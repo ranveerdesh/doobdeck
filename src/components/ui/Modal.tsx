@@ -1,0 +1,86 @@
+"use client";
+
+import { useEffect, useCallback, type ReactNode } from "react";
+import { X } from "lucide-react";
+import { cn } from "@/lib/cn";
+
+interface ModalProps {
+  open: boolean;
+  onClose: () => void;
+  title?: string;
+  description?: string;
+  children: ReactNode;
+  size?: "sm" | "md" | "lg" | "xl";
+}
+
+function Modal({ open, onClose, title, description, children, size = "md" }: ModalProps) {
+  const handleEscape = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    },
+    [onClose]
+  );
+
+  useEffect(() => {
+    if (open) {
+      document.addEventListener("keydown", handleEscape);
+      document.body.style.overflow = "hidden";
+    }
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+      document.body.style.overflow = "";
+    };
+  }, [open, handleEscape]);
+
+  if (!open) return null;
+
+  const sizes = {
+    sm: "max-w-sm",
+    md: "max-w-md",
+    lg: "max-w-lg",
+    xl: "max-w-2xl",
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div
+        className="absolute inset-0 bg-black/70 backdrop-blur-sm animate-fade-in"
+        onClick={onClose}
+        aria-hidden="true"
+      />
+      <div
+        className={cn(
+          "relative w-full bg-surface-raised border border-border rounded-xl shadow-modal",
+          "animate-slide-up",
+          sizes[size]
+        )}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={title ? "modal-title" : undefined}
+      >
+        <div className="flex items-start justify-between p-6 border-b border-border">
+          <div>
+            {title && (
+              <h2 id="modal-title" className="text-lg font-semibold text-text-primary">
+                {title}
+              </h2>
+            )}
+            {description && (
+              <p className="mt-1 text-sm text-text-muted">{description}</p>
+            )}
+          </div>
+          <button
+            onClick={onClose}
+            className="ml-4 p-1 rounded-md text-text-muted hover:text-text-primary hover:bg-surface-overlay transition-colors"
+            aria-label="Close modal"
+          >
+            <X size={18} />
+          </button>
+        </div>
+        <div className="p-6">{children}</div>
+      </div>
+    </div>
+  );
+}
+
+export { Modal };

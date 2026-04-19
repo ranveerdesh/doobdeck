@@ -1,0 +1,106 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String     @id @default(cuid())
+  email      String     @unique
+  name       String?
+  password   String
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  stills     Still[]
+  folders    Folder[]
+  categories Category[]
+}
+
+model Still {
+  id            String    @id @default(cuid())
+  title         String
+  description   String?
+  filmName      String?
+  director      String?
+  year          Int?
+  notes         String?
+  imageUrl      String
+  imagePublicId String
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  folderId      String?
+  folder        Folder?   @relation(fields: [folderId], references: [id])
+  categoryId    String?
+  category      Category? @relation(fields: [categoryId], references: [id])
+  tags          StillTag[]
+  colours       Colour[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([userId, folderId])
+  @@index([userId, categoryId])
+}
+
+model Folder {
+  id        String   @id @default(cuid())
+  name      String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stills    Still[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, name])
+}
+
+model Category {
+  id        String   @id @default(cuid())
+  name      String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stills    Still[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, name])
+}
+
+// Tags are intentionally immutable after creation (no updatedAt).
+// A tag's identity is just its name; it can only be renamed by deleting and recreating.
+model Tag {
+  id        String     @id @default(cuid())
+  name      String
+  userId    String
+  stills    StillTag[]
+  createdAt DateTime   @default(now())
+
+  @@unique([userId, name])
+}
+
+model StillTag {
+  stillId String
+  tagId   String
+  still   Still  @relation(fields: [stillId], references: [id], onDelete: Cascade)
+  tag     Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([stillId, tagId])
+}
+
+model Colour {
+  id         String @id @default(cuid())
+  hex        String
+  r          Int
+  g          Int
+  b          Int
+  population Int
+  name       String?
+  stillId    String
+  still      Still  @relation(fields: [stillId], references: [id], onDelete: Cascade)
+}
