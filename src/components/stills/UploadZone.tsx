@@ -23,7 +23,7 @@ function UploadZone({ onFile, preview, disabled, className }: UploadZoneProps) {
     (file: File) => {
       setError(null);
       if (!ACCEPTED_TYPES.includes(file.type)) {
-        setError("Only JPEG, PNG, WebP and GIF images are accepted.");
+        setError("Only JPEG, PNG, WebP, and GIF images are accepted.");
         return;
       }
       if (file.size > MAX_SIZE_BYTES) {

@@ -29,7 +29,7 @@ export async function POST(request: Request) {
 
     if (!ACCEPTED_TYPES.has(file.type)) {
       return NextResponse.json(
-        { error: "Only JPEG, PNG, WebP and GIF images are accepted" },
+        { error: "Only JPEG, PNG, WebP, and GIF images are accepted" },
         { status: 400 }
       );
     }
