@@ -7,7 +7,7 @@ import EditStillClient from "./EditStillClient";
 import type { Metadata } from "next";
 
 interface EditStillPageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export const metadata: Metadata = { title: "Edit Still" };
@@ -17,10 +17,11 @@ export default async function EditStillPage({ params }: EditStillPageProps) {
   if (!session?.user?.id) redirect("/auth/sign-in");
 
   const userId = session.user.id;
+  const { id } = await params;
 
   const [still, folders, categories, tags] = await Promise.all([
     prisma.still.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: { tags: { include: { tag: true } } },
     }),
     prisma.folder.findMany({ where: { userId }, orderBy: { name: "asc" } }),

@@ -3,7 +3,7 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 
 interface RouteParams {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export async function GET(_req: Request, { params }: RouteParams) {
@@ -13,8 +13,9 @@ export async function GET(_req: Request, { params }: RouteParams) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const { id } = await params;
     const still = await prisma.still.findUnique({
-      where: { id: params.id },
+      where: { id },
       select: { userId: true },
     });
 
@@ -23,7 +24,7 @@ export async function GET(_req: Request, { params }: RouteParams) {
     }
 
     const colours = await prisma.colour.findMany({
-      where: { stillId: params.id },
+      where: { stillId: id },
       orderBy: { population: "desc" },
     });
 

@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { categorySchema } from "@/lib/validations";
 
 interface RouteParams {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export async function PATCH(request: Request, { params }: RouteParams) {
@@ -14,7 +14,8 @@ export async function PATCH(request: Request, { params }: RouteParams) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const existing = await prisma.category.findUnique({ where: { id: params.id } });
+    const { id } = await params;
+    const existing = await prisma.category.findUnique({ where: { id } });
     if (!existing || existing.userId !== session.user.id) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
@@ -29,7 +30,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
     }
 
     const category = await prisma.category.update({
-      where: { id: params.id },
+      where: { id },
       data: { name: parsed.data.name },
       include: { _count: { select: { stills: true } } },
     });
@@ -59,12 +60,13 @@ export async function DELETE(_req: Request, { params }: RouteParams) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const existing = await prisma.category.findUnique({ where: { id: params.id } });
+    const { id } = await params;
+    const existing = await prisma.category.findUnique({ where: { id } });
     if (!existing || existing.userId !== session.user.id) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
 
-    await prisma.category.delete({ where: { id: params.id } });
+    await prisma.category.delete({ where: { id } });
     return NextResponse.json({ message: "Deleted" });
   } catch (error) {
     console.error("[DELETE /api/categories/[id]]", error);

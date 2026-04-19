@@ -10,12 +10,13 @@ import type { Metadata } from "next";
 import DeleteStillButton from "./DeleteStillButton";
 
 interface StillPageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export async function generateMetadata({ params }: StillPageProps): Promise<Metadata> {
+  const { id } = await params;
   const still = await prisma.still.findUnique({
-    where: { id: params.id },
+    where: { id },
     select: { title: true },
   });
   return { title: still?.title ?? "Still" };
@@ -25,8 +26,10 @@ export default async function StillPage({ params }: StillPageProps) {
   const session = await auth();
   if (!session?.user?.id) redirect("/auth/sign-in");
 
+  const { id } = await params;
+
   const still = await prisma.still.findUnique({
-    where: { id: params.id },
+    where: { id },
     include: {
       folder: true,
       category: true,

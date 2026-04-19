@@ -15,7 +15,7 @@ const STILL_INCLUDE = {
 };
 
 interface RouteParams {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export async function GET(_req: Request, { params }: RouteParams) {
@@ -25,8 +25,9 @@ export async function GET(_req: Request, { params }: RouteParams) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const { id } = await params;
     const still = await prisma.still.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: STILL_INCLUDE,
     });
 
@@ -49,8 +50,9 @@ export async function PATCH(request: Request, { params }: RouteParams) {
     }
     const userId = session.user.id;
 
+    const { id } = await params;
     const existing = await prisma.still.findUnique({
-      where: { id: params.id },
+      where: { id },
       select: { userId: true },
     });
 
@@ -96,7 +98,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
 
     // Update still with new tags
     const still = await prisma.still.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         ...rest,
         folderId: folderId ?? null,
@@ -123,8 +125,9 @@ export async function DELETE(_req: Request, { params }: RouteParams) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const { id } = await params;
     const still = await prisma.still.findUnique({
-      where: { id: params.id },
+      where: { id },
       select: { userId: true, imagePublicId: true },
     });
 
@@ -140,7 +143,7 @@ export async function DELETE(_req: Request, { params }: RouteParams) {
       // Continue with DB deletion even if Cloudinary fails
     }
 
-    await prisma.still.delete({ where: { id: params.id } });
+    await prisma.still.delete({ where: { id } });
 
     return NextResponse.json({ message: "Deleted" });
   } catch (error) {

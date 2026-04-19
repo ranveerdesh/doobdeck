@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { folderSchema } from "@/lib/validations";
 
 interface RouteParams {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export async function PATCH(request: Request, { params }: RouteParams) {
@@ -14,7 +14,8 @@ export async function PATCH(request: Request, { params }: RouteParams) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const existing = await prisma.folder.findUnique({ where: { id: params.id } });
+    const { id } = await params;
+    const existing = await prisma.folder.findUnique({ where: { id } });
     if (!existing || existing.userId !== session.user.id) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
@@ -29,7 +30,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
     }
 
     const folder = await prisma.folder.update({
-      where: { id: params.id },
+      where: { id },
       data: { name: parsed.data.name },
       include: { _count: { select: { stills: true } } },
     });
@@ -59,12 +60,13 @@ export async function DELETE(_req: Request, { params }: RouteParams) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const existing = await prisma.folder.findUnique({ where: { id: params.id } });
+    const { id } = await params;
+    const existing = await prisma.folder.findUnique({ where: { id } });
     if (!existing || existing.userId !== session.user.id) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
 
-    await prisma.folder.delete({ where: { id: params.id } });
+    await prisma.folder.delete({ where: { id } });
     return NextResponse.json({ message: "Deleted" });
   } catch (error) {
     console.error("[DELETE /api/folders/[id]]", error);

@@ -11,13 +11,13 @@ import type { Metadata } from "next";
 export const metadata: Metadata = { title: "Library" };
 
 interface LibraryPageProps {
-  searchParams: {
+  searchParams: Promise<{
     q?: string;
     folderId?: string;
     categoryId?: string;
     tag?: string;
     page?: string;
-  };
+  }>;
 }
 
 async function LibraryContent({
@@ -145,13 +145,14 @@ export default async function LibraryPage({ searchParams }: LibraryPageProps) {
   if (!session?.user?.id) redirect("/auth/sign-in");
 
   const userId = session.user.id;
+  const sp = await searchParams;
 
   const filters = searchSchema.parse({
-    q: searchParams.q,
-    folderId: searchParams.folderId,
-    categoryId: searchParams.categoryId,
-    tag: searchParams.tag,
-    page: searchParams.page,
+    q: sp.q,
+    folderId: sp.folderId,
+    categoryId: sp.categoryId,
+    tag: sp.tag,
+    page: sp.page,
   });
 
   const [folders, categories, tags] = await Promise.all([
