@@ -72,6 +72,8 @@ model Category {
   @@unique([userId, name])
 }
 
+// Tags are intentionally immutable after creation (no updatedAt).
+// A tag's identity is just its name; it can only be renamed by deleting and recreating.
 model Tag {
   id        String     @id @default(cuid())
   name      String

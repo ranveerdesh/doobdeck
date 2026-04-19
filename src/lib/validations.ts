@@ -23,6 +23,7 @@ export const stillSchema = z.object({
     .number()
     .int()
     .min(1888, "Year must be 1888 or later")
+    // Allow up to 5 years in the future to accommodate pre-production announcements
     .max(new Date().getFullYear() + 5)
     .optional()
     .nullable(),
