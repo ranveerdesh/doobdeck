@@ -110,22 +110,30 @@ async function LibraryContent({
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center justify-center gap-2 pt-4">
-          {page > 1 && (
-            <a
-              href={`?${new URLSearchParams({ ...(q ? { q } : {}), ...(folderId ? { folderId } : {}), ...(categoryId ? { categoryId } : {}), ...(tag ? { tag } : {}), page: String(page - 1) }).toString()}`}
-              className="px-3 py-1.5 rounded-md border border-border text-sm text-text-secondary hover:bg-surface-raised transition-colors"
-            >
-              Previous
-            </a>
-          )}
-          {page < totalPages && (
-            <a
-              href={`?${new URLSearchParams({ ...(q ? { q } : {}), ...(folderId ? { folderId } : {}), ...(categoryId ? { categoryId } : {}), ...(tag ? { tag } : {}), page: String(page + 1) }).toString()}`}
-              className="px-3 py-1.5 rounded-md border border-border text-sm text-text-secondary hover:bg-surface-raised transition-colors"
-            >
-              Next
-            </a>
-          )}
+          {[
+            page > 1 && { label: "Previous", targetPage: page - 1 },
+            page < totalPages && { label: "Next", targetPage: page + 1 },
+          ]
+            .filter(Boolean)
+            .map((item) => {
+              if (!item) return null;
+              const params = new URLSearchParams({
+                ...(q ? { q } : {}),
+                ...(folderId ? { folderId } : {}),
+                ...(categoryId ? { categoryId } : {}),
+                ...(tag ? { tag } : {}),
+                page: String(item.targetPage),
+              });
+              return (
+                <a
+                  key={item.label}
+                  href={`?${params.toString()}`}
+                  className="px-3 py-1.5 rounded-md border border-border text-sm text-text-secondary hover:bg-surface-raised transition-colors"
+                >
+                  {item.label}
+                </a>
+              );
+            })}
         </div>
       )}
     </div>

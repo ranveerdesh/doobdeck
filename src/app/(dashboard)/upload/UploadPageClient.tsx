@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,7 +9,6 @@ import { StillForm } from "@/components/stills/StillForm";
 import { uploadSchema, type UploadInput } from "@/lib/validations";
 import { AlertCircle, CheckCircle2 } from "lucide-react";
 import type { Folder, Category, Tag } from "@prisma/client";
-import { useEffect } from "react";
 
 interface UploadFormData extends UploadInput {
   file?: File;

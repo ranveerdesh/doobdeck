@@ -30,14 +30,13 @@ function SearchBar({ className, placeholder = "Search stills..." }: SearchBarPro
     const q = debouncedValue.trim();
     if (q) {
       router.push(`/library?q=${encodeURIComponent(q)}`);
-    } else if (value === "") {
-      // Only navigate away from search if user cleared the input
+    } else if (value === "" && searchParams.get("q")) {
       const currentPath = window.location.pathname;
-      if (currentPath === "/library" && searchParams.get("q")) {
+      if (currentPath === "/library") {
         router.push("/library");
       }
     }
-  }, [debouncedValue]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [debouncedValue, router, value, searchParams]);
 
   return (
     <div className={cn("relative max-w-sm", className)}>
