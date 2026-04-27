@@ -1,4 +1,4 @@
-import Vibrant from "node-vibrant";
+import * as Vibrant from "node-vibrant";
 
 export interface ExtractedColour {
   hex: string;
