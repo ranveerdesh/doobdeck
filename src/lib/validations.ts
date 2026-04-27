@@ -38,7 +38,7 @@ export const folderSchema = z.object({
     .string()
     .min(1, "Folder name is required")
     .max(100)
-    .regex(/^[^/\\]+$/, "Folder name cannot contain / or \\"),
+    .regex(/^[^/\\]+$/, "Folder name cannot contain / or \\")
 });
 
 export const categorySchema = z.object({

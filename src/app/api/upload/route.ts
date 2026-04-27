@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { cloudinary } from "@/lib/cloudinary";
-import { extractColours } from "@/lib/colours";
 
 const ACCEPTED_TYPES = new Set([
   "image/jpeg",
@@ -96,8 +95,15 @@ export async function POST(request: Request) {
         .end(buffer);
     });
 
-    // Extract colours
-    const extractedColours = await extractColours(uploadResult.secure_url);
+    // TODO: Re-enable palette extraction when node-vibrant integration is stable.
+    const extractedColours: Array<{
+      hex: string;
+      r: number;
+      g: number;
+      b: number;
+      population: number;
+      name: string;
+    }> = [];
 
     // Upsert tags
     const tagRecords = await Promise.all(
