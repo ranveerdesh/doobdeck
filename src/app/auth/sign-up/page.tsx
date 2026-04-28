@@ -101,6 +101,13 @@ export default function SignUpPage() {
               error={errors.password?.message}
               hint="At least 8 characters"
             />
+            <Input
+              label="Invite Code"
+              placeholder="Enter your invite code"
+              {...register("inviteCode")}
+              error={errors.inviteCode?.message}
+              hint="Required to create an account"
+            />
             <Button type="submit" className="w-full" loading={isSubmitting}>
               Create account
             </Button>

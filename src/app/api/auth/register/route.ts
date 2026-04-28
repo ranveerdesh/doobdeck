@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { signUpSchema } from "@/lib/validations";
+import { normalizeInviteCode } from "@/lib/invite-codes";
 
 export async function POST(request: Request) {
   try {

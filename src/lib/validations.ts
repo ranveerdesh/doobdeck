@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { isValidInviteCode, normalizeInviteCode } from "./invite-codes";
 
 export const signUpSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters").max(60),
@@ -7,7 +8,20 @@ export const signUpSchema = z.object({
     .string()
     .min(8, "Password must be at least 8 characters")
     .max(72),
+  inviteCode: z
+    .string()
+    .min(1, "Invite code is required")
+    .refine(
+      (code) => !code.includes(" "),
+      "Invite code cannot contain spaces"
+    )
+    .refine(
+      (code) => isValidInviteCode(normalizeInviteCode(code)),
+      "Invalid invite code"
+    ),
 });
+
+export type SignUpInput = z.infer<typeof signUpSchema>;
 
 export const signInSchema = z.object({
   email: z.string().email("Invalid email address"),
