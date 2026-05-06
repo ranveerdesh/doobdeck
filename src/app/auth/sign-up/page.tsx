@@ -6,8 +6,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { AlertCircle, ArrowRight, Film } from "lucide-react";
+import { AlertCircle, ArrowRight } from "lucide-react";
 import { signUpSchema, type SignUpInput } from "@/lib/validations";
+import { Logo } from "@/components/ui/Logo";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 
@@ -60,14 +61,14 @@ export default function SignUpPage() {
         <div className="grid w-full gap-8 lg:grid-cols-[0.9fr_1.1fr]">
           <div className="space-y-6 self-center">
             <div className="inline-flex items-center gap-3 rounded-md border border-border/80 bg-surface-container-low/80 px-3 py-2 shadow-card">
-              <div className="flex h-9 w-9 items-center justify-center rounded-md bg-accent text-accent-foreground">
-                <Film size={18} />
+              <div className="flex h-9 w-9 items-center justify-center rounded-md">
+                <Logo size={36} />
               </div>
               <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-text-muted">
+                <p className="font-sans text-[18px] font-extrabold leading-none tracking-[-0.03em] text-text-primary">
                   doobdeck
                 </p>
-                <p className="text-sm text-text-secondary">Private film archive</p>
+                <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.24em] text-text-muted">Cinematic Archive</p>
               </div>
             </div>
             <div className="space-y-3 max-w-md">

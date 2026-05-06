@@ -3,12 +3,12 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import {
   ArrowRight,
-  Film,
   Layers3,
   Palette,
   Shield,
   Sparkles,
 } from "lucide-react";
+import { Logo } from "@/components/ui/Logo";
 
 export default async function LandingPage() {
   const session = await auth();
@@ -17,20 +17,20 @@ export default async function LandingPage() {
   return (
     <main className="relative min-h-screen overflow-hidden bg-background">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,183,125,0.11),transparent_34%),radial-gradient(circle_at_80%_20%,rgba(255,183,125,0.06),transparent_20%)]" />
-      <div className="relative mx-auto flex min-h-screen w-full max-w-[1440px] items-center px-4 py-12 sm:px-6 lg:px-8">
-        <div className="grid w-full gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:gap-12">
+      <div className="relative mx-auto flex min-h-screen w-full max-w-5xl items-center px-4 py-12 sm:px-6 lg:px-8">
+        <div className="w-full">
           <section className="space-y-8">
             <div className="inline-flex items-center gap-3 rounded-md border border-border/80 bg-surface-container-low/80 px-3 py-2 shadow-card">
-              <div className="flex h-9 w-9 items-center justify-center rounded-md bg-accent text-accent-foreground">
-                <Film size={20} />
+              <div className="flex h-9 w-9 items-center justify-center rounded-md">
+                <Logo size={36} />
               </div>
               <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-text-muted">
-                  cinematic archive
-                </p>
-                <h1 className="text-lg font-semibold tracking-tight text-text-primary">
+                <p className="font-sans text-[18px] font-extrabold leading-none tracking-[-0.03em] text-text-primary">
                   doobdeck
-                </h1>
+                </p>
+                <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.24em] text-text-muted">
+                  Cinematic Archive
+                </p>
               </div>
             </div>
 
@@ -97,69 +97,6 @@ export default async function LandingPage() {
             </div>
           </section>
 
-          <section className="flex items-stretch">
-            <div className="relative flex w-full flex-col justify-between overflow-hidden rounded-md border border-border/80 bg-surface-container-low/85 p-6 shadow-modal">
-              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),transparent_28%)]" />
-              <div className="relative space-y-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-text-muted">
-                      contact sheet
-                    </p>
-                    <p className="mt-1 text-sm text-text-secondary">
-                      Recent archive activity
-                    </p>
-                  </div>
-                  <div className="rounded-md border border-border/80 bg-accent/10 px-3 py-2 text-right">
-                    <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-muted">
-                      ready
-                    </p>
-                    <p className="text-sm font-medium text-text-primary">for review</p>
-                  </div>
-                </div>
-
-                <div className="grid gap-3 sm:grid-cols-2">
-                  {[
-                    "Editorial framing",
-                    "Film metadata",
-                    "Colour harmony",
-                    "Search-driven browsing",
-                  ].map((label) => (
-                    <div
-                      key={label}
-                      className="rounded-md border border-border/70 bg-surface/60 px-4 py-4"
-                    >
-                      <div className="h-1.5 w-10 rounded-full bg-accent" />
-                      <p className="mt-3 text-sm font-medium text-text-primary">
-                        {label}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="relative mt-10 grid grid-cols-3 gap-3 border-t border-border/70 pt-5 text-sm">
-                <div>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-muted">
-                    format
-                  </p>
-                  <p className="mt-1 text-text-primary">Archive</p>
-                </div>
-                <div>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-muted">
-                    tone
-                  </p>
-                  <p className="mt-1 text-text-primary">Ink & amber</p>
-                </div>
-                <div>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-muted">
-                    mode
-                  </p>
-                  <p className="mt-1 text-text-primary">Private</p>
-                </div>
-              </div>
-            </div>
-          </section>
         </div>
       </div>
     </main>
