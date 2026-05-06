@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "surface-container-lowest": "#0e0e0e",
+                "background": "#131313",
+                "surface-tint": "#ffb77d",
+                "surface-container-high": "#2a2a2a",
+                "on-tertiary": "#303030",
+                "inverse-surface": "#e5e2e1",
+                "on-secondary-container": "#b7b5b4",
+                "on-surface-variant": "#dbc2b0",
+                "on-primary-container": "#432100",
+                "tertiary-fixed": "#e4e2e1",
+                "on-tertiary-fixed": "#1b1c1c",
+                "on-secondary-fixed": "#1c1b1b",
+                "primary": "#ffb77d",
+                "on-secondary": "#313030",
+                "primary-container": "#d97707",
+                "on-surface": "#e5e2e1",
+                "surface-dim": "#131313",
+                "tertiary-fixed-dim": "#c8c6c5",
+                "on-error": "#690005",
+                "primary-fixed": "#ffdcc3",
+                "on-primary-fixed-variant": "#6e3900",
+                "tertiary-container": "#929090",
+                "on-tertiary-fixed-variant": "#474746",
+                "secondary-container": "#474746",
+                "surface-variant": "#353534",
+                "on-primary-fixed": "#2f1500",
+                "inverse-primary": "#904d00",
+                "secondary": "#c8c6c5",
+                "surface-container-low": "#1c1b1b",
+                "on-primary": "#4d2600",
+                "outline-variant": "#554336",
+                "error": "#ffb4ab",
+                "primary-fixed-dim": "#ffb77d",
+                "inverse-on-surface": "#313030",
+                "error-container": "#93000a",
+                "surface-container": "#201f1f",
+                "surface": "#131313",
+                "surface-container-highest": "#353534",
+                "outline": "#a38c7c",
+                "on-secondary-fixed-variant": "#474746",
+                "surface-bright": "#3a3939",
+                "on-tertiary-container": "#2a2a2a",
+                "on-error-container": "#ffdad6",
+                "secondary-fixed-dim": "#c8c6c5",
+                "on-background": "#e5e2e1",
+                "secondary-fixed": "#e5e2e1",
+                "tertiary": "#c8c6c5"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+            },
+            "spacing": {
+                "unit": "4px",
+                "container-max": "1440px",
+                "margin": "32px",
+                "grid-columns": "12",
+                "gutter": "16px"
+            },
+            "fontFamily": {
+                "body-lg": ["Inter"],
+                "headline-xl": ["Inter"],
+                "label-mono": ["monospace"],
+                "headline-md": ["Inter"],
+                "headline-lg": ["Inter"],
+                "body-sm": ["Inter"],
+                "body-md": ["Inter"]
+            },
+            "fontSize": {
+                "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                "headline-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "label-mono": ["11px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                "body-sm": ["13px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                "body-md": ["15px", {"lineHeight": "1.5", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { background-color: #131313; color: #e5e2e1; -webkit-font-smoothing: antialiased; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20; }
+        .aspect-16-9 { aspect-ratio: 16 / 9; }
+        .bento-glow { box-shadow: 0 0 40px 0 rgba(217, 119, 7, 0.02); }
+        .scrim-gradient { background: linear-gradient(to top, rgba(14, 14, 14, 0.9) 0%, rgba(14, 14, 14, 0) 100%); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0e0e0e; }
+        ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #353534; }
+    </style>
+</head>
+<body class="font-body-md text-body-md overflow-x-hidden selection:bg-primary/30 selection:text-primary-fixed">
+<!-- SideNavBar Component (as requested) -->
+<aside class="fixed left-0 top-0 bottom-0 w-64 z-40 bg-surface-container-low border-r border-outline-variant/20 flex flex-col h-full py-8">
+<div class="px-6 mb-10 flex items-center gap-3">
+<img alt="doobdeck icon" class="w-8 h-8 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBs20ANGSw0EYnDIiNblGqhd85rZpdrdP_aRViFx12iAwe-ti4AFyH7KlA9TscmUlkApQNiD9GG8IBbF49nBZDiywYV2VdwOLss8I5Q0dcZFkA2hUx3uvVXNIfBUaewx915ixRm27d0gxhayIKa7thNe6HfafHZZaoYqWpBvVtqhRfwBxC5Wp7VMMKZWyjPHvnWcLrhqIEP9XNnddIqmpBQDBSCfXS-9p1DPWXXN7Ichwjom3C_0P7OU8bur2HlbZAr6G3atmMVByBi"/>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md text-primary tracking-tighter">doobdeck</span>
+<span class="font-label-mono text-[10px] text-on-surface-variant uppercase tracking-[0.2em]">Archive</span>
+</div>
+</div>
+<nav class="flex flex-col font-label-mono text-label-mono uppercase tracking-widest">
+<a class="flex items-center gap-4 text-primary border-l-4 border-primary bg-surface-container-high/50 py-3 px-6 transition-transform active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span>Home</span>
+</a>
+<a class="flex items-center gap-4 text-on-secondary-container py-3 px-6 hover:bg-surface-container-highest/30 transition-all duration-150 group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">movie_filter</span>
+<span>Latest</span>
+</a>
+<a class="flex items-center gap-4 text-on-secondary-container py-3 px-6 hover:bg-surface-container-highest/30 transition-all duration-150 group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">person</span>
+<span>Directors</span>
+</a>
+<a class="flex items-center gap-4 text-on-secondary-container py-3 px-6 hover:bg-surface-container-highest/30 transition-all duration-150 group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">videocam</span>
+<span>Cinematographers</span>
+</a>
+<a class="flex items-center gap-4 text-on-secondary-container py-3 px-6 hover:bg-surface-container-highest/30 transition-all duration-150 group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">camera_roll</span>
+<span>Equipment</span>
+</a>
+</nav>
+<div class="mt-auto px-6 space-y-6">
+<button class="w-full bg-primary-container text-on-primary-fixed py-2 rounded-lg font-label-mono text-label-mono uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all">
+            Upgrade to Pro
+        </button>
+<div class="pt-6 border-t border-outline-variant/10 flex flex-col gap-4 font-label-mono text-label-mono uppercase tracking-widest text-on-surface-variant/60">
+<a class="flex items-center gap-4 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">help_outline</span>
+<span>Help</span>
+</a>
+<a class="flex items-center gap-4 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span>Logout</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- TopNavBar Component (as requested) -->
+<header class="fixed top-0 right-0 left-64 h-16 px-margin z-50 flex justify-between items-center border-b border-outline-variant/30 bg-background/80 backdrop-blur-md">
+<div class="flex items-center gap-8 flex-1 max-w-2xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant/20 rounded-full py-1.5 pl-10 pr-4 text-body-sm text-on-surface placeholder:text-on-surface-variant/40 focus:ring-1 focus:ring-primary focus:border-primary transition-all" placeholder="Search the cinematic archive..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden lg:flex items-center gap-8 font-label-mono text-label-mono uppercase tracking-widest">
+<a class="text-primary font-bold border-b-2 border-primary pb-1" href="#">Browse</a>
+<a class="text-secondary hover:text-primary transition-colors" href="#">Collections</a>
+<a class="text-secondary hover:text-primary transition-colors" href="#">Analytics</a>
+</nav>
+<div class="flex items-center gap-4 pl-6 border-l border-outline-variant/20">
+<button class="material-symbols-outlined text-secondary hover:text-primary transition-colors">notifications</button>
+<button class="material-symbols-outlined text-secondary hover:text-primary transition-colors">settings</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant/30 ml-2">
+<img alt="User profile" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfhnWrSj4gyCZxJR12SOK2bFSw970SBRjOdoacjXtUToKb7Qj8kJm48G3HlZzlXLFobHfm5b6iTKN1-jWba2Oaq7juWC7ZxKOzR5Y2V_lcYhopcj5oETMlEpzqHrKxWWk40nalnx7fGZZeLJhDQ6EOYmsqQy7VmNGrKEvG1LtK1jZJ2NLGDuXBvRAtqOgJMdF5To5gFQN1cRS66NvQzYmU0TihiH4jg3NI5xdV3vJY633agl3lJgyIHRNah1jCQVQIb7vVOvJuRCW0"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 mt-16 min-h-screen bg-surface">
+<!-- Page Content -->
+<div class="p-gutter max-w-[container-max] mx-auto space-y-10 px-margin py-10">
+<!-- Welcome Section -->
+<section class="space-y-2">
+<h2 class="font-headline-xl text-headline-xl text-on-surface tracking-tight">Welcome back, Alex</h2>
+<p class="text-on-surface-variant font-body-md max-w-2xl opacity-80">Your cinematic library has grown by 42 stills this week. The latest additions from <span class="text-primary italic">"The Silver Horizon"</span> are now processed and categorized.</p>
+</section>
+<!-- Stat Cards - Higher Density Grid -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<a class="group relative p-4 rounded-lg bg-surface-container-low border border-outline-variant/10 bento-glow hover:border-primary/20 hover:bg-surface-container-high transition-all duration-300" href="#">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary/60 text-lg">photo_library</span>
+<span class="material-symbols-outlined text-on-surface-variant/20 group-hover:text-primary transition-colors text-sm">arrow_outward</span>
+</div>
+<p class="font-label-mono text-[10px] text-on-surface-variant uppercase tracking-widest mb-1">Library Size</p>
+<p class="font-headline-md text-[20px] font-bold text-on-surface">1,248 Stills</p>
+</a>
+<a class="group relative p-4 rounded-lg bg-surface-container-low border border-outline-variant/10 bento-glow hover:border-primary/20 hover:bg-surface-container-high transition-all duration-300" href="#">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary/60 text-lg">folder_special</span>
+<span class="material-symbols-outlined text-on-surface-variant/20 group-hover:text-primary transition-colors text-sm">arrow_outward</span>
+</div>
+<p class="font-label-mono text-[10px] text-on-surface-variant uppercase tracking-widest mb-1">Collections</p>
+<p class="font-headline-md text-[20px] font-bold text-on-surface">12 Folders</p>
+</a>
+<a class="group relative p-4 rounded-lg bg-surface-container-low border border-outline-variant/10 bento-glow hover:border-primary/20 hover:bg-surface-container-high transition-all duration-300" href="#">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary/60 text-lg">label_important</span>
+<span class="material-symbols-outlined text-on-surface-variant/20 group-hover:text-primary transition-colors text-sm">arrow_outward</span>
+</div>
+<p class="font-label-mono text-[10px] text-on-surface-variant uppercase tracking-widest mb-1">Taxonomy</p>
+<p class="font-headline-md text-[20px] font-bold text-on-surface">8 Categories</p>
+</a>
+<a class="group relative p-4 rounded-lg bg-surface-container-low border border-outline-variant/10 bento-glow hover:border-primary/20 hover:bg-surface-container-high transition-all duration-300" href="#">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary/60 text-lg">bolt</span>
+<span class="material-symbols-outlined text-on-surface-variant/20 group-hover:text-primary transition-colors text-sm">arrow_outward</span>
+</div>
+<p class="font-label-mono text-[10px] text-on-surface-variant uppercase tracking-widest mb-1">Weekly Growth</p>
+<p class="font-headline-md text-[20px] font-bold text-on-surface">+42 New</p>
+</a>
+</section>
+<!-- Recent Uploads Section - High Density Shotdeck Grid -->
+<section class="space-y-6">
+<div class="flex items-center justify-between border-b border-outline-variant/10 pb-4">
+<div class="flex items-center gap-4">
+<h3 class="font-label-mono text-label-mono uppercase tracking-[0.2em] text-on-surface font-bold">Recent Uploads</h3>
+</div>
+<a class="font-label-mono text-[11px] text-primary uppercase tracking-widest flex items-center gap-2 hover:gap-3 transition-all" href="#">
+                    Library 
+                    <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</a>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-2">
+<!-- Grid items (Shotdeck style: No gaps or tiny 2px gaps, minimal metadata) -->
+<!-- Item 1 -->
+<div class="group relative aspect-16-9 overflow-hidden bg-surface-container-highest cursor-pointer border border-outline-variant/5">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSoF1dJaG44S8UTAyxm59izu140PZYURoKbHN-Qi3ZEYZfUYqebhwidVpdhI95Jmb8jJ_kls2bmedl92iCzBmEyYH-yD8bnvmyM3TOFl79mi6kFms12lYeZP8sUC_LVXjNcNUKTz90GZqZPbkgJGEBAiI9CHKz7PWYRVhs8rhxJh5q4xlYcXPpG2V7aZXZxtpr1F_jegs-GioH9xHoIb556m2SFpKc_-rFXQsjcNm98G7yFJB-06EyyCz0pEp5DoP4OvCUqnBys9mB"/>
+<div class="absolute inset-0 scrim-gradient opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-2">
+<p class="font-label-mono text-[9px] text-primary uppercase mb-1">Evening Descent</p>
+<h4 class="font-body-sm font-bold text-white text-[11px] truncate">The Silver Horizon</h4>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="group relative aspect-16-9 overflow-hidden bg-surface-container-highest cursor-pointer border border-outline-variant/5">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiUbA_9mbahmIxuZpgtQVkEORIAxydSVg0Tip1Dd1J5hS4FdmmzJet9WbZntwxgXnip5InDlyqB_umHcsUtnJIpODUs071QF6GWwMKVrLC8Mek-iTK7oVJzD3hSGO9MfWj15NtOFjKT2pCX_6WkuFJo3q9xMJeIJWuw0FP7IqJoCg1cY99B2MzDiyQUVQUgo8_oaf0EY2zm8zcr1xyMVCr_aL2XzqS3YJPbtLZNBnA9DjCPQjyOD5hNa_HRhkXN33Cc2w1PVrDkJX5"/>
+<div class="absolute inset-0 scrim-gradient opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-2">
+<p class="font-label-mono text-[9px] text-primary uppercase mb-1">Projector Glow</p>
+<h4 class="font-body-sm font-bold text-white text-[11px] truncate">Cinema Paradiso Redux</h4>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="group relative aspect-16-9 overflow-hidden bg-surface-container-highest cursor-pointer border border-outline-variant/5">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDP-euTDz52JnuQz8m_QjoZ5HxavmnT0nf8vi9XCe266Qg5Z84KvKVxkG8Z3LzfDzyJVuDz91BLD5KA5gGwKtZ4PzyXGimUsfiQDOY45FnWEq3ivBMR7BQ1IbcgoAOrOWGdpIx7nIO1KXTCG6Q1xVCvnmzBngf94LDUDHo_7mR3R7ys2ZQzL4Y0Ish-Y3nt_J7BRdqf-vIYFMEjU3aPBWSdUBYFBxbxFvRaGo97awsoVaKgZofsK7iL11ZHQetkh6X5DzLrkaBLs82M"/>
+<div class="absolute inset-0 scrim-gradient opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-2">
+<p class="font-label-mono text-[9px] text-primary uppercase mb-1">Rainy Sector 7</p>
+<h4 class="font-body-sm font-bold text-white text-[11px] truncate">Neon Requiem</h4>
+</div>
+</div>
+<!-- Item 4 -->
+<div class="group relative aspect-16-9 overflow-hidden bg-surface-container-highest cursor-pointer border border-outline-variant/5">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2mXb_YLh4QHoPD7ndTNb9zPwt2Fkfvq4DC59Owz6fE7MVL1z99pqry7AEYIAhc-WNaBXdTHLKUp5iTk6cOt4zh9qFrym_3qEsjEjorbZZm-Ras4itUwmaHdaG383uGfORlcTP7zvnWmGJYN0xkx-jM2RE8H-n-PAcJRL22r8c8Srv-eyGlByMEjyfApK64qHgxmzgzp7FqITbbl1T993wFBJj3ZCyTT9q8VVZAoIkbHdGAegZ7n0EwLHbh-rjSiu39JKiPpO6NsVa"/>
+<div class="absolute inset-0 scrim-gradient opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-2">
+<p class="font-label-mono text-[9px] text-primary uppercase mb-1">Platform 9 Dawn</p>
+<h4 class="font-body-sm font-bold text-white text-[11px] truncate">The Last Departure</h4>
+</div>
+</div>
+<!-- Item 5 -->
+<div class="group relative aspect-16-9 overflow-hidden bg-surface-container-highest cursor-pointer border border-outline-variant/5">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBy7AByauiuBei_7M5golKE-EosmLfPQDr7t7bRcYYMJxafv-wosKP71ZbEwoXk40xUQoS7wJiKRi-CEzUAfWkfbZmyGTbBkVuB_JggDqIkOJXoiSJPd-mxwyXoX6tZHgBycLPSHXIs_W4TNASfp-88uXFvK9V4E4lwWP2FlULoy37jTiYXBRe9OfQ-b8l4IBLN7dQZuwuSg8KWtPpHBZH46KZl-5E_aBvOcInSXbg93-03RkBh17EvHOtA20AlpQld3XgXzKgrgeNj"/>
+<div class="absolute inset-0 scrim-gradient opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-2">
+<p class="font-label-mono text-[9px] text-primary uppercase mb-1">Through Glass</p>
+<h4 class="font-body-sm font-bold text-white text-[11px] truncate">Internal Monologue</h4>
+</div>
+</div>
+<!-- Item 6 -->
+<div class="group relative aspect-16-9 overflow-hidden bg-surface-container-highest cursor-pointer border border-outline-variant/5">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAeBB-FymNl1CFBth4VQsmtsLnJZmxJBpZlEIjDCYeJWy0_TxDyMlvNbBr32dFVuc595h9L-mXVfkIF_Y6-rqJOsBzDXJw-SAeOe8vUM8nLLd9ifOfu7-Qq5N95jEe-T36cIUw-0a5zmjTMWcw-kj9hI-QiPlWbFd7CR9moOqEUFUgAXadnvzHu8AqfCFnlqp-usvA82gTwC8n8tRF2ZfMSzaodBP0UocsPSJhpCMPQf495ZAVGb8c5eZIxVIi-QMuv3KCC3MHexmkg"/>
+<div class="absolute inset-0 scrim-gradient opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-2">
+<p class="font-label-mono text-[9px] text-primary uppercase mb-1">Monolith Structure</p>
+<h4 class="font-body-sm font-bold text-white text-[11px] truncate">The Concrete Wall</h4>
+</div>
+</div>
+<!-- Item 7 -->
+<div class="group relative aspect-16-9 overflow-hidden bg-surface-container-highest cursor-pointer border border-outline-variant/5">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjWjb2vc06GTlUQ7Qw6iMIrZlEDKg0jrNHz6yGGuu8HrZ7tGL2GLyloDA1YOKjMH8ncKrTNVxaYDl9VmON86iIsLpd4VJVaz-jF6DP1ZbEGMtliObHYj2GTs7RDQMrOPPhXCQZQPe_eC9kXu4yJpm917pqnRO703n3JBp1uZA6OAWiPgeLXfV_Ijnv8ZDgx_xox9ZNdcvNUiPN8MTx3pN6X0cMJSEW28gTg36q4LYxZG-4vNFK79SBEBPDylVjCEsxLljrUvyxIdiF"/>
+<div class="absolute inset-0 scrim-gradient opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-2">
+<p class="font-label-mono text-[9px] text-primary uppercase mb-1">Morning Rays</p>
+<h4 class="font-body-sm font-bold text-white text-[11px] truncate">Nature's Silence</h4>
+</div>
+</div>
+<!-- Item 8 -->
+<div class="group relative aspect-16-9 overflow-hidden bg-surface-container-highest cursor-pointer border border-outline-variant/5">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPl_EIb_yfZXTwMlD0SFEmOZvY4sU3uAvwkhXqqQJAY16-Wt4h7_kuWkY__SnOtPGoPibgfNIasmQS-alEokLa9huyzV0eBsBm8C0Dz27ca3J87GcXe0t3eOGsjhhlQcDVOM23YubNMkfPIYDZkeZ-UQ3HjFHKsPB1JB9MrzFHVcnHC_gMnuoa5PHMKq8vNt3L2MSa-A0uONPytDpL3lpZF6mDRqXHZONQc3FEf4rLkWpNpYTQt1M7_BuBp8jHP1sxzZs_uedrQRiw"/>
+<div class="absolute inset-0 scrim-gradient opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-2">
+<p class="font-label-mono text-[9px] text-primary uppercase mb-1">Midnight Jazz</p>
+<h4 class="font-body-sm font-bold text-white text-[11px] truncate">The Blue Note Sessions</h4>
+</div>
+</div>
+<!-- Item 9 (Density) -->
+<div class="group relative aspect-16-9 overflow-hidden bg-surface-container-highest cursor-pointer border border-outline-variant/5">
+<img class="w-full h-full object-cover grayscale brightness-50 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSoF1dJaG44S8UTAyxm59izu140PZYURoKbHN-Qi3ZEYZfUYqebhwidVpdhI95Jmb8jJ_kls2bmedl92iCzBmEyYH-yD8bnvmyM3TOFl79mi6kFms12lYeZP8sUC_LVXjNcNUKTz90GZqZPbkgJGEBAiI9CHKz7PWYRVhs8rhxJh5q4xlYcXPpG2V7aZXZxtpr1F_jegs-GioH9xHoIb556m2SFpKc_-rFXQsjcNm98G7yFJB-06EyyCz0pEp5DoP4OvCUqnBys9mB"/>
+</div>
+<!-- Item 10 (Density) -->
+<div class="group relative aspect-16-9 overflow-hidden bg-surface-container-highest cursor-pointer border border-outline-variant/5">
+<img class="w-full h-full object-cover grayscale brightness-50 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiUbA_9mbahmIxuZpgtQVkEORIAxydSVg0Tip1Dd1J5hS4FdmmzJet9WbZntwxgXnip5InDlyqB_umHcsUtnJIpODUs071QF6GWwMKVrLC8Mek-iTK7oVJzD3hSGO9MfWj15NtOFjKT2pCX_6WkuFJo3q9xMJeIJWuw0FP7IqJoCg1cY99B2MzDiyQUVQUgo8_oaf0EY2zm8zcr1xyMVCr_aL2XzqS3YJPbtLZNBnA9DjCPQjyOD5hNa_HRhkXN33Cc2w1PVrDkJX5"/>
+</div>
+<!-- Item 11 (Density) -->
+<div class="group relative aspect-16-9 overflow-hidden bg-surface-container-highest cursor-pointer border border-outline-variant/5">
+<img class="w-full h-full object-cover grayscale brightness-50 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDP-euTDz52JnuQz8m_QjoZ5HxavmnT0nf8vi9XCe266Qg5Z84KvKVxkG8Z3LzfDzyJVuDz91BLD5KA5gGwKtZ4PzyXGimUsfiQDOY45FnWEq3ivBMR7BQ1IbcgoAOrOWGdpIx7nIO1KXTCG6Q1xVCvnmzBngf94LDUDHo_7mR3R7ys2ZQzL4Y0Ish-Y3nt_J7BRdqf-vIYFMEjU3aPBWSdUBYFBxbxFvRaGo97awsoVaKgZofsK7iL11ZHQetkh6X5DzLrkaBLs82M"/>
+</div>
+<!-- Item 12 (Density) -->
+<div class="group relative aspect-16-9 overflow-hidden bg-surface-container-highest cursor-pointer border border-outline-variant/5">
+<img class="w-full h-full object-cover grayscale brightness-50 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2mXb_YLh4QHoPD7ndTNb9zPwt2Fkfvq4DC59Owz6fE7MVL1z99pqry7AEYIAhc-WNaBXdTHLKUp5iTk6cOt4zh9qFrym_3qEsjEjorbZZm-Ras4itUwmaHdaG383uGfORlcTP7zvnWmGJYN0xkx-jM2RE8H-n-PAcJRL22r8c8Srv-eyGlByMEjyfApK64qHgxmzgzp7FqITbbl1T993wFBJj3ZCyTT9q8VVZAoIkbHdGAegZ7n0EwLHbh-rjSiu39JKiPpO6NsVa"/>
+</div>
+</div>
+</section>
+<!-- Bottom CTA Section -->
+<section class="bg-surface-container-low rounded-lg p-8 border border-outline-variant/10 flex flex-col md:flex-row items-center justify-between gap-6">
+<div class="space-y-1">
+<h3 class="font-headline-md text-headline-md font-bold text-on-surface">Curate Your Next Collection</h3>
+<p class="text-on-surface-variant font-body-sm opacity-70">Advanced filters and director tagging tools are ready for your new uploads.</p>
+</div>
+<div class="flex items-center gap-4">
+<button class="bg-primary text-on-primary font-label-mono text-[11px] uppercase tracking-[0.2em] px-8 py-3 rounded hover:brightness-110 transition-all active:scale-95 font-bold shadow-lg shadow-primary/5">
+                    Start New Folder
+                </button>
+<button class="border border-outline-variant/30 text-on-surface font-label-mono text-[11px] uppercase tracking-[0.2em] px-8 py-3 rounded hover:bg-surface-container-high hover:border-outline-variant/50 transition-all font-medium">
+                    Upload More
+                </button>
+</div>
+</section>
+</div>
+<!-- Footer Padding -->
+<footer class="h-24 border-t border-outline-variant/5 flex items-center justify-center">
+<p class="font-label-mono text-[10px] text-on-surface-variant/40 uppercase tracking-[0.3em]">doobdeck cinematic archival systems © 2024</p>
+</footer>
+</main>
+<!-- Contextual FAB -->
+<button class="fixed bottom-margin right-margin w-14 h-14 bg-primary text-on-primary-fixed rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50 group border-4 border-background">
+<span class="material-symbols-outlined text-[28px] group-hover:rotate-90 transition-transform duration-300" style="font-variation-settings: 'FILL' 1;">add</span>
+</button>
+</body></html>
