@@ -19,13 +19,18 @@ export default async function UploadPage() {
   ]);
 
   return (
-    <div className="space-y-6 max-w-7xl">
-      <div>
-        <h1 className="text-2xl font-bold text-text-primary">Upload Still</h1>
-        <p className="text-sm text-text-muted mt-1">
-          Add a new film still to your collection.
+    <div className="space-y-6">
+      <section className="space-y-3">
+        <p className="font-mono text-xs uppercase tracking-[0.32em] text-text-muted">
+          upload
         </p>
-      </div>
+        <h1 className="text-3xl font-semibold tracking-tight text-text-primary sm:text-4xl">
+          Add a new film still to your collection.
+        </h1>
+        <p className="max-w-2xl text-sm leading-6 text-text-secondary sm:text-base">
+          Drop in a frame, then annotate it with the metadata that makes it searchable later.
+        </p>
+      </section>
       <UploadPageClient folders={folders} categories={categories} tags={tags} />
     </div>
   );

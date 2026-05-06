@@ -16,7 +16,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="text-sm font-medium text-text-secondary"
+            className="font-mono text-[11px] uppercase tracking-[0.18em] text-text-muted"
           >
             {label}
           </label>
@@ -25,9 +25,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           id={inputId}
           className={cn(
-            "h-10 w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-text-primary",
-            "placeholder:text-text-disabled",
-            "focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent",
+            "h-11 w-full rounded-md border border-border/80 bg-surface-container-low/80 px-3 py-2 text-sm text-text-primary shadow-[inset_0_1px_0_rgba(255,255,255,0.02)]",
+            "placeholder:text-text-muted",
+            "focus:border-accent/70 focus:outline-none focus:ring-2 focus:ring-accent/30",
             "disabled:cursor-not-allowed disabled:opacity-50",
             "transition-colors",
             error && "border-danger focus:ring-danger",
@@ -60,7 +60,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="text-sm font-medium text-text-secondary"
+            className="font-mono text-[11px] uppercase tracking-[0.18em] text-text-muted"
           >
             {label}
           </label>
@@ -69,9 +69,9 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           ref={ref}
           id={inputId}
           className={cn(
-            "w-full min-h-[80px] rounded-md border border-border bg-surface px-3 py-2 text-sm text-text-primary",
-            "placeholder:text-text-disabled resize-y",
-            "focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent",
+            "w-full min-h-[80px] rounded-md border border-border/80 bg-surface-container-low/80 px-3 py-2 text-sm text-text-primary shadow-[inset_0_1px_0_rgba(255,255,255,0.02)]",
+            "placeholder:text-text-muted resize-y",
+            "focus:border-accent/70 focus:outline-none focus:ring-2 focus:ring-accent/30",
             "disabled:cursor-not-allowed disabled:opacity-50",
             "transition-colors",
             error && "border-danger focus:ring-danger",

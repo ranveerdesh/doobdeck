@@ -12,17 +12,17 @@ function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-10 flex items-center gap-4 h-14 px-6 bg-background/80 backdrop-blur border-b border-border">
-      <div className="flex-1">
+    <header className="sticky top-0 z-20 flex items-center gap-4 border-b border-border/70 bg-background/70 px-4 py-3 backdrop-blur-xl sm:px-6 lg:px-8">
+      <div className="flex-1 min-w-0">
         <SearchBar />
       </div>
 
       <div className="relative">
         <button
           onClick={() => setMenuOpen((v) => !v)}
-          className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm text-text-secondary hover:text-text-primary hover:bg-surface-raised transition-colors"
+          className="flex items-center gap-2 rounded-md border border-border/70 bg-surface/70 px-3 py-2 text-sm text-text-secondary transition-colors hover:border-border hover:bg-surface-raised hover:text-text-primary"
         >
-          <div className="flex items-center justify-center w-6 h-6 rounded-full bg-accent text-accent-foreground text-xs font-bold">
+          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-accent text-xs font-semibold text-accent-foreground">
             {session?.user?.name?.[0]?.toUpperCase() ??
               session?.user?.email?.[0]?.toUpperCase() ??
               "?"}
@@ -42,15 +42,15 @@ function Header() {
               className="fixed inset-0 z-10"
               onClick={() => setMenuOpen(false)}
             />
-            <div className="absolute right-0 top-full mt-1 w-48 rounded-lg border border-border bg-surface-raised shadow-modal z-20 py-1 animate-fade-in">
-              <div className="px-3 py-2 border-b border-border">
-                <p className="text-xs text-text-muted truncate">
+            <div className="absolute right-0 top-full z-20 mt-2 w-52 rounded-md border border-border/80 bg-surface-container-high shadow-modal animate-fade-in">
+              <div className="border-b border-border/70 px-3 py-2.5">
+                <p className="truncate text-[11px] uppercase tracking-[0.18em] text-text-muted font-mono">
                   {session?.user?.email}
                 </p>
               </div>
               <button
                 onClick={() => signOut({ callbackUrl: "/" })}
-                className="flex w-full items-center gap-2 px-3 py-2 text-sm text-text-secondary hover:text-text-primary hover:bg-surface-overlay transition-colors"
+                className="flex w-full items-center gap-2 px-3 py-2.5 text-sm text-text-secondary transition-colors hover:bg-white/[0.03] hover:text-text-primary"
               >
                 <LogOut size={14} />
                 Sign out

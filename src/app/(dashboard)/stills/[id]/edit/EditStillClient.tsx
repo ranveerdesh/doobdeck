@@ -44,7 +44,7 @@ export default function EditStillClient({
   return (
     <div className="max-w-2xl space-y-6">
       {error && (
-        <div className="flex items-center gap-2 p-3 rounded-lg bg-danger-subtle border border-danger/20 text-sm text-danger">
+        <div className="flex items-center gap-2 rounded-md border border-danger/20 bg-danger-subtle px-3 py-3 text-sm text-danger">
           <AlertCircle size={14} />
           {error}
         </div>

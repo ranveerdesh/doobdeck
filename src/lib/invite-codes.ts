@@ -4,9 +4,8 @@
  * This is a simple configuration; for production, consider using a database
  */
 export const VALID_INVITE_CODES = [
-  "DOOBDECK2024",
-  "FILMMAKER",
-  "STILLS",
+  "DOOBYBOY",
+  "RONNIEBOY",
 ] as const;
 
 /**

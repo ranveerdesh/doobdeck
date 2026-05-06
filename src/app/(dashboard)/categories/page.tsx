@@ -17,13 +17,18 @@ export default async function CategoriesPage() {
   });
 
   return (
-    <div className="space-y-6 max-w-7xl">
-      <div>
-        <h1 className="text-2xl font-bold text-text-primary">Categories</h1>
-        <p className="text-sm text-text-muted mt-1">
-          Classify your stills by genre, mood or theme.
+    <div className="space-y-6">
+      <section className="space-y-3">
+        <p className="font-mono text-xs uppercase tracking-[0.32em] text-text-muted">
+          categories
         </p>
-      </div>
+        <h1 className="text-3xl font-semibold tracking-tight text-text-primary sm:text-4xl">
+          Classify your stills by genre, mood or theme.
+        </h1>
+        <p className="max-w-2xl text-sm leading-6 text-text-secondary sm:text-base">
+          Use categories to keep your archive readable at a glance.
+        </p>
+      </section>
       <CategoryList categories={categories} />
     </div>
   );

@@ -24,19 +24,22 @@ function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="flex flex-col w-60 min-h-screen bg-surface border-r border-border flex-shrink-0">
-      {/* Logo */}
-      <div className="flex items-center gap-2.5 px-5 py-5 border-b border-border">
-        <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-accent">
+    <aside className="sticky top-0 flex h-screen w-72 shrink-0 flex-col border-r border-border/80 bg-surface-container-lowest/95 backdrop-blur">
+      <div className="flex items-center gap-3 border-b border-border/70 px-5 py-5">
+        <div className="flex h-9 w-9 items-center justify-center rounded-md border border-border/70 bg-accent text-accent-foreground shadow-card">
           <Film size={18} className="text-accent-foreground" />
         </div>
-        <span className="font-bold text-lg text-text-primary tracking-tight">
-          doobdeck
-        </span>
+        <div>
+          <span className="block text-[10px] uppercase tracking-[0.32em] text-text-muted font-mono">
+            archive
+          </span>
+          <span className="block text-lg font-semibold tracking-tight text-text-primary">
+            doobdeck
+          </span>
+        </div>
       </div>
 
-      {/* Nav */}
-      <nav className="flex-1 p-3 space-y-0.5">
+      <nav className="flex-1 p-3">
         {NAV_ITEMS.map(({ href, label, icon: Icon }) => {
           const isActive =
             pathname === href || (href !== "/dashboard" && pathname.startsWith(href));
@@ -45,13 +48,20 @@ function Sidebar() {
             <Link
               key={href}
               href={href}
+              aria-current={isActive ? "page" : undefined}
               className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
+                "group relative flex items-center gap-3 rounded-md px-4 py-3 text-sm font-medium transition-colors",
                 isActive
-                  ? "bg-accent-subtle text-accent"
-                  : "text-text-muted hover:text-text-primary hover:bg-surface-raised"
+                  ? "bg-white/[0.03] text-accent"
+                  : "text-text-muted hover:bg-white/[0.02] hover:text-text-primary"
               )}
             >
+              <span
+                className={cn(
+                  "absolute left-0 top-2 bottom-2 w-[2px] rounded-full bg-accent transition-opacity",
+                  isActive ? "opacity-100" : "opacity-0 group-hover:opacity-60"
+                )}
+              />
               <Icon size={18} />
               {label}
             </Link>
@@ -59,9 +69,8 @@ function Sidebar() {
         })}
       </nav>
 
-      {/* Footer */}
-      <div className="p-3 border-t border-border">
-        <p className="text-xs text-text-disabled text-center">
+      <div className="border-t border-border/70 p-4">
+        <p className="text-center font-mono text-[11px] uppercase tracking-[0.24em] text-text-muted">
           doobdeck · v0.1.0
         </p>
       </div>

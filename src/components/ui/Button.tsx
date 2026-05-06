@@ -21,23 +21,23 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const base =
-      "inline-flex items-center justify-center font-medium rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50";
+      "inline-flex items-center justify-center rounded-md font-medium tracking-wide transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50";
 
     const variants = {
       primary:
-        "bg-accent text-accent-foreground hover:bg-accent-dim active:bg-accent-dim",
+        "bg-accent text-accent-foreground shadow-[0_10px_24px_rgba(217,119,7,0.18)] hover:brightness-105 active:brightness-95",
       secondary:
-        "bg-surface-raised text-text-primary border border-border hover:bg-surface-overlay",
-      ghost: "text-text-secondary hover:text-text-primary hover:bg-surface-raised",
-      danger: "bg-danger text-white hover:bg-danger-dim active:bg-danger-dim",
+        "border border-border/80 bg-surface-raised text-text-primary hover:border-border hover:bg-surface-overlay",
+      ghost: "text-text-secondary hover:bg-white/[0.03] hover:text-text-primary",
+      danger: "bg-danger text-on-error shadow-[0_10px_24px_rgba(255,180,171,0.12)] hover:brightness-105 active:brightness-95",
       outline:
-        "border border-border text-text-primary bg-transparent hover:bg-surface-raised",
+        "border border-border/80 bg-transparent text-text-primary hover:bg-white/[0.03]",
     };
 
     const sizes = {
-      sm: "h-8 px-3 text-sm gap-1.5",
+      sm: "h-8 px-3 text-xs gap-1.5 uppercase",
       md: "h-10 px-4 text-sm gap-2",
-      lg: "h-11 px-6 text-base gap-2",
+      lg: "h-11 px-6 text-sm gap-2",
     };
 
     return (

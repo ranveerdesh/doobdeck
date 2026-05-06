@@ -26,7 +26,7 @@ export default function DeleteStillButton({ stillId }: { stillId: string }) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="p-2 rounded-lg text-text-muted hover:text-danger hover:bg-danger-subtle transition-colors"
+        className="rounded-md border border-border/70 p-2 text-text-muted transition-colors hover:bg-danger-subtle hover:text-danger"
         title="Delete"
       >
         <Trash2 size={15} />

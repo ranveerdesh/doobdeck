@@ -39,8 +39,8 @@ function FilterPanel({ folders, categories, tags, className }: FilterPanelProps)
   const hasFilters = currentFolder || currentCategory || currentTag || currentQ;
 
   return (
-    <div className={cn("flex items-center gap-3 flex-wrap", className)}>
-      <div className="flex items-center gap-1.5 text-xs text-text-muted">
+    <div className={cn("flex flex-wrap items-center gap-3 rounded-md border border-border/80 bg-surface-container-low/60 p-3", className)}>
+      <div className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-text-muted">
         <Filter size={13} />
         <span>Filter:</span>
       </div>
@@ -48,7 +48,7 @@ function FilterPanel({ folders, categories, tags, className }: FilterPanelProps)
       <select
         value={currentFolder}
         onChange={(e) => updateFilter("folderId", e.target.value)}
-        className="h-8 rounded-md border border-border bg-surface px-2 text-xs text-text-primary focus:outline-none focus:ring-1 focus:ring-accent"
+        className="h-9 rounded-md border border-border/80 bg-surface-container-low/80 px-2.5 text-xs text-text-primary focus:border-accent/70 focus:outline-none focus:ring-1 focus:ring-accent/30"
       >
         <option value="">All folders</option>
         {folders.map((f) => (
@@ -61,7 +61,7 @@ function FilterPanel({ folders, categories, tags, className }: FilterPanelProps)
       <select
         value={currentCategory}
         onChange={(e) => updateFilter("categoryId", e.target.value)}
-        className="h-8 rounded-md border border-border bg-surface px-2 text-xs text-text-primary focus:outline-none focus:ring-1 focus:ring-accent"
+        className="h-9 rounded-md border border-border/80 bg-surface-container-low/80 px-2.5 text-xs text-text-primary focus:border-accent/70 focus:outline-none focus:ring-1 focus:ring-accent/30"
       >
         <option value="">All categories</option>
         {categories.map((c) => (
@@ -74,7 +74,7 @@ function FilterPanel({ folders, categories, tags, className }: FilterPanelProps)
       <select
         value={currentTag}
         onChange={(e) => updateFilter("tag", e.target.value)}
-        className="h-8 rounded-md border border-border bg-surface px-2 text-xs text-text-primary focus:outline-none focus:ring-1 focus:ring-accent"
+        className="h-9 rounded-md border border-border/80 bg-surface-container-low/80 px-2.5 text-xs text-text-primary focus:border-accent/70 focus:outline-none focus:ring-1 focus:ring-accent/30"
       >
         <option value="">All tags</option>
         {tags.map((t) => (
@@ -87,7 +87,7 @@ function FilterPanel({ folders, categories, tags, className }: FilterPanelProps)
       {hasFilters && (
         <button
           onClick={clearAll}
-          className="flex items-center gap-1 h-8 px-2 text-xs text-danger hover:text-danger-dim transition-colors"
+          className="flex h-9 items-center gap-1 rounded-md px-2.5 text-xs text-danger transition-colors hover:bg-danger-subtle hover:text-danger-dim"
         >
           <X size={12} />
           Clear

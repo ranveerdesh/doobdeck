@@ -2,7 +2,7 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { Images, Folder, Tag, UploadCloud, Clock } from "lucide-react";
+import { Clock, Folder, Images, Tag, UploadCloud } from "lucide-react";
 import { StillCard } from "@/components/stills/StillCard";
 import type { Metadata } from "next";
 
@@ -58,52 +58,51 @@ export default async function DashboardPage() {
   ];
 
   return (
-    <div className="space-y-8 max-w-7xl">
-      {/* Welcome */}
-      <div>
-        <h1 className="text-2xl font-bold text-text-primary">
-          Welcome back
-          {session.user.name ? `, ${session.user.name.split(" ")[0]}` : ""}
-        </h1>
-        <p className="text-sm text-text-muted mt-1">
-          Here&apos;s an overview of your film stills collection.
+    <div className="space-y-8">
+      <section className="space-y-3">
+        <p className="font-mono text-xs uppercase tracking-[0.32em] text-text-muted">
+          dashboard
         </p>
-      </div>
+        <h1 className="text-3xl font-semibold tracking-tight text-text-primary sm:text-4xl">
+          Welcome back{session.user.name ? `, ${session.user.name.split(" ")[0]}` : ""}
+        </h1>
+        <p className="max-w-2xl text-sm leading-6 text-text-secondary sm:text-base">
+          Here&apos;s a quick read on your archive: collection size, recent uploads, and where to continue cataloguing.
+        </p>
+      </section>
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         {stats.map(({ label, value, icon: Icon, href }) => (
           <Link
             key={label}
             href={href}
-            className="flex items-center gap-4 p-5 rounded-xl bg-surface-raised border border-border hover:border-border-strong transition-colors"
+            className="flex items-center gap-4 rounded-md border border-border/80 bg-surface-container-low/75 p-5 transition-colors hover:border-border hover:bg-surface-container/85"
           >
-            <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-accent-subtle">
+            <div className="flex h-10 w-10 items-center justify-center rounded-md border border-accent/20 bg-accent-subtle">
               <Icon size={20} className="text-accent" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-text-primary">{value}</p>
-              <p className="text-xs text-text-muted">{label}</p>
+              <p className="text-2xl font-semibold tracking-tight text-text-primary">{value}</p>
+              <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-text-muted">{label}</p>
             </div>
           </Link>
         ))}
       </div>
 
-      {/* Upload CTA */}
       {totalStills === 0 && (
-        <div className="flex flex-col items-center gap-4 py-12 rounded-xl border-2 border-dashed border-border text-center">
-          <div className="p-3 rounded-full bg-surface-raised">
+        <div className="flex flex-col items-center gap-4 rounded-md border border-dashed border-border/80 bg-surface-container-low/60 py-14 text-center">
+          <div className="rounded-md border border-border/70 bg-surface-raised p-3">
             <UploadCloud size={28} className="text-text-muted" />
           </div>
           <div>
-            <p className="text-text-primary font-medium">No stills yet</p>
-            <p className="text-sm text-text-muted mt-1">
+            <p className="font-medium text-text-primary">No stills yet</p>
+            <p className="mt-1 text-sm text-text-muted">
               Upload your first film still to get started.
             </p>
           </div>
           <Link
             href="/upload"
-            className="inline-flex items-center gap-2 h-10 px-5 rounded-lg bg-accent text-accent-foreground font-medium text-sm hover:bg-accent-dim transition-colors"
+            className="inline-flex items-center gap-2 rounded-md bg-accent px-5 py-3 text-sm font-medium text-accent-foreground transition-colors hover:brightness-105"
           >
             <UploadCloud size={16} />
             Upload a still
@@ -111,22 +110,21 @@ export default async function DashboardPage() {
         </div>
       )}
 
-      {/* Recent stills */}
       {recentStills.length > 0 && (
         <div>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="flex items-center gap-2 text-base font-semibold text-text-primary">
+          <div className="mb-4 flex items-center justify-between gap-3">
+            <h2 className="flex items-center gap-2 text-base font-semibold tracking-tight text-text-primary">
               <Clock size={16} className="text-text-muted" />
               Recent uploads
             </h2>
             <Link
               href="/library"
-              className="text-sm text-accent hover:text-accent-dim transition-colors"
+              className="text-sm text-accent transition-colors hover:text-accent-dim"
             >
               View all
             </Link>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {recentStills.map((still) => (
               <StillCard key={still.id} still={still} />
             ))}

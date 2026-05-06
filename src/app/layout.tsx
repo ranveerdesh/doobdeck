@@ -1,6 +1,18 @@
 import type { Metadata } from "next";
+import { IBM_Plex_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+});
+
+const plexMono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-plex-mono",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -16,8 +28,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
-      <body className="bg-background text-text-primary antialiased font-sans min-h-screen">
+    <html lang="en" className={`dark ${inter.variable} ${plexMono.variable}`}>
+      <body className="min-h-screen bg-background text-text-primary antialiased font-sans">
         <Providers>{children}</Providers>
       </body>
     </html>

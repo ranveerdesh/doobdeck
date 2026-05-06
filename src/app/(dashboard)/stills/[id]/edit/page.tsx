@@ -32,16 +32,21 @@ export default async function EditStillPage({ params }: EditStillPageProps) {
   if (!still || still.userId !== userId) notFound();
 
   return (
-    <div className="space-y-6 max-w-7xl">
-      <div className="space-y-1">
+    <div className="space-y-6">
+      <div className="space-y-3">
         <Link
           href={`/stills/${still.id}`}
-          className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-text-primary transition-colors"
+          className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.2em] text-text-muted transition-colors hover:text-text-primary"
         >
           <ArrowLeft size={14} />
           Back to still
         </Link>
-        <h1 className="text-2xl font-bold text-text-primary">Edit Still</h1>
+        <p className="font-mono text-xs uppercase tracking-[0.32em] text-text-muted">
+          edit
+        </p>
+        <h1 className="text-3xl font-semibold tracking-tight text-text-primary sm:text-4xl">
+          Edit still
+        </h1>
       </div>
       <EditStillClient
         still={still}

@@ -17,13 +17,18 @@ export default async function FoldersPage() {
   });
 
   return (
-    <div className="space-y-6 max-w-7xl">
-      <div>
-        <h1 className="text-2xl font-bold text-text-primary">Folders</h1>
-        <p className="text-sm text-text-muted mt-1">
-          Organise your stills into folders.
+    <div className="space-y-6">
+      <section className="space-y-3">
+        <p className="font-mono text-xs uppercase tracking-[0.32em] text-text-muted">
+          folders
         </p>
-      </div>
+        <h1 className="text-3xl font-semibold tracking-tight text-text-primary sm:text-4xl">
+          Organise your stills into folders.
+        </h1>
+        <p className="max-w-2xl text-sm leading-6 text-text-secondary sm:text-base">
+          Group related frames into named sets so the collection stays structured.
+        </p>
+      </section>
       <FolderList folders={folders} />
     </div>
   );

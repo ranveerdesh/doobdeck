@@ -8,17 +8,17 @@ interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
 function Badge({ className, variant = "default", children, ...props }: BadgeProps) {
   const variants = {
     default:
-      "bg-surface-raised text-text-secondary border border-border",
+      "border border-border/70 bg-surface-raised text-text-secondary",
     accent:
-      "bg-accent-subtle text-accent border border-accent/20",
-    muted: "bg-surface text-text-muted border border-border-subtle",
-    danger: "bg-danger-subtle text-danger border border-danger/20",
+      "border border-accent/25 bg-accent-subtle text-accent",
+    muted: "border border-border/60 bg-surface text-text-muted",
+    danger: "border border-danger/25 bg-danger-subtle text-danger",
   };
 
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium",
+        "inline-flex items-center rounded-md px-2.5 py-0.5 text-[11px] font-medium tracking-wide",
         variants[variant],
         className
       )}

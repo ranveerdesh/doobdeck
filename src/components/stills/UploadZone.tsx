@@ -63,15 +63,15 @@ function UploadZone({ onFile, preview, disabled, className }: UploadZoneProps) {
         onDragLeave={() => setIsDragging(false)}
         onDrop={disabled ? undefined : handleDrop}
         className={cn(
-          "relative flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed",
-          "min-h-[200px] cursor-pointer transition-all duration-200",
+          "relative flex min-h-[240px] cursor-pointer flex-col items-center justify-center gap-3 overflow-hidden rounded-md border border-dashed border-border/80 transition-all duration-200",
           isDragging
-            ? "border-accent bg-accent-subtle"
-            : "border-border hover:border-border-strong hover:bg-surface-raised",
+            ? "border-accent bg-accent-subtle/25"
+            : "bg-surface-container-low/60 hover:border-border hover:bg-surface-container-low/80",
           disabled && "opacity-50 cursor-not-allowed",
           preview ? "aspect-video" : ""
         )}
       >
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),transparent_35%)]" />
         <input
           type="file"
           accept={ACCEPTED_TYPES.join(",")}
@@ -86,14 +86,14 @@ function UploadZone({ onFile, preview, disabled, className }: UploadZoneProps) {
           <img
             src={preview}
             alt="Preview"
-            className="w-full h-full object-cover rounded-xl"
+            className="relative z-10 h-full w-full object-cover"
           />
         ) : (
-          <div className="flex flex-col items-center gap-2 text-center px-6 py-8">
+          <div className="relative z-10 flex flex-col items-center gap-2 px-6 py-8 text-center">
             <div
               className={cn(
-                "rounded-full p-3",
-                isDragging ? "bg-accent/20" : "bg-surface-raised"
+                "rounded-md border border-border/70 p-3",
+                isDragging ? "bg-accent/15" : "bg-surface-raised/80"
               )}
             >
               <UploadCloud

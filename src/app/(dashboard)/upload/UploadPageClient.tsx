@@ -91,11 +91,11 @@ export default function UploadPageClient({
 
   if (success) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 gap-4 text-center">
-        <div className="p-3 rounded-full bg-success/10">
+      <div className="flex flex-col items-center justify-center gap-4 rounded-md border border-border/80 bg-surface-container-low/60 py-20 text-center">
+        <div className="rounded-md border border-success/20 bg-success-subtle p-3">
           <CheckCircle2 size={28} className="text-success" />
         </div>
-        <p className="text-text-primary font-medium">Still uploaded!</p>
+        <p className="font-medium text-text-primary">Still uploaded!</p>
         <p className="text-sm text-text-muted">Redirecting…</p>
       </div>
     );
@@ -104,14 +104,14 @@ export default function UploadPageClient({
   return (
     <div className="max-w-2xl space-y-6">
       {error && (
-        <div className="flex items-center gap-2 p-3 rounded-lg bg-danger-subtle border border-danger/20 text-sm text-danger">
+        <div className="flex items-center gap-2 rounded-md border border-danger/20 bg-danger-subtle px-3 py-3 text-sm text-danger">
           <AlertCircle size={14} />
           {error}
         </div>
       )}
 
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-text-secondary">
+      <div className="space-y-2 rounded-md border border-border/80 bg-surface-container-low/60 p-4">
+        <label className="font-mono text-[11px] uppercase tracking-[0.18em] text-text-muted">
           Image *
         </label>
         <UploadZone

@@ -86,7 +86,7 @@ async function LibraryContent({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between text-sm text-text-muted">
+      <div className="flex items-center justify-between gap-3 rounded-md border border-border/80 bg-surface-container-low/60 px-4 py-3 text-sm text-text-muted">
         <span>
           {total} still{total !== 1 ? "s" : ""}
           {q ? ` matching "${q}"` : ""}
@@ -128,7 +128,7 @@ async function LibraryContent({
                 <a
                   key={item.label}
                   href={`?${params.toString()}`}
-                  className="px-3 py-1.5 rounded-md border border-border text-sm text-text-secondary hover:bg-surface-raised transition-colors"
+                  className="rounded-md border border-border/80 px-3 py-1.5 text-sm text-text-secondary transition-colors hover:bg-white/[0.03] hover:text-text-primary"
                 >
                   {item.label}
                 </a>
@@ -171,13 +171,18 @@ export default async function LibraryPage({ searchParams }: LibraryPageProps) {
   ]);
 
   return (
-    <div className="space-y-6 max-w-7xl">
-      <div>
-        <h1 className="text-2xl font-bold text-text-primary">Library</h1>
-        <p className="text-sm text-text-muted mt-1">
-          All your film stills in one place.
+    <div className="space-y-6">
+      <section className="space-y-3">
+        <p className="font-mono text-xs uppercase tracking-[0.32em] text-text-muted">
+          library
         </p>
-      </div>
+        <h1 className="text-3xl font-semibold tracking-tight text-text-primary sm:text-4xl">
+          All your film stills in one place.
+        </h1>
+        <p className="max-w-2xl text-sm leading-6 text-text-secondary sm:text-base">
+          Search, filter, and browse the archive with the same structure you use to capture it.
+        </p>
+      </section>
 
       <Suspense>
         <FilterPanel folders={folders} categories={categories} tags={tags} />

@@ -12,13 +12,39 @@
   }
 
   html {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    background:
+      radial-gradient(circle at top, rgba(255, 183, 125, 0.08), transparent 34%),
+      radial-gradient(circle at 20% 20%, rgba(255, 183, 125, 0.04), transparent 22%),
+      #131313;
   }
 
   body {
-    background-color: #0a0a0a;
-    color: #f0f0f0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.01), transparent 24%),
+      #131313;
+    color: #e5e2e1;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image: linear-gradient(
+      rgba(255, 255, 255, 0.015) 1px,
+      transparent 1px
+    );
+    background-size: 100% 3rem;
+    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.32), transparent 70%);
+  }
+
+  ::selection {
+    background: rgba(255, 183, 125, 0.28);
+    color: #ffffff;
   }
 
   /* Custom scrollbar */
@@ -30,17 +56,17 @@
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: #2a2a2a;
+    background: #3a3939;
     border-radius: 3px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #3a3a3a;
+    background: #554336;
   }
 
   /* Remove default select arrow and style it */
   select {
     appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a38c7c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 0.5rem center;
     padding-right: 1.75rem !important;

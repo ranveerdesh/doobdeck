@@ -41,20 +41,18 @@ export default async function StillPage({ params }: StillPageProps) {
   if (!still || still.userId !== session.user.id) notFound();
 
   return (
-    <div className="max-w-4xl space-y-6">
-      {/* Back nav */}
+    <div className="space-y-6">
       <Link
         href="/library"
-        className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-text-primary transition-colors"
+        className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.2em] text-text-muted transition-colors hover:text-text-primary"
       >
         <ArrowLeft size={14} />
         Back to library
       </Link>
 
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-        {/* Image */}
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-5">
         <div className="lg:col-span-3">
-          <div className="relative aspect-video rounded-xl overflow-hidden bg-surface">
+          <div className="relative aspect-video overflow-hidden rounded-md border border-border/80 bg-surface-container-low shadow-card">
             <Image
               src={still.imageUrl}
               alt={still.title}
@@ -65,21 +63,20 @@ export default async function StillPage({ params }: StillPageProps) {
             />
           </div>
 
-          {/* Colour palette */}
           {still.colours.length > 0 && (
-            <div className="mt-4 p-4 rounded-xl bg-surface-raised border border-border">
-              <h3 className="text-xs font-medium text-text-muted uppercase tracking-wider mb-3">
-                Colour Palette
+            <div className="mt-4 rounded-md border border-border/80 bg-surface-container-low/75 p-4">
+              <h3 className="mb-3 font-mono text-[11px] uppercase tracking-[0.24em] text-text-muted">
+                Colour palette
               </h3>
-              <div className="flex items-center gap-2 flex-wrap">
+              <div className="flex flex-wrap items-center gap-2">
                 {still.colours.map((c) => (
                   <div key={c.id} className="flex flex-col items-center gap-1">
                     <div
-                      className="w-8 h-8 rounded-lg border border-white/10"
+                      className="h-8 w-8 rounded-md border border-white/10"
                       style={{ backgroundColor: c.hex }}
                       title={c.name ?? c.hex}
                     />
-                    <span className="text-[9px] text-text-muted font-mono">
+                    <span className="font-mono text-[9px] text-text-muted">
                       {c.hex}
                     </span>
                   </div>
@@ -89,16 +86,15 @@ export default async function StillPage({ params }: StillPageProps) {
           )}
         </div>
 
-        {/* Metadata */}
-        <div className="lg:col-span-2 space-y-5">
-          <div className="flex items-start justify-between gap-2">
-            <h1 className="text-xl font-bold text-text-primary leading-tight">
+        <div className="space-y-5 lg:col-span-2">
+          <div className="flex items-start justify-between gap-3 rounded-md border border-border/80 bg-surface-container-low/60 p-4">
+            <h1 className="text-xl font-semibold tracking-tight text-text-primary leading-tight">
               {still.title}
             </h1>
             <div className="flex items-center gap-1 flex-shrink-0">
               <Link
                 href={`/stills/${still.id}/edit`}
-                className="p-2 rounded-lg text-text-muted hover:text-text-primary hover:bg-surface-raised transition-colors"
+                className="rounded-md border border-border/70 p-2 text-text-muted transition-colors hover:bg-white/[0.03] hover:text-text-primary"
                 title="Edit"
               >
                 <Pencil size={15} />
@@ -107,11 +103,11 @@ export default async function StillPage({ params }: StillPageProps) {
             </div>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-3 rounded-md border border-border/80 bg-surface-container-low/60 p-4">
             {still.filmName && (
               <div className="flex items-center gap-2">
                 <Clapperboard size={14} className="text-accent flex-shrink-0" />
-                <span className="text-sm text-text-secondary">
+                <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-text-secondary">
                   {still.filmName}
                 </span>
               </div>
@@ -119,7 +115,7 @@ export default async function StillPage({ params }: StillPageProps) {
             {still.director && (
               <div className="flex items-center gap-2">
                 <User size={14} className="text-text-muted flex-shrink-0" />
-                <span className="text-sm text-text-secondary">
+                <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-text-secondary">
                   {still.director}
                 </span>
               </div>
@@ -127,36 +123,36 @@ export default async function StillPage({ params }: StillPageProps) {
             {still.year && (
               <div className="flex items-center gap-2">
                 <Calendar size={14} className="text-text-muted flex-shrink-0" />
-                <span className="text-sm text-text-secondary">{still.year}</span>
+                <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-text-secondary">{still.year}</span>
               </div>
             )}
           </div>
 
           {still.description && (
-            <div>
-              <p className="text-xs font-medium text-text-muted uppercase tracking-wider mb-1.5">
+            <div className="rounded-md border border-border/80 bg-surface-container-low/60 p-4">
+              <p className="mb-1.5 font-mono text-[11px] uppercase tracking-[0.24em] text-text-muted">
                 Description
               </p>
-              <p className="text-sm text-text-secondary leading-relaxed">
+              <p className="text-sm leading-relaxed text-text-secondary">
                 {still.description}
               </p>
             </div>
           )}
 
           {still.notes && (
-            <div>
-              <p className="text-xs font-medium text-text-muted uppercase tracking-wider mb-1.5">
+            <div className="rounded-md border border-border/80 bg-surface-container-low/60 p-4">
+              <p className="mb-1.5 font-mono text-[11px] uppercase tracking-[0.24em] text-text-muted">
                 Notes
               </p>
-              <p className="text-sm text-text-secondary leading-relaxed whitespace-pre-wrap">
+              <p className="whitespace-pre-wrap text-sm leading-relaxed text-text-secondary">
                 {still.notes}
               </p>
             </div>
           )}
 
           {still.folder && (
-            <div>
-              <p className="text-xs font-medium text-text-muted uppercase tracking-wider mb-1.5">
+            <div className="rounded-md border border-border/80 bg-surface-container-low/60 p-4">
+              <p className="mb-1.5 font-mono text-[11px] uppercase tracking-[0.24em] text-text-muted">
                 Folder
               </p>
               <Badge variant="default">{still.folder.name}</Badge>
@@ -164,8 +160,8 @@ export default async function StillPage({ params }: StillPageProps) {
           )}
 
           {still.category && (
-            <div>
-              <p className="text-xs font-medium text-text-muted uppercase tracking-wider mb-1.5">
+            <div className="rounded-md border border-border/80 bg-surface-container-low/60 p-4">
+              <p className="mb-1.5 font-mono text-[11px] uppercase tracking-[0.24em] text-text-muted">
                 Category
               </p>
               <Badge variant="accent">{still.category.name}</Badge>
@@ -173,8 +169,8 @@ export default async function StillPage({ params }: StillPageProps) {
           )}
 
           {still.tags.length > 0 && (
-            <div>
-              <p className="text-xs font-medium text-text-muted uppercase tracking-wider mb-1.5">
+            <div className="rounded-md border border-border/80 bg-surface-container-low/60 p-4">
+              <p className="mb-1.5 font-mono text-[11px] uppercase tracking-[0.24em] text-text-muted">
                 Tags
               </p>
               <div className="flex flex-wrap gap-1.5">
@@ -187,8 +183,8 @@ export default async function StillPage({ params }: StillPageProps) {
             </div>
           )}
 
-          <div className="pt-2 border-t border-border">
-            <p className="text-xs text-text-disabled">
+          <div className="border-t border-border/80 pt-2">
+            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
               Added{" "}
               {new Date(still.createdAt).toLocaleDateString("en-GB", {
                 day: "numeric",

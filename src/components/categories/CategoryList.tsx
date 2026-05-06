@@ -86,8 +86,8 @@ function CategoryList({ categories }: CategoryListProps) {
   };
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-4">
+    <div className="space-y-4">
+      <div className="flex items-center justify-between gap-3 rounded-md border border-border/80 bg-surface-container-low/60 px-4 py-3">
         <h2 className="text-sm font-medium text-text-muted">
           {categories.length} categor{categories.length !== 1 ? "ies" : "y"}
         </h2>
@@ -98,23 +98,23 @@ function CategoryList({ categories }: CategoryListProps) {
       </div>
 
       {categories.length === 0 ? (
-        <div className="text-center py-12 text-text-muted text-sm">
+        <div className="rounded-md border border-dashed border-border/80 px-6 py-12 text-center text-sm text-text-muted">
           No categories yet. Create one to classify your stills.
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {categories.map((category) => (
             <div
               key={category.id}
-              className="flex items-center justify-between p-4 rounded-lg border border-border bg-surface-raised hover:border-border-strong transition-colors"
+              className="flex items-center justify-between rounded-md border border-border/80 bg-surface-container-low/75 p-4 transition-colors hover:border-border hover:bg-surface-container/80"
             >
               <div className="flex items-center gap-3">
                 <Tag size={18} className="text-accent flex-shrink-0" />
                 <div>
-                  <p className="text-sm font-medium text-text-primary">
+                  <p className="text-sm font-medium tracking-tight text-text-primary">
                     {category.name}
                   </p>
-                  <p className="text-xs text-text-muted">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-text-muted">
                     {category._count.stills} still{category._count.stills !== 1 ? "s" : ""}
                   </p>
                 </div>
@@ -126,13 +126,13 @@ function CategoryList({ categories }: CategoryListProps) {
                     setName(category.name);
                     setError("");
                   }}
-                  className="p-1.5 rounded text-text-muted hover:text-text-primary hover:bg-surface-overlay transition-colors"
+                  className="rounded-md p-1.5 text-text-muted transition-colors hover:bg-white/[0.03] hover:text-text-primary"
                 >
                   <Pencil size={13} />
                 </button>
                 <button
                   onClick={() => setDeleteCategory(category)}
-                  className="p-1.5 rounded text-text-muted hover:text-danger transition-colors"
+                  className="rounded-md p-1.5 text-text-muted transition-colors hover:bg-danger-subtle hover:text-danger"
                 >
                   <Trash2 size={13} />
                 </button>

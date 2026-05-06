@@ -10,7 +10,7 @@ interface ModalProps {
   title?: string;
   description?: string;
   children: ReactNode;
-  size?: "sm" | "md" | "lg" | "xl";
+  size?: "sm" | "md" | "lg" | "xl" | "full";
 }
 
 function Modal({ open, onClose, title, description, children, size = "md" }: ModalProps) {
@@ -39,29 +39,32 @@ function Modal({ open, onClose, title, description, children, size = "md" }: Mod
     md: "max-w-md",
     lg: "max-w-lg",
     xl: "max-w-2xl",
+    full: "max-w-[calc(100vw-32px)] max-h-[calc(100vh-32px)]",
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div
-        className="absolute inset-0 bg-black/70 backdrop-blur-sm animate-fade-in"
+        className="absolute inset-0 bg-black/75 backdrop-blur-sm animate-fade-in"
         onClick={onClose}
         aria-hidden="true"
       />
       <div
         className={cn(
-          "relative w-full bg-surface-raised border border-border rounded-xl shadow-modal",
+          "relative w-full overflow-hidden border border-border/80 bg-surface-container-high shadow-modal",
           "animate-slide-up",
-          sizes[size]
+          sizes[size],
+          // ensure content doesn't overflow viewport for full mode
+          size === "full" ? "overflow-hidden" : "overflow-visible"
         )}
         role="dialog"
         aria-modal="true"
         aria-labelledby={title ? "modal-title" : undefined}
       >
-        <div className="flex items-start justify-between p-6 border-b border-border">
+        <div className="flex items-start justify-between border-b border-border/70 px-5 py-4 sm:px-6">
           <div>
             {title && (
-              <h2 id="modal-title" className="text-lg font-semibold text-text-primary">
+              <h2 id="modal-title" className="text-lg font-semibold tracking-tight text-text-primary">
                 {title}
               </h2>
             )}
@@ -71,13 +74,13 @@ function Modal({ open, onClose, title, description, children, size = "md" }: Mod
           </div>
           <button
             onClick={onClose}
-            className="ml-4 p-1 rounded-md text-text-muted hover:text-text-primary hover:bg-surface-overlay transition-colors"
+            className="ml-4 rounded-md border border-border/70 p-1.5 text-text-muted transition-colors hover:border-border hover:bg-white/[0.03] hover:text-text-primary"
             aria-label="Close modal"
           >
             <X size={18} />
           </button>
         </div>
-        <div className="p-6">{children}</div>
+        <div className="px-5 py-5 sm:px-6">{children}</div>
       </div>
     </div>
   );

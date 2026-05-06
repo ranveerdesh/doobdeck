@@ -39,10 +39,10 @@ function SearchBar({ className, placeholder = "Search stills..." }: SearchBarPro
   }, [debouncedValue, router, value, searchParams]);
 
   return (
-    <div className={cn("relative max-w-sm", className)}>
+    <div className={cn("relative w-full max-w-2xl", className)}>
       <Search
         size={15}
-        className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none"
+        className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-text-muted"
       />
       <input
         ref={inputRef}
@@ -50,12 +50,12 @@ function SearchBar({ className, placeholder = "Search stills..." }: SearchBarPro
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder={placeholder}
-        className="w-full h-9 rounded-lg border border-border bg-surface pl-9 pr-8 text-sm text-text-primary placeholder:text-text-disabled focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-colors"
+        className="h-11 w-full rounded-md border border-border/80 bg-surface-container-low/90 pl-9 pr-9 font-mono text-sm tracking-wide text-text-primary placeholder:text-text-muted focus:border-accent/70 focus:outline-none focus:ring-2 focus:ring-accent/30"
       />
       {value && (
         <button
           onClick={() => setValue("")}
-          className="absolute right-2.5 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-primary"
+          className="absolute right-2.5 top-1/2 -translate-y-1/2 text-text-muted transition-colors hover:text-text-primary"
           aria-label="Clear search"
         >
           <X size={13} />

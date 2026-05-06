@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Film, AlertCircle } from "lucide-react";
+import { AlertCircle, ArrowRight, Film } from "lucide-react";
 import { signInSchema, type SignInInput } from "@/lib/validations";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
@@ -42,22 +42,45 @@ export default function SignInForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-background">
-      <div className="w-full max-w-sm space-y-8">
-        <div className="text-center space-y-2">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-accent">
-              <Film size={18} className="text-accent-foreground" />
+    <div className="relative min-h-screen overflow-hidden bg-background px-4 py-10 sm:px-6 lg:px-8">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,183,125,0.08),transparent_32%)]" />
+      <div className="relative mx-auto flex min-h-[calc(100vh-5rem)] w-full max-w-5xl items-center justify-center">
+        <div className="grid w-full gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="space-y-6 self-center">
+            <div className="inline-flex items-center gap-3 rounded-md border border-border/80 bg-surface-container-low/80 px-3 py-2 shadow-card">
+              <div className="flex h-9 w-9 items-center justify-center rounded-md bg-accent text-accent-foreground">
+                <Film size={18} />
+              </div>
+              <div>
+                <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-text-muted">
+                  doobdeck
+                </p>
+                <p className="text-sm text-text-secondary">Private film archive</p>
+              </div>
             </div>
-            <span className="font-bold text-xl text-text-primary">doobdeck</span>
+            <div className="space-y-3 max-w-md">
+              <p className="font-mono text-xs uppercase tracking-[0.32em] text-text-muted">
+                sign in
+              </p>
+              <h1 className="text-4xl font-semibold tracking-tight text-text-primary">
+                Welcome back.
+              </h1>
+              <p className="text-base leading-7 text-text-secondary">
+                Continue browsing your archive, search your collection, and keep the visual library in one place.
+              </p>
+            </div>
+            <Link
+              href="/auth/sign-up"
+              className="inline-flex items-center gap-2 text-sm font-medium text-accent transition-colors hover:text-accent-dim"
+            >
+              Need an account? Create one
+              <ArrowRight size={15} />
+            </Link>
           </div>
-          <h1 className="text-2xl font-semibold text-text-primary">Welcome back</h1>
-          <p className="text-sm text-text-muted">Sign in to your account</p>
-        </div>
 
-        <div className="bg-surface-raised border border-border rounded-xl p-6 space-y-5">
+          <div className="self-center rounded-md border border-border/80 bg-surface-container-low/85 p-6 shadow-modal sm:p-8">
           {authError && (
-            <div className="flex items-center gap-2 p-3 rounded-lg bg-danger-subtle border border-danger/20 text-sm text-danger">
+            <div className="flex items-center gap-2 rounded-md border border-danger/20 bg-danger-subtle px-3 py-3 text-sm text-danger">
               <AlertCircle size={14} />
               {authError}
             </div>
@@ -82,17 +105,8 @@ export default function SignInForm() {
               Sign in
             </Button>
           </form>
+          </div>
         </div>
-
-        <p className="text-center text-sm text-text-muted">
-          Don&apos;t have an account?{" "}
-          <Link
-            href="/auth/sign-up"
-            className="text-accent hover:text-accent-dim transition-colors"
-          >
-            Sign up
-          </Link>
-        </p>
       </div>
     </div>
   );

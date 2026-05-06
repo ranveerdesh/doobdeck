@@ -71,7 +71,7 @@ function StillForm({
   };
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-5 rounded-md border border-border/80 bg-surface-container-low/60 p-5 shadow-card sm:p-6">
       <Input
         label="Title *"
         {...register("title")}
@@ -79,7 +79,7 @@ function StillForm({
         placeholder="e.g. Rooftop at dusk"
       />
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <Input
           label="Film Name"
           {...register("filmName")}
@@ -94,7 +94,7 @@ function StillForm({
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <Input
           label="Year"
           type="number"
@@ -106,7 +106,7 @@ function StillForm({
         />
 
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-text-secondary">
+          <label className="font-mono text-[11px] uppercase tracking-[0.18em] text-text-muted">
             Folder
           </label>
           <Controller
@@ -116,7 +116,7 @@ function StillForm({
               <select
                 {...field}
                 value={field.value ?? ""}
-                className="h-10 w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-accent"
+                className="h-11 w-full rounded-md border border-border/80 bg-surface-container-low/80 px-3 py-2 text-sm text-text-primary focus:border-accent/70 focus:outline-none focus:ring-2 focus:ring-accent/30"
               >
                 <option value="">No folder</option>
                 {folders.map((f) => (
@@ -131,7 +131,7 @@ function StillForm({
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <label className="text-sm font-medium text-text-secondary">
+        <label className="font-mono text-[11px] uppercase tracking-[0.18em] text-text-muted">
           Category
         </label>
         <Controller
@@ -141,7 +141,7 @@ function StillForm({
             <select
               {...field}
               value={field.value ?? ""}
-              className="h-10 w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-accent"
+              className="h-11 w-full rounded-md border border-border/80 bg-surface-container-low/80 px-3 py-2 text-sm text-text-primary focus:border-accent/70 focus:outline-none focus:ring-2 focus:ring-accent/30"
             >
               <option value="">No category</option>
               {categories.map((c) => (
@@ -172,12 +172,12 @@ function StillForm({
 
       {/* Tags */}
       <div className="flex flex-col gap-1.5">
-        <label className="text-sm font-medium text-text-secondary">Tags</label>
-        <div className="flex flex-wrap gap-1.5 min-h-[40px] rounded-md border border-border bg-surface px-3 py-2">
+        <label className="font-mono text-[11px] uppercase tracking-[0.18em] text-text-muted">Tags</label>
+        <div className="flex min-h-[48px] flex-wrap gap-1.5 rounded-md border border-border/80 bg-surface-container-low/80 px-3 py-2.5">
           {currentTags.map((tag) => (
             <span
               key={tag}
-              className="inline-flex items-center gap-1 rounded-full bg-accent-subtle text-accent text-xs px-2 py-0.5 border border-accent/20"
+              className="inline-flex items-center gap-1 rounded-md border border-accent/20 bg-accent-subtle px-2 py-0.5 text-xs text-accent"
             >
               {tag}
               <button
@@ -200,11 +200,11 @@ function StillForm({
               }
             }}
             placeholder={currentTags.length === 0 ? "Add tags... (Enter to add)" : ""}
-            className="flex-1 min-w-[120px] bg-transparent text-sm text-text-primary outline-none placeholder:text-text-disabled"
+            className="min-w-[120px] flex-1 bg-transparent text-sm text-text-primary outline-none placeholder:text-text-muted"
           />
         </div>
         {allTags.length > 0 && (
-          <div className="flex flex-wrap gap-1 mt-1">
+          <div className="mt-1 flex flex-wrap gap-1">
             <span className="text-xs text-text-muted">Existing:</span>
             {allTags
               .filter((t) => !currentTags.includes(t.name))
@@ -214,7 +214,7 @@ function StillForm({
                   key={tag.id}
                   type="button"
                   onClick={() => addTag(tag.name)}
-                  className="text-xs text-text-muted hover:text-accent transition-colors"
+                  className="text-xs text-text-muted transition-colors hover:text-accent"
                 >
                   {tag.name}
                 </button>
