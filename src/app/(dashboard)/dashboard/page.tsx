@@ -186,8 +186,8 @@ export default async function DashboardPage() {
             </Link>
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {recentStills.map((still) => (
-              <StillCard key={still.id} still={still} />
+            {recentStills.map((still, index) => (
+              <StillCard key={still.id} still={still} stills={recentStills} index={index} />
             ))}
           </div>
         </div>

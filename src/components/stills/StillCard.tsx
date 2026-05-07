@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Calendar, Clapperboard } from "lucide-react";
 import type { StillSummary } from "@/types";
 import { ColourSwatches } from "./ColourSwatches";
@@ -10,16 +10,44 @@ import { StillViewer } from "./StillViewer";
 
 interface StillCardProps {
   still: StillSummary;
+  stills?: StillSummary[];
+  index?: number;
   className?: string;
 }
 
-function StillCard({ still, className }: StillCardProps) {
+function StillCard({ still, stills, index, className }: StillCardProps) {
   const [open, setOpen] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(index ?? 0);
+  const hasGallery = Boolean(stills && stills.length > 1 && typeof index === "number");
+  const activeStill = hasGallery ? stills![currentIndex] : still;
+
+  useEffect(() => {
+    if (!open || !hasGallery) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        setCurrentIndex((prev) => Math.max(0, prev - 1));
+      }
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        setCurrentIndex((prev) => Math.min(stills!.length - 1, prev + 1));
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open, hasGallery, stills]);
 
   return (
     <>
       <button
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          if (typeof index === "number") {
+            setCurrentIndex(index);
+          }
+          setOpen(true);
+        }}
         className={cn(
           "group block overflow-hidden rounded-md border border-border/80 bg-surface-container-low text-left shadow-card transition-all duration-200 hover:border-border hover:shadow-card-hover",
           className
@@ -83,7 +111,25 @@ function StillCard({ still, className }: StillCardProps) {
         </div>
       </button>
 
-      <StillViewer open={open} onClose={() => setOpen(false)} still={still} />
+      <StillViewer
+        open={open}
+        onClose={() => setOpen(false)}
+        still={activeStill}
+        onPrev={
+          hasGallery
+            ? () => setCurrentIndex((prev) => Math.max(0, prev - 1))
+            : undefined
+        }
+        onNext={
+          hasGallery
+            ? () => setCurrentIndex((prev) => Math.min(stills!.length - 1, prev + 1))
+            : undefined
+        }
+        canPrev={hasGallery ? currentIndex > 0 : false}
+        canNext={hasGallery ? currentIndex < stills!.length - 1 : false}
+        currentIndex={hasGallery ? currentIndex : undefined}
+        total={hasGallery ? stills!.length : undefined}
+      />
     </>
   );
 }

@@ -3,15 +3,31 @@
 import { Modal } from "@/components/ui/Modal";
 import type { StillSummary } from "@/types";
 import { Badge } from "@/components/ui/Badge";
-import { Expand, Search } from "lucide-react";
+import { ChevronLeft, ChevronRight, Expand, Search } from "lucide-react";
 
 interface StillViewerProps {
   open: boolean;
   onClose: () => void;
   still: StillSummary;
+  onPrev?: () => void;
+  onNext?: () => void;
+  canPrev?: boolean;
+  canNext?: boolean;
+  currentIndex?: number;
+  total?: number;
 }
 
-function StillViewer({ open, onClose, still }: StillViewerProps) {
+function StillViewer({
+  open,
+  onClose,
+  still,
+  onPrev,
+  onNext,
+  canPrev,
+  canNext,
+  currentIndex,
+  total,
+}: StillViewerProps) {
   const viewerWidthPx = 1320;
   const viewerHeightPx = 860;
   const entryId = still.id.slice(0, 8).toUpperCase();
@@ -43,12 +59,39 @@ function StillViewer({ open, onClose, still }: StillViewerProps) {
                       alt={still.title}
                       className="h-full w-full object-cover"
                     />
+                    {typeof currentIndex === "number" && typeof total === "number" && total > 1 && (
+                      <>
+                        <button
+                          type="button"
+                          aria-label="Previous still"
+                          onClick={onPrev}
+                          disabled={!canPrev}
+                          className="absolute left-3 top-1/2 -translate-y-1/2 rounded-md border border-white/15 bg-black/45 p-2 text-white/90 backdrop-blur-sm transition-colors hover:bg-black/65 disabled:cursor-not-allowed disabled:opacity-40"
+                        >
+                          <ChevronLeft size={18} />
+                        </button>
+                        <button
+                          type="button"
+                          aria-label="Next still"
+                          onClick={onNext}
+                          disabled={!canNext}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md border border-white/15 bg-black/45 p-2 text-white/90 backdrop-blur-sm transition-colors hover:bg-black/65 disabled:cursor-not-allowed disabled:opacity-40"
+                        >
+                          <ChevronRight size={18} />
+                        </button>
+                      </>
+                    )}
                   </div>
                   <div className="flex items-center justify-between border-t border-border/70 px-4 py-3">
                     <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-text-muted">
                       rec: {entryId} · {resolutionLabel}
                     </p>
-                    <div className="flex items-center gap-2 text-text-muted">
+                    <div className="flex items-center gap-3 text-text-muted">
+                      {typeof currentIndex === "number" && typeof total === "number" && total > 1 && (
+                        <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-text-muted">
+                          {currentIndex + 1} / {total}
+                        </span>
+                      )}
                       <Search size={14} />
                       <Expand size={14} />
                     </div>

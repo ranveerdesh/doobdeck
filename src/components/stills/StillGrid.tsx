@@ -30,8 +30,8 @@ function StillGrid({ stills, className, emptyMessage }: StillGridProps) {
         className
       )}
     >
-      {stills.map((still) => (
-        <StillCard key={still.id} still={still} />
+      {stills.map((still, index) => (
+        <StillCard key={still.id} still={still} stills={stills} index={index} />
       ))}
     </div>
   );
