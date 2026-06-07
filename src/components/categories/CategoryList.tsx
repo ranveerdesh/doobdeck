@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Tag, Plus, Pencil, Trash2 } from "lucide-react";
+import Link from "next/link";
+import { Tag, Plus, Pencil, Trash2, ArrowRight } from "lucide-react";
 import type { CategoryWithCount } from "@/types";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -106,19 +107,24 @@ function CategoryList({ categories }: CategoryListProps) {
           {categories.map((category) => (
             <div
               key={category.id}
-              className="flex items-center justify-between rounded-md border border-border/80 bg-surface-container-low/75 p-4 transition-colors hover:border-border hover:bg-surface-container/80"
+              className="flex items-stretch justify-between gap-3 rounded-md border border-border/80 bg-surface-container-low/75 p-4 transition-colors hover:border-border hover:bg-surface-container/80"
             >
-              <div className="flex items-center gap-3">
-                <Tag size={18} className="text-accent flex-shrink-0" />
-                <div>
-                  <p className="text-sm font-medium tracking-tight text-text-primary">
+              <Link
+                href={`/categories/${category.id}`}
+                className="flex min-w-0 flex-1 items-center gap-3"
+                aria-label={`Open category ${category.name}`}
+              >
+                <Tag size={18} className="flex-shrink-0 text-accent" />
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-medium tracking-tight text-text-primary">
                     {category.name}
                   </p>
                   <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-text-muted">
                     {category._count.stills} still{category._count.stills !== 1 ? "s" : ""}
                   </p>
                 </div>
-              </div>
+                <ArrowRight size={14} className="ml-auto flex-shrink-0 text-text-muted" />
+              </Link>
               <div className="flex items-center gap-1">
                 <button
                   onClick={() => {

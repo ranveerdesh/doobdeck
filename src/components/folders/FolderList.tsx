@@ -95,7 +95,7 @@ function FolderList({ folders }: FolderListProps) {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between gap-3 rounded-md bg-surface-container-low/60 px-4 py-3">
+      <div className="flex items-center justify-between gap-3 px-0 py-1">
         <h2 className="text-sm font-medium text-text-muted">
           {folders.length} deck{folders.length !== 1 ? "s" : ""}
         </h2>
