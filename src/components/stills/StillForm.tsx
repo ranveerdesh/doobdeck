@@ -292,3 +292,5 @@ function StillForm<TValues extends StillInput | UploadInput = StillInput>({
 }
 
 export { StillForm };
+
+export default StillForm;

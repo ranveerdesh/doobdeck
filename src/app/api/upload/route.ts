@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { cloudinary } from "@/lib/cloudinary";
+import { extractColoursFromBuffer } from "@/lib/colours";
 
 const ACCEPTED_TYPES = new Set([
   "image/jpeg",
@@ -139,16 +140,6 @@ export async function POST(request: Request) {
         .end(buffer);
     });
 
-    // TODO: Re-enable palette extraction when node-vibrant integration is stable.
-    const extractedColours: Array<{
-      hex: string;
-      r: number;
-      g: number;
-      b: number;
-      population: number;
-      name: string;
-    }> = [];
-
     // Upsert tags
     const tagRecords = await Promise.all(
       tags.map((name) =>
@@ -160,7 +151,7 @@ export async function POST(request: Request) {
       )
     );
 
-    // Create still with colours
+    const extractedColours = await extractColoursFromBuffer(buffer);
     const still = await prisma.still.create({
       data: {
         title: title.trim(),

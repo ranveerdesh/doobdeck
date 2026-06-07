@@ -29,7 +29,7 @@ function Sidebar() {
   return (
     <aside className="sticky top-0 flex h-screen w-64 shrink-0 flex-col border-r border-border/70 bg-surface-container-lowest/95 backdrop-blur">
       <div className="border-b border-border/70 px-6 py-8">
-        <div className="mb-2 flex items-center gap-3">
+        <Link href="/dashboard" className="mb-2 flex items-center gap-3 no-underline" aria-label="Go to dashboard">
           <div className="flex h-10 w-10 items-center justify-center shadow-card">
             <Logo size={40} />
           </div>
@@ -41,7 +41,7 @@ function Sidebar() {
               Cinematic Archive
             </span>
           </div>
-        </div>
+        </Link>
       </div>
 
       <nav className="flex-1 space-y-1 p-3">

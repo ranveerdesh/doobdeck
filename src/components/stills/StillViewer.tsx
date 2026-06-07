@@ -34,12 +34,10 @@ function StillViewer({
 }: StillViewerProps) {
   const viewerWidthPx = 1320;
   const viewerHeightPx = 860;
-  const entryId = still.id.slice(0, 8).toUpperCase();
   const palette = still.colours.slice(0, 6);
   const colourTags = Array.isArray(still.colourTags)
     ? still.colourTags.filter((colour): colour is string => typeof colour === "string" && colour.trim().length > 0)
     : [];
-  const resolutionLabel = "unknown";
   const archivedYear = new Date(still.createdAt).getFullYear();
   const imageStageRef = useRef<HTMLDivElement | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -144,9 +142,6 @@ function StillViewer({
                     )}
                   </div>
                   <div className="flex items-center justify-between border-t border-border/70 px-4 py-3">
-                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-text-muted">
-                      {resolutionLabel}
-                    </p>
                     <div className="flex items-center gap-3 text-text-muted">
                       {typeof currentIndex === "number" && typeof total === "number" && total > 1 && (
                         <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-text-muted">
@@ -165,36 +160,20 @@ function StillViewer({
                   </div>
                 </div>
 
-                <div className="rounded-md border border-border/80 bg-surface/50 p-4">
-                  <div className="mb-3 flex items-end justify-between gap-3">
-                    <h3 className="text-3xl font-semibold tracking-tight text-text-primary">Chromatic Analysis</h3>
-                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-text-muted">
-                      Hexadecimal extract
-                    </p>
-                  </div>
+                <div className="rounded-md border border-border/80 bg-surface/50 p-2">
                   {palette.length > 0 ? (
-                    <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-6">
-                      {palette.map((colour, index) => (
+                    <div className="flex h-14 w-full overflow-x-auto overflow-y-hidden rounded-sm border border-border/70">
+                      {palette.map((colour) => (
                         <div
                           key={colour.id}
-                          className="rounded-sm border border-border/80 bg-surface-container-low p-2"
-                        >
-                          <div
-                            className="mb-2 h-24 w-full rounded-sm border border-black/30"
-                            style={{ backgroundColor: colour.hex }}
-                          />
-                          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-text-muted">
-                            Base_{String(index + 1).padStart(2, "0")}
-                          </p>
-                          <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.08em] text-text-primary">
-                            {colour.hex}
-                          </p>
-                        </div>
+                          className="h-full min-w-[72px] flex-1"
+                          style={{ backgroundColor: colour.hex }}
+                          aria-label={colour.name ?? colour.hex}
+                          title={colour.name ?? colour.hex}
+                        />
                       ))}
                     </div>
-                  ) : (
-                    <p className="text-sm text-text-muted">No extracted colours available for this still.</p>
-                  )}
+                  ) : null}
                 </div>
               </section>
 
