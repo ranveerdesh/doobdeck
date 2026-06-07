@@ -5,6 +5,9 @@ import { Modal } from "@/components/ui/Modal";
 import type { StillSummary } from "@/types";
 import { Badge } from "@/components/ui/Badge";
 import { ChevronLeft, ChevronRight, Expand } from "lucide-react";
+import Link from "next/link";
+import { Pencil } from "lucide-react";
+import DeleteStillButton from "@/app/(dashboard)/stills/[id]/DeleteStillButton";
 
 interface StillViewerProps {
   open: boolean;
@@ -142,7 +145,7 @@ function StillViewer({
                   </div>
                   <div className="flex items-center justify-between border-t border-border/70 px-4 py-3">
                     <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-text-muted">
-                      rec: {entryId} · {resolutionLabel}
+                      {resolutionLabel}
                     </p>
                     <div className="flex items-center gap-3 text-text-muted">
                       {typeof currentIndex === "number" && typeof total === "number" && total > 1 && (
@@ -196,9 +199,21 @@ function StillViewer({
               </section>
 
               <aside className="min-h-0 overflow-y-auto rounded-md border border-border/80 bg-surface/70 p-4 sm:p-5">
-                <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-text-muted">
-                  Entry ID: {entryId} · Archive {archivedYear}
-                </p>
+                <div className="flex items-start justify-between gap-3">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-text-muted">
+                    Archive {archivedYear}
+                  </p>
+                  <div className="flex items-center gap-1 flex-shrink-0">
+                    <Link
+                      href={`/stills/${still.id}/edit`}
+                      className="rounded-md border border-border/70 p-2 text-text-muted transition-colors hover:bg-white/[0.03] hover:text-text-primary"
+                      title="Edit"
+                    >
+                      <Pencil size={15} />
+                    </Link>
+                    <DeleteStillButton stillId={still.id} />
+                  </div>
+                </div>
 
                 <h2 className="mt-3 text-3xl font-semibold leading-tight tracking-tight text-text-primary sm:text-[2.4rem]">
                   {still.title}
@@ -288,12 +303,6 @@ function StillViewer({
                   )}
                 </div>
 
-                <div className="mt-5 border-t border-border/70 pt-4">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-text-muted">Archived Record</p>
-                  <p className="mt-3 text-base italic leading-7 text-text-secondary">
-                    &quot;A pivotal frame from {still.filmName}, where light, palette, and composition define the still&apos;s narrative tension.&quot;
-                  </p>
-                </div>
               </aside>
             </div>
           </div>

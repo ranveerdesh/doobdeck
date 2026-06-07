@@ -183,6 +183,39 @@ export default async function StillPage({ params }: StillPageProps) {
             </div>
           )}
 
+          {(still.director || still.cinematographer || still.editor || still.actor || still.shotType || still.composition || still.lighting || still.set || still.aspectRatio || still.frameSize || still.lensSize || (still.colourTags && still.colourTags.length > 0)) && (
+            <div className="rounded-md border border-border/80 bg-surface-container-low/60 p-4">
+              <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.24em] text-text-muted">Metadata</p>
+
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                {still.director && <div><p className="text-xs text-text-muted">Director</p><p className="font-medium">{still.director}</p></div>}
+                {still.cinematographer && <div><p className="text-xs text-text-muted">Cinematographer</p><p className="font-medium">{still.cinematographer}</p></div>}
+                {still.editor && <div><p className="text-xs text-text-muted">Editor</p><p className="font-medium">{still.editor}</p></div>}
+                {still.actor && <div><p className="text-xs text-text-muted">Actor</p><p className="font-medium">{still.actor}</p></div>}
+
+                {still.shotType && <div><p className="text-xs text-text-muted">Shot Type</p><p className="font-medium">{still.shotType}</p></div>}
+                {still.composition && <div><p className="text-xs text-text-muted">Composition</p><p className="font-medium">{still.composition}</p></div>}
+                {still.lighting && <div><p className="text-xs text-text-muted">Lighting</p><p className="font-medium">{still.lighting}</p></div>}
+                {still.set && <div><p className="text-xs text-text-muted">Set</p><p className="font-medium">{still.set}</p></div>}
+
+                {still.aspectRatio && <div><p className="text-xs text-text-muted">Aspect Ratio</p><p className="font-medium">{still.aspectRatio}</p></div>}
+                {still.frameSize && <div><p className="text-xs text-text-muted">Frame Size</p><p className="font-medium">{still.frameSize}</p></div>}
+                {still.lensSize && <div><p className="text-xs text-text-muted">Lens Size</p><p className="font-medium">{still.lensSize}</p></div>}
+
+                {still.colourTags && still.colourTags.length > 0 && (
+                  <div className="sm:col-span-2">
+                    <p className="text-xs text-text-muted">Colour tags</p>
+                    <div className="mt-2 flex flex-wrap gap-1">
+                      {still.colourTags.map((c: string) => (
+                        <Badge key={c} variant="accent">{c}</Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           <div className="border-t border-border/80 pt-2">
             <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
               Added{" "}

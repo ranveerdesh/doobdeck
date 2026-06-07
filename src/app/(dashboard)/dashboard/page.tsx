@@ -7,6 +7,7 @@ import { ArrowUpRight, Clock, Folder, Images, Tag, UploadCloud } from "lucide-re
 import { StillCard } from "@/components/stills/StillCard";
 import { LatestStillLink } from "@/components/stills/LatestStillLink";
 import type { Metadata } from "next";
+import type { StillSummary } from "@/types";
 
 export const metadata: Metadata = { title: "Dashboard" };
 
@@ -25,8 +26,13 @@ export default async function DashboardPage() {
 
   const userId = session.user.id;
 
-  const [totalStills, totalFolders, totalCategories, recentStills, storageSummary] =
-    await Promise.all([
+  const [totalStills, totalFolders, totalCategories, recentStills, storageSummary]: [
+    number,
+    number,
+    number,
+    any[],
+    Awaited<ReturnType<typeof getCloudinaryStorageSummary>>
+  ] = await Promise.all([
       prisma.still.count({ where: { userId } }),
       prisma.folder.count({ where: { userId } }),
       prisma.category.count({ where: { userId } }),
@@ -79,6 +85,7 @@ export default async function DashboardPage() {
     session.user.email?.split("@")[0]?.replace(/[._-]+/g, " ") ||
     "there";
   const latestStillTitle = recentStills[0]?.title ?? "the latest still";
+  const recentStillsTyped: StillSummary[] = (recentStills as unknown) as StillSummary[];
 
   return (
     <div className="space-y-8 lg:space-y-10">
