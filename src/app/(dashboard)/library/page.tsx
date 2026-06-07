@@ -44,6 +44,20 @@ async function LibraryContent({
             { description: { contains: q, mode: "insensitive" as const } },
             { filmName: { contains: q, mode: "insensitive" as const } },
             { director: { contains: q, mode: "insensitive" as const } },
+            { cinematographer: { contains: q, mode: "insensitive" as const } },
+            { editor: { contains: q, mode: "insensitive" as const } },
+            { actor: { contains: q, mode: "insensitive" as const } },
+            { notes: { contains: q, mode: "insensitive" as const } },
+            { shotType: { contains: q, mode: "insensitive" as const } },
+            { composition: { contains: q, mode: "insensitive" as const } },
+            { lighting: { contains: q, mode: "insensitive" as const } },
+            { interiorExterior: { contains: q, mode: "insensitive" as const } },
+            { timeOfDay: { contains: q, mode: "insensitive" as const } },
+            { aspectRatio: { contains: q, mode: "insensitive" as const } },
+            { frameSize: { contains: q, mode: "insensitive" as const } },
+            { lensSize: { contains: q, mode: "insensitive" as const } },
+            { set: { contains: q, mode: "insensitive" as const } },
+            { year: Number.isNaN(Number(q)) ? undefined : Number(q) },
             { folder: { name: { contains: q, mode: "insensitive" as const } } },
             {
               category: {
@@ -55,6 +69,21 @@ async function LibraryContent({
                 some: {
                   tag: { name: { contains: q, mode: "insensitive" as const } },
                 },
+              },
+            },
+            {
+              colours: {
+                some: {
+                  OR: [
+                    { hex: { contains: q, mode: "insensitive" as const } },
+                    { name: { contains: q, mode: "insensitive" as const } },
+                  ],
+                },
+              },
+            },
+            {
+              colourTags: {
+                hasSome: [q],
               },
             },
           ],
