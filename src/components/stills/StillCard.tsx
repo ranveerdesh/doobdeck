@@ -18,7 +18,23 @@ function StillCard({ still, stills, index, className }: StillCardProps) {
   const [open, setOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(index ?? 0);
   const hasGallery = Boolean(stills && stills.length > 1 && typeof index === "number");
-  const activeStill = hasGallery ? stills![currentIndex] : still;
+  const safeIndex = hasGallery ? Math.min(currentIndex, stills!.length - 1) : 0;
+  const activeStill = hasGallery ? stills![safeIndex] : still;
+
+  useEffect(() => {
+    if (typeof index === "number") {
+      setCurrentIndex(index);
+    }
+  }, [index]);
+
+  useEffect(() => {
+    if (!hasGallery) {
+      setCurrentIndex(0);
+      return;
+    }
+
+    setCurrentIndex((prev) => Math.min(prev, stills!.length - 1));
+  }, [hasGallery, stills]);
 
   useEffect(() => {
     if (!open || !hasGallery) return;
@@ -119,8 +135,8 @@ function StillCard({ still, stills, index, className }: StillCardProps) {
             : undefined
         }
         canPrev={hasGallery ? currentIndex > 0 : false}
-        canNext={hasGallery ? currentIndex < stills!.length - 1 : false}
-        currentIndex={hasGallery ? currentIndex : undefined}
+        canNext={hasGallery ? safeIndex < stills!.length - 1 : false}
+        currentIndex={hasGallery ? safeIndex : undefined}
         total={hasGallery ? stills!.length : undefined}
       />
     </>

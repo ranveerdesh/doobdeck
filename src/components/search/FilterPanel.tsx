@@ -50,7 +50,7 @@ function FilterPanel({ folders, categories, tags, className }: FilterPanelProps)
         onChange={(e) => updateFilter("folderId", e.target.value)}
         className="h-9 rounded-md border border-border/80 bg-surface-container-low/80 px-2.5 text-xs text-text-primary focus:border-accent/70 focus:outline-none focus:ring-1 focus:ring-accent/30"
       >
-        <option value="">All folders</option>
+        <option value="">All decks</option>
         {folders.map((f) => (
           <option key={f.id} value={f.id}>
             {f.name}

@@ -194,7 +194,7 @@ function StillForm<TValues extends StillInput | UploadInput = StillInput>({
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="flex flex-col gap-1.5">
-              <label className="font-mono text-[11px] uppercase tracking-[0.18em] text-text-muted">Folder *</label>
+              <label className="font-mono text-[11px] uppercase tracking-[0.18em] text-text-muted">Deck *</label>
               <ControllerAny name="folderId" control={control} render={({ field }: any) => (
                 <select {...field} value={field.value ?? ""} className="h-11 w-full rounded-md border border-border/80 bg-surface-container-low/80 px-3 py-2 text-sm text-text-primary focus:border-accent/70 focus:outline-none focus:ring-2 focus:ring-accent/30">
                   <option value="">No deck</option>
