@@ -2,14 +2,11 @@
 
 import { useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { UploadZone } from "@/components/stills/UploadZone";
 import { StillForm } from "@/components/stills/StillForm";
-import { uploadSchema, type UploadInput } from "@/lib/validations";
+import type { UploadInput } from "@/lib/validations";
 import { AlertCircle, CheckCircle2 } from "lucide-react";
 import type { Folder, Category, Tag } from "@prisma/client";
-import type { UploadInput } from "@/lib/validations";
 
 interface UploadFormData extends UploadInput {
   file?: File;

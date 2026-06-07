@@ -140,33 +140,37 @@ function StillForm<TValues extends StillInput | UploadInput = StillInput>({
     } as DefaultValues<TValues>,
   });
 
-  const currentTags = watch("tags") ?? [];
-  const currentColours = watch("colourTags") ?? [];
+  const watchAny = watch as unknown as (...args: any[]) => any;
+  const currentTags: string[] = watchAny("tags") ?? [];
+  const currentColours: string[] = watchAny("colourTags") ?? [];
 
   // helper to avoid type-assertions inside JSX spreads (SWC parser can choke on `as` in JSX)
   const registerAny = register as unknown as (...args: any[]) => any;
+  const setValueAny = setValue as unknown as (name: string, value: any) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const ControllerAny = Controller as any;
 
   const addTag = (name: string) => {
     const trimmed = name.trim().toLowerCase();
     if (trimmed && !currentTags.includes(trimmed)) {
-      setValue("tags", [...currentTags, trimmed] as never);
+      setValueAny("tags", [...currentTags, trimmed]);
     }
     setTagInput("");
   };
 
   const removeTag = (tag: string) => {
-    setValue("tags", currentTags.filter((t) => t !== tag) as never);
+    setValueAny("tags", currentTags.filter((t) => t !== tag));
   };
 
   const addColour = (value: string) => {
     const trimmed = value.trim();
     if (trimmed && !currentColours.includes(trimmed)) {
-      setValue("colourTags", [...currentColours, trimmed] as never);
+      setValueAny("colourTags", [...currentColours, trimmed]);
     }
   };
 
   const removeColour = (value: string) => {
-    setValue("colourTags", currentColours.filter((item) => item !== value) as never);
+    setValueAny("colourTags", currentColours.filter((item) => item !== value));
   };
 
   const handleFormSubmit = async (data: TValues) => {
@@ -191,7 +195,7 @@ function StillForm<TValues extends StillInput | UploadInput = StillInput>({
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="flex flex-col gap-1.5">
               <label className="font-mono text-[11px] uppercase tracking-[0.18em] text-text-muted">Folder *</label>
-              <Controller name="folderId" control={control} render={({ field }) => (
+              <ControllerAny name="folderId" control={control} render={({ field }: any) => (
                 <select {...field} value={field.value ?? ""} className="h-11 w-full rounded-md border border-border/80 bg-surface-container-low/80 px-3 py-2 text-sm text-text-primary focus:border-accent/70 focus:outline-none focus:ring-2 focus:ring-accent/30">
                   <option value="">No folder</option>
                   {folders.map((folder) => (
@@ -204,7 +208,7 @@ function StillForm<TValues extends StillInput | UploadInput = StillInput>({
 
             <div className="flex flex-col gap-1.5">
               <label className="font-mono text-[11px] uppercase tracking-[0.18em] text-text-muted">Category *</label>
-              <Controller name="categoryId" control={control} render={({ field }) => (
+              <ControllerAny name="categoryId" control={control} render={({ field }: any) => (
                 <select {...field} value={field.value ?? ""} className="h-11 w-full rounded-md border border-border/80 bg-surface-container-low/80 px-3 py-2 text-sm text-text-primary focus:border-accent/70 focus:outline-none focus:ring-2 focus:ring-accent/30">
                   <option value="">No category</option>
                   {categories.map((category) => (
@@ -216,7 +220,7 @@ function StillForm<TValues extends StillInput | UploadInput = StillInput>({
             </div>
           </div>
 
-          <Input label="Year" type="number" {...registerAny("year", { setValueAs: (value) => (value === "" ? null : parseInt(value, 10)) })} error={errors.year?.message} placeholder="e.g. 1982" />
+          <Input label="Year" type="number" {...registerAny("year", { setValueAs: (value: string) => (value === "" ? null : parseInt(value, 10)) })} error={errors.year?.message} placeholder="e.g. 1982" />
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -237,10 +241,10 @@ function StillForm<TValues extends StillInput | UploadInput = StillInput>({
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <Controller name="interiorExterior" control={control} render={({ field }) => (
+          <ControllerAny name="interiorExterior" control={control} render={({ field }: any) => (
             <SelectField label="Interior / Exterior" value={field.value ?? ""} onChange={field.onChange} options={INTERIOR_EXTERIOR_OPTIONS} placeholder="Select interior / exterior" required={isCreate} />
           )} />
-          <Controller name="timeOfDay" control={control} render={({ field }) => (
+          <ControllerAny name="timeOfDay" control={control} render={({ field }: any) => (
             <SelectField label="Time of Day" value={field.value ?? ""} onChange={field.onChange} options={TIME_OF_DAY_OPTIONS} placeholder="Select time of day" required={isCreate} />
           )} />
         </div>
@@ -248,7 +252,7 @@ function StillForm<TValues extends StillInput | UploadInput = StillInput>({
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <Input label="Aspect Ratio" {...registerAny("aspectRatio")} error={errors.aspectRatio?.message} placeholder="e.g. 2.39:1" />
           <Input label="Frame Size" {...registerAny("frameSize")} error={errors.frameSize?.message} placeholder="e.g. 4K" />
-          <Controller name="lensSize" control={control} render={({ field }) => (
+          <ControllerAny name="lensSize" control={control} render={({ field }: any) => (
             <SelectField label="Lens Size" value={field.value ?? ""} onChange={field.onChange} options={LENS_SIZE_OPTIONS} placeholder="Select lens size" required={isCreate} />
           )} />
         </div>
