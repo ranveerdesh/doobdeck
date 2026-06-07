@@ -96,7 +96,7 @@ export default async function DashboardPage() {
               Welcome back, {displayName}
             </h1>
             <p className="max-w-2xl text-[13px] font-light leading-[1.65] tracking-[0.005em] text-text-secondary sm:text-[15px]">
-              Your cinematic library is {totalStills} stills big!. The latest additions are <LatestStillLink still={recentStills[0]} fallbackTitle={latestStillTitle} />.
+              Your cinematic library is {totalStills} stills big!. The latest addition is <LatestStillLink still={recentStills[0]} fallbackTitle={latestStillTitle} />.
             </p>
           </div>
 

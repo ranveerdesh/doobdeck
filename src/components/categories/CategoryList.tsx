@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Tag, Plus, Pencil, Trash2, ArrowRight } from "lucide-react";
+import { Tag, Plus, Pencil, Trash2 } from "lucide-react";
 import type { CategoryWithCount } from "@/types";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -88,7 +88,7 @@ function CategoryList({ categories }: CategoryListProps) {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between gap-3 rounded-md border border-border/80 bg-surface-container-low/60 px-4 py-3">
+      <div className="flex items-center justify-between gap-3 rounded-md bg-surface-container-low/60 px-4 py-3">
         <h2 className="text-sm font-medium text-text-muted">
           {categories.length} categor{categories.length !== 1 ? "ies" : "y"}
         </h2>
@@ -123,7 +123,6 @@ function CategoryList({ categories }: CategoryListProps) {
                     {category._count.stills} still{category._count.stills !== 1 ? "s" : ""}
                   </p>
                 </div>
-                <ArrowRight size={14} className="ml-auto flex-shrink-0 text-text-muted" />
               </Link>
               <div className="flex items-center gap-1">
                 <button
