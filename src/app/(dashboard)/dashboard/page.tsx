@@ -2,8 +2,9 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { Clock, Folder, Images, Tag, UploadCloud } from "lucide-react";
+import { ArrowUpRight, Clock, Folder, Images, Tag, UploadCloud } from "lucide-react";
 import { StillCard } from "@/components/stills/StillCard";
+import { LatestStillLink } from "@/components/stills/LatestStillLink";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = { title: "Dashboard" };
@@ -42,105 +43,72 @@ export default async function DashboardPage() {
       value: totalStills,
       icon: Images,
       href: "/library",
+      accent: "Library",
+      valueSuffix: "Stills",
     },
     {
       label: "Folders",
       value: totalFolders,
       icon: Folder,
       href: "/folders",
+      accent: "Decks",
+      valueSuffix: "Folders",
     },
     {
       label: "Categories",
       value: totalCategories,
       icon: Tag,
       href: "/categories",
+      accent: "Categories",
+      valueSuffix: "Categories",
     },
   ];
-  const firstName = session.user.name?.split(" ")[0];
+  const displayName =
+    session.user.name?.trim() ||
+    session.user.email?.split("@")[0]?.replace(/[._-]+/g, " ") ||
+    "there";
+  const latestStillTitle = recentStills[0]?.title ?? "the latest still";
 
   return (
     <div className="space-y-8 lg:space-y-10">
-      <section className="grid gap-4 lg:grid-cols-[minmax(0,1.6fr)_minmax(280px,0.8fr)]">
-        <div className="space-y-5 rounded-md border border-border/80 bg-surface-container-low/75 p-6 shadow-card sm:p-8">
-          <div className="flex items-center justify-between gap-3">
-            <div>
-              <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-text-muted">
-                dashboard
-              </p>
-              <h1 className="mt-3 text-3xl font-semibold tracking-tight text-text-primary sm:text-4xl">
-                Welcome back{firstName ? `, ${firstName}` : ""}
-              </h1>
-            </div>
-            <div className="hidden rounded-sm border border-border/70 bg-surface-raised px-3 py-2 text-right lg:block">
-              <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-muted">
-                archive status
-              </p>
-              <p className="mt-1 text-sm text-text-primary">
-                {totalStills} stills indexed
-              </p>
-            </div>
+      <section className="space-y-6">
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-3xl space-y-3">
+            <h1 className="text-[34px] font-bold tracking-[-0.035em] text-text-primary sm:text-[40px] sm:leading-[1.08] lg:text-[48px] lg:leading-[1.05]">
+              Welcome back, {displayName}
+            </h1>
+            <p className="max-w-2xl text-[13px] font-light leading-[1.65] tracking-[0.005em] text-text-secondary sm:text-[15px]">
+              Your cinematic library has grown by {totalStills} stills this week. The latest additions are <LatestStillLink still={recentStills[0]} fallbackTitle={latestStillTitle} />.
+            </p>
           </div>
-          <p className="max-w-2xl text-sm leading-6 text-text-secondary sm:text-base">
-            Here&apos;s a quick read on your archive: collection size, recent uploads, and where to continue cataloguing.
-          </p>
-          <div className="flex flex-wrap items-center gap-3 pt-1">
-            <Link
-              href="/upload"
-              className="inline-flex items-center gap-2 bg-accent px-5 py-3 text-sm font-medium text-accent-foreground transition-colors hover:brightness-105"
-            >
-              <UploadCloud size={16} />
-              Upload a still
-            </Link>
-            <Link
-              href="/library"
-              className="inline-flex items-center gap-2 border border-border/80 bg-surface/70 px-5 py-3 text-sm font-medium text-text-secondary transition-colors hover:border-border hover:bg-surface-raised hover:text-text-primary"
-            >
-              <Clock size={16} />
-              View library
-            </Link>
-          </div>
-        </div>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
-          <div className="rounded-md border border-border/80 bg-surface-container-high/80 p-5 shadow-card">
-            <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-text-muted">
-              archive profile
-            </p>
-            <p className="mt-3 text-2xl font-semibold tracking-tight text-text-primary">
-              {totalStills} assets
-            </p>
-            <p className="mt-2 text-sm leading-6 text-text-secondary">
-              {totalFolders} folders and {totalCategories} categories currently organized in the collection.
-            </p>
-          </div>
-          <div className="rounded-md border border-border/80 bg-surface-container-high/80 p-5 shadow-card">
-            <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-text-muted">
-              current focus
-            </p>
-            <p className="mt-3 text-2xl font-semibold tracking-tight text-text-primary">
-              Recent uploads
-            </p>
-            <p className="mt-2 text-sm leading-6 text-text-secondary">
-              Latest work appears first, keeping the newest stills ready for review and tagging.
-            </p>
-          </div>
+          <Link
+            href="/upload"
+            className="inline-flex items-center justify-center gap-2 self-start rounded-[6px] border border-[#f2b37b]/40 bg-[#f2b37b] px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#151312] shadow-[0_8px_24px_rgba(242,179,123,0.15)] transition-all hover:border-[#f2b37b]/60 hover:brightness-105 active:scale-[0.99] sm:px-6 sm:py-3.5"
+          >
+            <UploadCloud size={16} />
+            Upload stills
+          </Link>
         </div>
       </section>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        {stats.map(({ label, value, icon: Icon, href }) => (
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {stats.map(({ label, value, icon: Icon, href, accent, valueSuffix }) => (
           <Link
             key={label}
             href={href}
-            className="flex items-center gap-4 border border-border/80 bg-surface-container-low/75 p-5 transition-colors hover:border-border hover:bg-surface-container/85"
+            className="group relative min-h-[118px] rounded-[6px] border border-[#2a2624] bg-[#1d1b1a] px-4 py-3 shadow-[0_1px_0_rgba(255,255,255,0.02),0_10px_30px_rgba(0,0,0,0.18)] transition-all duration-300 hover:border-[#3a332f] hover:bg-[#201d1c]"
           >
-            <div className="flex h-12 w-12 items-center justify-center border border-accent/20 bg-accent-subtle">
-              <Icon size={20} className="text-accent" />
+            <div className="mb-7 flex items-start justify-between">
+              <Icon size={14} className="text-[#c58c59]" strokeWidth={1.9} />
+              <ArrowUpRight size={12} className="text-text-muted/20 transition-colors group-hover:text-[#c58c59]" />
             </div>
-            <div>
-              <p className="text-3xl font-semibold tracking-tight text-text-primary">{value}</p>
-              <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">{label}</p>
-            </div>
+            <p className="mb-2 font-mono text-[8px] uppercase tracking-[0.3em] text-text-muted/90">
+              {accent}
+            </p>
+            <p className="text-[19px] font-semibold tracking-[-0.02em] text-text-primary">
+              {`${value} ${valueSuffix}`}
+            </p>
           </Link>
         ))}
       </div>
@@ -170,12 +138,9 @@ export default async function DashboardPage() {
         <div className="space-y-4">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <p className="font-mono text-[11px] uppercase tracking-[0.24em] text-text-muted">
-                recent uploads
-              </p>
-              <h2 className="mt-2 flex items-center gap-2 text-lg font-semibold tracking-tight text-text-primary">
+              <h2 className="flex items-center gap-2 text-base font-semibold tracking-tight text-text-primary sm:text-lg">
                 <Clock size={16} className="text-text-muted" />
-                Contact sheet
+                Recent uploads
               </h2>
             </div>
             <Link

@@ -16,7 +16,7 @@ const NAV_ITEMS = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/library", label: "Library", icon: Images },
   { href: "/upload", label: "Upload", icon: UploadCloud },
-  { href: "/folders", label: "Folders", icon: Folder },
+  { href: "/folders", label: "Decks", icon: Folder },
   { href: "/categories", label: "Categories", icon: Tag },
 ];
 

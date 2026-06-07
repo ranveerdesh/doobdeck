@@ -17,12 +17,6 @@ function Header() {
         <div className="min-w-0 flex-1">
           <SearchBar />
         </div>
-        <div className="hidden min-w-[180px] items-center gap-2 border-l border-border/70 pl-4 lg:flex">
-          <span className="h-2 w-2 bg-accent" />
-          <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-text-muted">
-            archive access
-          </span>
-        </div>
       </div>
 
       <div className="relative">

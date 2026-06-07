@@ -61,9 +61,6 @@ function StillCard({ still, stills, index, className }: StillCardProps) {
           />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_45%,rgba(0,0,0,0.55)_100%)]" />
           <div className="absolute left-3 right-3 top-3 flex items-center justify-between gap-3 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-            <span className="rounded-md border border-white/10 bg-black/40 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.24em] text-white/80 backdrop-blur-sm">
-              still
-            </span>
             {still.year && (
               <span className="rounded-md border border-white/10 bg-black/40 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.22em] text-white/80 backdrop-blur-sm">
                 {still.year}
