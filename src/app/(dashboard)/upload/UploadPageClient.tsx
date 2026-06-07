@@ -9,6 +9,7 @@ import { StillForm } from "@/components/stills/StillForm";
 import { uploadSchema, type UploadInput } from "@/lib/validations";
 import { AlertCircle, CheckCircle2 } from "lucide-react";
 import type { Folder, Category, Tag } from "@prisma/client";
+import type { UploadInput } from "@/lib/validations";
 
 interface UploadFormData extends UploadInput {
   file?: File;
@@ -54,15 +55,30 @@ export default function UploadPageClient({
       const formData = new FormData();
       formData.append("file", file);
       formData.append("title", data.title);
-      if (data.filmName) formData.append("filmName", data.filmName);
+      formData.append("filmName", data.filmName);
       if (data.director) formData.append("director", data.director);
+      if (data.cinematographer) formData.append("cinematographer", data.cinematographer);
+      if (data.editor) formData.append("editor", data.editor);
+      if (data.actor) formData.append("actor", data.actor);
       if (data.year != null) formData.append("year", String(data.year));
       if (data.description) formData.append("description", data.description);
       if (data.notes) formData.append("notes", data.notes);
+      if (data.shotType) formData.append("shotType", data.shotType);
+      if (data.aspectRatio) formData.append("aspectRatio", data.aspectRatio);
+      if (data.frameSize) formData.append("frameSize", data.frameSize);
+      if (data.composition) formData.append("composition", data.composition);
+      if (data.lighting) formData.append("lighting", data.lighting);
+      if (data.interiorExterior) formData.append("interiorExterior", data.interiorExterior);
+      if (data.timeOfDay) formData.append("timeOfDay", data.timeOfDay);
+      if (data.lensSize) formData.append("lensSize", data.lensSize);
+      if (data.set) formData.append("set", data.set);
       if (data.folderId) formData.append("folderId", data.folderId);
       if (data.categoryId) formData.append("categoryId", data.categoryId);
       if (data.tags?.length) {
         formData.append("tags", JSON.stringify(data.tags));
+      }
+      if (data.colourTags?.length) {
+        formData.append("colourTags", JSON.stringify(data.colourTags));
       }
 
       const res = await fetch("/api/upload", {
@@ -122,6 +138,7 @@ export default function UploadPageClient({
       </div>
 
       <StillForm
+        mode="create"
         folders={folders}
         categories={categories}
         allTags={tags}

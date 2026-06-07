@@ -127,8 +127,8 @@ export async function POST(request: Request) {
       data: {
         ...rest,
         userId,
-        folderId: folderId ?? null,
-        categoryId: categoryId ?? null,
+          folderId: folderId ?? null,
+          categoryId: categoryId ?? null,
         imageUrl: (body as { imageUrl: string }).imageUrl,
         imagePublicId: (body as { imagePublicId: string }).imagePublicId,
         tags: {

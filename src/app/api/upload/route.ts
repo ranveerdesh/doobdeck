@@ -11,6 +11,18 @@ const ACCEPTED_TYPES = new Set([
 ]);
 const MAX_SIZE_BYTES = 10 * 1024 * 1024; // 10MB
 
+function parseJsonArray(value: FormDataEntryValue | null): string[] {
+  if (typeof value !== "string" || !value.trim()) return [];
+  try {
+    const parsed = JSON.parse(value);
+    return Array.isArray(parsed)
+      ? parsed.filter((item) => typeof item === "string" && item.trim().length > 0)
+      : [];
+  } catch {
+    return [];
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const session = await auth();
@@ -46,16 +58,48 @@ export async function POST(request: Request) {
     }
 
     // Parse optional fields
-    const filmName = (formData.get("filmName") as string) || undefined;
+    const filmName = (formData.get("filmName") as string) || "";
+    if (!filmName.trim()) {
+      return NextResponse.json({ error: "Film name is required" }, { status: 400 });
+    }
+
     const director = (formData.get("director") as string) || undefined;
+    const cinematographer = (formData.get("cinematographer") as string) || undefined;
+    const editor = (formData.get("editor") as string) || undefined;
+    const actor = (formData.get("actor") as string) || undefined;
     const yearRaw = formData.get("year") as string;
     const year = yearRaw ? parseInt(yearRaw, 10) : undefined;
     const description = (formData.get("description") as string) || undefined;
     const notes = (formData.get("notes") as string) || undefined;
-    const folderId = (formData.get("folderId") as string) || undefined;
-    const categoryId = (formData.get("categoryId") as string) || undefined;
+    const shotType = (formData.get("shotType") as string) || undefined;
+    const aspectRatio = (formData.get("aspectRatio") as string) || undefined;
+    const frameSize = (formData.get("frameSize") as string) || undefined;
+    const composition = (formData.get("composition") as string) || undefined;
+    const lighting = (formData.get("lighting") as string) || undefined;
+    const interiorExterior = (formData.get("interiorExterior") as string) || undefined;
+    const timeOfDay = (formData.get("timeOfDay") as string) || undefined;
+    const lensSize = (formData.get("lensSize") as string) || undefined;
+    const set = (formData.get("set") as string) || undefined;
+    const folderId = (formData.get("folderId") as string) || "";
+    const categoryId = (formData.get("categoryId") as string) || "";
+    if (!folderId.trim()) {
+      return NextResponse.json({ error: "Folder is required" }, { status: 400 });
+    }
+    if (!categoryId.trim()) {
+      return NextResponse.json({ error: "Category is required" }, { status: 400 });
+    }
+    if (!interiorExterior?.trim()) {
+      return NextResponse.json({ error: "Interior / Exterior is required" }, { status: 400 });
+    }
+    if (!timeOfDay?.trim()) {
+      return NextResponse.json({ error: "Time of Day is required" }, { status: 400 });
+    }
+    if (!lensSize?.trim()) {
+      return NextResponse.json({ error: "Lens Size is required" }, { status: 400 });
+    }
     const tagsRaw = formData.get("tags") as string;
     const tags: string[] = tagsRaw ? JSON.parse(tagsRaw) : [];
+    const colourTags = parseJsonArray(formData.get("colourTags"));
 
     // Validate folder/category ownership
     if (folderId) {
@@ -120,16 +164,29 @@ export async function POST(request: Request) {
     const still = await prisma.still.create({
       data: {
         title: title.trim(),
-        filmName,
+        filmName: filmName.trim(),
         director,
+        cinematographer,
+        editor,
+        actor,
         year: year && !isNaN(year) ? year : undefined,
         description,
         notes,
+        shotType,
+        aspectRatio,
+        frameSize,
+        composition,
+        lighting,
+        interiorExterior,
+        timeOfDay,
+        lensSize,
+        set,
+        colourTags,
         imageUrl: uploadResult.secure_url,
         imagePublicId: uploadResult.public_id,
         userId,
-        folderId: folderId ?? null,
-        categoryId: categoryId ?? null,
+        folderId,
+        categoryId,
         tags: {
           create: tagRecords.map((tag) => ({ tagId: tag.id })),
         },

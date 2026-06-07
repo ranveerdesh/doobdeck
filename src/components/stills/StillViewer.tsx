@@ -33,6 +33,9 @@ function StillViewer({
   const viewerHeightPx = 860;
   const entryId = still.id.slice(0, 8).toUpperCase();
   const palette = still.colours.slice(0, 6);
+  const colourTags = Array.isArray(still.colourTags)
+    ? still.colourTags.filter((colour): colour is string => typeof colour === "string" && colour.trim().length > 0)
+    : [];
   const resolutionLabel = "unknown";
   const archivedYear = new Date(still.createdAt).getFullYear();
   const imageStageRef = useRef<HTMLDivElement | null>(null);
@@ -57,6 +60,34 @@ function StillViewer({
     } catch (e) {
       // ignore fullscreen errors
     }
+  };
+
+  const metadataValueClass = "mt-1 text-sm font-medium leading-6 text-text-primary";
+  const displayText = (value: unknown): string => {
+    if (typeof value === "string") {
+      const trimmed = value.trim();
+      return trimmed.length > 0 ? trimmed : "—";
+    }
+    if (typeof value === "number" && Number.isFinite(value)) {
+      return String(value);
+    }
+    return "—";
+  };
+
+  const description = typeof still.description === "string" ? still.description.trim() : "";
+  const notes = typeof still.notes === "string" ? still.notes.trim() : "";
+  const hasCore = Boolean(still.director) || Boolean(still.cinematographer) || Boolean(still.editor) || Boolean(still.actor) || Boolean(still.folder?.name) || Boolean(still.category?.name);
+  const hasCreative = Boolean(still.shotType) || Boolean(still.composition) || Boolean(still.lighting) || Boolean(still.interiorExterior) || Boolean(still.timeOfDay) || Boolean(still.set);
+  const hasTechnical = Boolean(still.aspectRatio) || Boolean(still.frameSize) || Boolean(still.lensSize);
+
+  const renderField = (label: string, value: unknown): React.ReactNode => {
+    if (!value && value !== 0) return null;
+    return (
+      <div>
+        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">{label}</p>
+        <p className={metadataValueClass}>{displayText(value)}</p>
+      </div>
+    );
   };
 
   return (
@@ -164,56 +195,103 @@ function StillViewer({
                 </div>
               </section>
 
-              <aside className="min-h-0 overflow-y-auto rounded-md border border-border/80 bg-surface/70 p-5">
+              <aside className="min-h-0 overflow-y-auto rounded-md border border-border/80 bg-surface/70 p-4 sm:p-5">
                 <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-text-muted">
                   Entry ID: {entryId} · Archive {archivedYear}
                 </p>
 
-                <h2 className="mt-4 text-4xl font-semibold leading-tight tracking-tight text-text-primary">
+                <h2 className="mt-3 text-3xl font-semibold leading-tight tracking-tight text-text-primary sm:text-[2.4rem]">
                   {still.title}
                 </h2>
 
-                {(still.filmName || still.year) && (
-                  <p className="mt-3 text-4xl font-medium leading-tight text-accent">
-                    {still.filmName}
-                    {still.filmName && still.year && " "}
-                    {still.year && `(${still.year})`}
-                  </p>
-                )}
+                <p className="mt-2 text-lg font-medium leading-snug text-accent sm:text-xl">
+                  {still.filmName}
+                  {still.year ? ` (${still.year})` : ""}
+                </p>
 
-                <div className="mt-5 grid grid-cols-2 gap-x-4 gap-y-5 border-t border-border/70 pt-5">
-                  <div>
-                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-text-muted">Director</p>
-                    <p className="mt-1 text-2xl font-medium text-text-primary">{still.director ?? "Unknown"}</p>
-                  </div>
-                  <div>
-                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-text-muted">Production Year</p>
-                    <p className="mt-1 text-2xl font-medium text-text-primary">{still.year ?? "—"}</p>
-                  </div>
-                  <div>
-                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-text-muted">Folder</p>
-                    <p className="mt-1 text-2xl font-medium text-text-primary">{still.folder?.name ?? "Unfiled"}</p>
-                  </div>
-                  <div>
-                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-text-muted">Category</p>
-                    <p className="mt-1 text-2xl font-medium text-text-primary">{still.category?.name ?? "Uncategorized"}</p>
-                  </div>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {still.tags.length > 0 && (
+                    <>
+                      {still.tags.map(({ tag }) => (
+                        <Badge key={tag.id} variant="muted" className="px-2 py-1 text-[10px] uppercase tracking-[0.16em]">
+                          {tag.name}
+                        </Badge>
+                      ))}
+                    </>
+                  )}
+                  {colourTags.length > 0 && (
+                    <>
+                      {colourTags.map((colour) => (
+                        <Badge key={colour} variant="accent" className="px-2 py-1 text-[10px] uppercase tracking-[0.16em]">
+                          {colour}
+                        </Badge>
+                      ))}
+                    </>
+                  )}
                 </div>
 
-                {still.tags.length > 0 && (
-                  <div className="mt-6 flex flex-wrap gap-2">
-                    {still.tags.map(({ tag }) => (
-                      <Badge key={tag.id} variant="muted" className="px-2 py-1 text-[10px] uppercase tracking-[0.16em]">
-                        {tag.name}
-                      </Badge>
-                    ))}
-                  </div>
-                )}
+                <div className="mt-5 space-y-4 border-t border-border/70 pt-5">
+                  {hasCore && (
+                    <div>
+                      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-text-muted">Core</p>
+                      <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        {renderField("Director", still.director)}
+                        {renderField("Cinematographer", still.cinematographer)}
+                        {renderField("Editor", still.editor)}
+                        {renderField("Actor", still.actor)}
+                        {renderField("Folder", still.folder?.name)}
+                        {renderField("Category", still.category?.name)}
+                      </div>
+                    </div>
+                  )}
 
-                <div className="mt-6 border-t border-border/70 pt-5">
+                  {hasCreative && (
+                    <div>
+                      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-text-muted">Creative</p>
+                      <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        {renderField("Shot Type", still.shotType)}
+                        {renderField("Composition", still.composition)}
+                        {renderField("Lighting", still.lighting)}
+                        {renderField("Interior / Exterior", still.interiorExterior)}
+                        {renderField("Time of Day", still.timeOfDay)}
+                        {renderField("Set", still.set)}
+                      </div>
+                    </div>
+                  )}
+
+                  {hasTechnical && (
+                    <div>
+                      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-text-muted">Technical</p>
+                      <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        {renderField("Aspect Ratio", still.aspectRatio)}
+                        {renderField("Frame Size", still.frameSize)}
+                        {renderField("Lens Size", still.lensSize)}
+                      </div>
+                    </div>
+                  )}
+
+                  {(description || notes) && (
+                    <div className="grid grid-cols-1 gap-4 border-t border-border/70 pt-4">
+                      {description && (
+                        <div>
+                          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">Description</p>
+                          <p className="mt-1 text-sm leading-6 text-text-secondary">{description}</p>
+                        </div>
+                      )}
+                      {notes && (
+                        <div>
+                          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">Other Notes</p>
+                          <p className="mt-1 whitespace-pre-wrap text-sm leading-6 text-text-secondary">{notes}</p>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                <div className="mt-5 border-t border-border/70 pt-4">
                   <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-text-muted">Archived Record</p>
-                  <p className="mt-3 text-lg italic leading-7 text-text-secondary">
-                    &quot;A pivotal frame from {still.filmName ?? "the archive"}, where light, palette, and composition define the still&apos;s narrative tension.&quot;
+                  <p className="mt-3 text-base italic leading-7 text-text-secondary">
+                    &quot;A pivotal frame from {still.filmName}, where light, palette, and composition define the still&apos;s narrative tension.&quot;
                   </p>
                 </div>
               </aside>

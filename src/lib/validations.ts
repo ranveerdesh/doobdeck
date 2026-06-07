@@ -1,6 +1,37 @@
 import { z } from "zod";
 import { isValidInviteCode, normalizeInviteCode } from "./invite-codes";
 
+export const INTERIOR_EXTERIOR_OPTIONS = ["Interior", "Exterior", "I/E"] as const;
+export const TIME_OF_DAY_OPTIONS = [
+  "Dawn",
+  "Morning",
+  "Midday",
+  "Afternoon",
+  "Golden Hour",
+  "Sunset",
+  "Twilight",
+  "Night",
+  "Blue Hour",
+] as const;
+export const LENS_SIZE_OPTIONS = [
+  "Ultra Wide",
+  "Wide",
+  "Medium Wide",
+  "Standard",
+  "Short Telephoto",
+  "Telephoto",
+  "Macro",
+  "Anamorphic",
+] as const;
+
+const optionalSelectSchema = <T extends readonly [string, ...string[]]>(
+  values: T
+) =>
+  z.preprocess(
+    (value) => (value === "" ? undefined : value),
+    z.enum(values).optional()
+  );
+
 export const signUpSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters").max(60),
   email: z.string().email("Invalid email address"),
@@ -28,11 +59,14 @@ export const signInSchema = z.object({
   password: z.string().min(1, "Password is required"),
 });
 
-export const stillSchema = z.object({
+const stillMetadataSchema = z.object({
   title: z.string().min(1, "Title is required").max(200),
   description: z.string().max(2000).optional().or(z.literal("")),
   filmName: z.string().max(200).optional().or(z.literal("")),
   director: z.string().max(200).optional().or(z.literal("")),
+  cinematographer: z.string().max(200).optional().or(z.literal("")),
+  editor: z.string().max(200).optional().or(z.literal("")),
+  actor: z.string().max(200).optional().or(z.literal("")),
   year: z
     .number()
     .int()
@@ -42,10 +76,22 @@ export const stillSchema = z.object({
     .optional()
     .nullable(),
   notes: z.string().max(5000).optional().or(z.literal("")),
+  shotType: z.string().max(120).optional().or(z.literal("")),
+  aspectRatio: z.string().max(50).optional().or(z.literal("")),
+  frameSize: z.string().max(50).optional().or(z.literal("")),
+  composition: z.string().max(120).optional().or(z.literal("")),
+  lighting: z.string().max(120).optional().or(z.literal("")),
+  interiorExterior: optionalSelectSchema(INTERIOR_EXTERIOR_OPTIONS),
+  timeOfDay: optionalSelectSchema(TIME_OF_DAY_OPTIONS),
+  lensSize: optionalSelectSchema(LENS_SIZE_OPTIONS),
+  set: z.string().max(120).optional().or(z.literal("")),
+  colourTags: z.array(z.string().min(1).max(60)).max(10).optional().default([]),
   folderId: z.string().cuid().optional().nullable(),
   categoryId: z.string().cuid().optional().nullable(),
   tags: z.array(z.string().min(1).max(50)).max(20).optional(),
 });
+
+export const stillSchema = stillMetadataSchema;
 
 export const folderSchema = z.object({
   name: z
@@ -61,8 +107,11 @@ export const categorySchema = z.object({
 
 export const uploadSchema = z.object({
   title: z.string().min(1, "Title is required").max(200),
-  filmName: z.string().max(200).optional().or(z.literal("")),
+  filmName: z.string().min(1, "Film name is required").max(200),
   director: z.string().max(200).optional().or(z.literal("")),
+  cinematographer: z.string().max(200).optional().or(z.literal("")),
+  editor: z.string().max(200).optional().or(z.literal("")),
+  actor: z.string().max(200).optional().or(z.literal("")),
   year: z
     .number()
     .int()
@@ -72,8 +121,18 @@ export const uploadSchema = z.object({
     .nullable(),
   description: z.string().max(2000).optional().or(z.literal("")),
   notes: z.string().max(5000).optional().or(z.literal("")),
-  folderId: z.string().cuid().optional().nullable(),
-  categoryId: z.string().cuid().optional().nullable(),
+  shotType: z.string().max(120).optional().or(z.literal("")),
+  aspectRatio: z.string().max(50).optional().or(z.literal("")),
+  frameSize: z.string().max(50).optional().or(z.literal("")),
+  composition: z.string().max(120).optional().or(z.literal("")),
+  lighting: z.string().max(120).optional().or(z.literal("")),
+  interiorExterior: z.enum(INTERIOR_EXTERIOR_OPTIONS),
+  timeOfDay: z.enum(TIME_OF_DAY_OPTIONS),
+  lensSize: z.enum(LENS_SIZE_OPTIONS),
+  set: z.string().max(120).optional().or(z.literal("")),
+  colourTags: z.array(z.string().min(1).max(60)).max(10).optional().default([]),
+  folderId: z.string().cuid({ message: "Folder is required" }),
+  categoryId: z.string().cuid({ message: "Category is required" }),
   tags: z.array(z.string().min(1).max(50)).max(20).optional(),
 });
 

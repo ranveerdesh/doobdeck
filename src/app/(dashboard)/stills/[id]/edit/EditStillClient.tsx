@@ -50,13 +50,27 @@ export default function EditStillClient({
         </div>
       )}
       <StillForm
+        mode="edit"
         defaultValues={{
           title: still.title,
           description: still.description ?? "",
           filmName: still.filmName ?? "",
           director: still.director ?? "",
+          cinematographer: still.cinematographer ?? "",
+          editor: still.editor ?? "",
+          actor: still.actor ?? "",
           year: still.year ?? undefined,
           notes: still.notes ?? "",
+          shotType: still.shotType ?? "",
+          aspectRatio: still.aspectRatio ?? "",
+          frameSize: still.frameSize ?? "",
+          composition: still.composition ?? "",
+          lighting: still.lighting ?? "",
+          interiorExterior: still.interiorExterior ?? undefined,
+          timeOfDay: still.timeOfDay ?? undefined,
+          lensSize: still.lensSize ?? undefined,
+          set: still.set ?? "",
+          colourTags: still.colourTags ?? [],
           folderId: still.folderId ?? undefined,
           categoryId: still.categoryId ?? undefined,
           tags: still.tags.map((t) => t.tag.name),

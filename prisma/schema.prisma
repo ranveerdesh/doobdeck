@@ -25,11 +25,24 @@ model User {
 model Still {
   id            String    @id @default(cuid())
   title         String
-  description   String?
   filmName      String?
+  description   String?
   director      String?
+  cinematographer String?
+  editor        String?
+  actor         String?
   year          Int?
   notes         String?
+  shotType      String?
+  aspectRatio   String?
+  frameSize     String?
+  composition   String?
+  lighting      String?
+  interiorExterior String?
+  timeOfDay     String?
+  lensSize      String?
+  set           String?
+  colourTags    String[]  @default([])
   imageUrl      String
   imagePublicId String
   userId        String
