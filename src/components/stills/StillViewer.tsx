@@ -1,9 +1,10 @@
 "use client";
 
+import React, { useEffect, useRef, useState } from "react";
 import { Modal } from "@/components/ui/Modal";
 import type { StillSummary } from "@/types";
 import { Badge } from "@/components/ui/Badge";
-import { ChevronLeft, ChevronRight, Expand, Search } from "lucide-react";
+import { ChevronLeft, ChevronRight, Expand } from "lucide-react";
 
 interface StillViewerProps {
   open: boolean;
@@ -34,30 +35,56 @@ function StillViewer({
   const palette = still.colours.slice(0, 6);
   const resolutionLabel = "unknown";
   const archivedYear = new Date(still.createdAt).getFullYear();
+  const imageStageRef = useRef<HTMLDivElement | null>(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    const onFullChange = () => {
+      setIsFullscreen(Boolean(document.fullscreenElement));
+    };
+
+    document.addEventListener("fullscreenchange", onFullChange);
+    return () => document.removeEventListener("fullscreenchange", onFullChange);
+  }, []);
+
+  const toggleFullscreen = async () => {
+    try {
+      if (!document.fullscreenElement) {
+        await imageStageRef.current?.requestFullscreen?.();
+      } else {
+        await document.exitFullscreen?.();
+      }
+    } catch (e) {
+      // ignore fullscreen errors
+    }
+  };
 
   return (
-    <Modal open={open} onClose={onClose} size="full">
-      <div className="flex w-full items-center justify-center px-2 sm:px-4">
+    <Modal open={open} onClose={onClose} size="full" compact>
+      <div className="flex w-full items-center justify-center px-1 sm:px-2">
         <div
           style={{
-            width: `min(${viewerWidthPx}px, calc(100vw - 96px))`,
+            width: `min(${viewerWidthPx}px, calc(100vw - 24px))`,
           }}
         >
           <div
-            className="rounded-md border border-border/80 bg-surface-container-low/60 p-4 shadow-card"
+            className="w-full"
             style={{
               width: "100%",
-              height: `min(${viewerHeightPx}px, calc(100vh - 160px))`,
+              height: isFullscreen ? "100vh" : `min(${viewerHeightPx}px, calc(100vh - 80px))`,
             }}
           >
             <div className="grid h-full gap-4 lg:grid-cols-[minmax(0,1fr)_320px] xl:grid-cols-[minmax(0,1fr)_360px]">
               <section className="flex min-h-0 flex-col gap-4">
                 <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-md border border-border/80 bg-surface/70">
-                  <div className="relative min-h-0 flex-1">
+                  <div
+                    ref={imageStageRef}
+                    className={`relative min-h-0 flex-1 ${isFullscreen ? "bg-black flex items-center justify-center" : ""}`}
+                  >
                     <img
                       src={still.imageUrl}
                       alt={still.title}
-                      className="h-full w-full object-cover"
+                      className={isFullscreen ? "max-w-full max-h-full object-contain" : "h-full w-full object-cover"}
                     />
                     {typeof currentIndex === "number" && typeof total === "number" && total > 1 && (
                       <>
@@ -92,8 +119,14 @@ function StillViewer({
                           {currentIndex + 1} / {total}
                         </span>
                       )}
-                      <Search size={14} />
-                      <Expand size={14} />
+                      <button
+                        type="button"
+                        aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+                        onClick={toggleFullscreen}
+                        className="rounded-md p-1 text-text-muted hover:bg-white/5"
+                      >
+                        <Expand size={14} className={isFullscreen ? "-rotate-45 transform" : undefined} />
+                      </button>
                     </div>
                   </div>
                 </div>

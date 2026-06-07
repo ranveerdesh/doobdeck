@@ -20,6 +20,9 @@ export const metadata: Metadata = {
     template: "%s · doobdeck",
   },
   description: "Your personal film stills directory",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
