@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Search, X } from "lucide-react";
+import { X } from "lucide-react";
 import { cn } from "@/lib/cn";
 
 function useDebounce<T>(value: T, delay: number): T {
@@ -40,25 +40,27 @@ function SearchBar({ className, placeholder = "Search stills..." }: SearchBarPro
 
   return (
     <div className={cn("relative w-full max-w-2xl", className)}>
-      <Search
-        size={15}
-        className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-text-muted"
-      />
+       <span
+         className="material-symbols-outlined pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]"
+         style={{ fontVariationSettings: "'FILL' 1" }}
+       >
+         search
+       </span>
       <input
         ref={inputRef}
         type="search"
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder={placeholder}
-        className="h-11 w-full rounded-md border border-border/80 bg-surface-container-low/90 pl-9 pr-9 font-mono text-sm tracking-wide text-text-primary placeholder:text-text-muted focus:border-accent/70 focus:outline-none focus:ring-2 focus:ring-accent/30"
+        className="w-full rounded-full border border-outline-variant/10 bg-surface-container-high/90 py-2 pl-10 pr-4 font-mono text-[13px] tracking-wide text-on-surface placeholder:text-on-surface-variant/50 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all"
       />
       {value && (
         <button
           onClick={() => setValue("")}
-          className="absolute right-2.5 top-1/2 -translate-y-1/2 text-text-muted transition-colors hover:text-text-primary"
+          className="absolute right-2 top-1/2 -translate-y-1/2 text-text-muted transition-colors hover:text-text-primary"
           aria-label="Clear search"
         >
-          <X size={13} />
+          <X size={12} />
         </button>
       )}
     </div>
