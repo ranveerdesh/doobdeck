@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { FolderList } from "@/components/folders/FolderList";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "Folders" };
+export const metadata: Metadata = { title: "Decks" };
 
 export default async function FoldersPage() {
   const session = await auth();
@@ -13,7 +13,17 @@ export default async function FoldersPage() {
   const folders = await prisma.folder.findMany({
     where: { userId: session.user.id },
     orderBy: { name: "asc" },
-    include: { _count: { select: { stills: true } } },
+    include: {
+      _count: { select: { stills: true } },
+      stills: {
+        orderBy: { createdAt: "desc" },
+        take: 1,
+        select: {
+          id: true,
+          imageUrl: true,
+        },
+      },
+    },
   });
 
   return (
