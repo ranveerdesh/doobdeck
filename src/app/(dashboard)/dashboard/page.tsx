@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { getCloudinaryStorageSummary } from "@/lib/cloudinary-usage";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { ArrowUpRight, Clock, Folder, Images, Tag, UploadCloud } from "lucide-react";
@@ -9,13 +10,22 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = { title: "Dashboard" };
 
+function formatBytes(value: number): string {
+  const units = ["B", "KB", "MB", "GB", "TB"];
+  if (value <= 0) return "0 B";
+  const exponent = Math.min(Math.floor(Math.log(value) / Math.log(1024)), units.length - 1);
+  const size = value / 1024 ** exponent;
+  const decimals = exponent === 0 ? 0 : size < 10 ? 2 : 1;
+  return `${size.toFixed(decimals)} ${units[exponent]}`;
+}
+
 export default async function DashboardPage() {
   const session = await auth();
   if (!session?.user?.id) redirect("/auth/sign-in");
 
   const userId = session.user.id;
 
-  const [totalStills, totalFolders, totalCategories, recentStills] =
+  const [totalStills, totalFolders, totalCategories, recentStills, storageSummary] =
     await Promise.all([
       prisma.still.count({ where: { userId } }),
       prisma.folder.count({ where: { userId } }),
@@ -35,6 +45,7 @@ export default async function DashboardPage() {
           },
         },
       }),
+      getCloudinaryStorageSummary(),
     ]);
 
   const stats = [
@@ -78,7 +89,7 @@ export default async function DashboardPage() {
               Welcome back, {displayName}
             </h1>
             <p className="max-w-2xl text-[13px] font-light leading-[1.65] tracking-[0.005em] text-text-secondary sm:text-[15px]">
-              Your cinematic library has grown by {totalStills} stills this week. The latest additions are <LatestStillLink still={recentStills[0]} fallbackTitle={latestStillTitle} />.
+              Your cinematic library is {totalStills} stills big!. The latest additions are <LatestStillLink still={recentStills[0]} fallbackTitle={latestStillTitle} />.
             </p>
           </div>
 
@@ -151,12 +162,53 @@ export default async function DashboardPage() {
             </Link>
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {recentStills.map((still, index) => (
+            {recentStills.slice(0, 8).map((still, index) => (
               <StillCard key={still.id} still={still} stills={recentStills} index={index} />
             ))}
           </div>
         </div>
       )}
+
+      <section className="rounded-[6px] border border-[#2a2624] bg-[#1d1b1a] p-5 shadow-[0_1px_0_rgba(255,255,255,0.02),0_10px_30px_rgba(0,0,0,0.18)]">
+        <div className="mb-4 flex items-start justify-between gap-4">
+          <div>
+            <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-text-muted/90">
+              Storage
+            </p>
+          </div>
+          {storageSummary && (
+            <p className="text-sm text-text-secondary">
+              {storageSummary.usagePercent.toFixed(1)}% used
+            </p>
+          )}
+        </div>
+
+        {storageSummary ? (
+          <>
+            <div className="h-2.5 w-full overflow-hidden rounded-full bg-black/25">
+              <div
+                className="h-full rounded-full bg-[#c58c59] transition-[width] duration-500"
+                style={{ width: `${storageSummary.usagePercent}%` }}
+              />
+            </div>
+            <div className="mt-3 grid gap-2 text-sm text-text-secondary sm:grid-cols-3">
+              <p>
+                Left: <span className="font-semibold text-text-primary">{formatBytes(storageSummary.remainingBytes)}</span>
+              </p>
+              <p>
+                Used: <span className="font-semibold text-text-primary">{formatBytes(storageSummary.usedBytes)}</span>
+              </p>
+              <p>
+                Total: <span className="font-semibold text-text-primary">{formatBytes(storageSummary.limitBytes)}</span>
+              </p>
+            </div>
+          </>
+        ) : (
+          <p className="text-sm text-text-muted">
+            Storage details are currently unavailable.
+          </p>
+        )}
+      </section>
     </div>
   );
 }
