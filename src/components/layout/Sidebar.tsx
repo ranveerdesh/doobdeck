@@ -2,12 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { signOut } from "next-auth/react";
 import {
   LayoutDashboard,
   Images,
   UploadCloud,
   Folder,
   Tag,
+  HelpCircle,
+  LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { Logo } from "@/components/ui/Logo";
@@ -69,10 +72,28 @@ function Sidebar() {
       </nav>
 
       <div className="mt-auto border-t border-border/70 px-6 py-6">
-        <p className="text-center font-mono text-[10px] uppercase tracking-[0.28em] text-text-muted">
+        <div className="flex flex-col items-start gap-2">
+          <button
+            type="button"
+            className="inline-flex w-full items-center gap-2 rounded-md border border-border/70 px-3 py-2 text-[10px] uppercase tracking-[0.18em] text-text-muted transition-colors hover:border-border hover:bg-white/[0.03] hover:text-text-primary"
+          >
+            <HelpCircle size={13} />
+            Help
+          </button>
+          <button
+            type="button"
+            onClick={() => signOut({ callbackUrl: "/" })}
+            className="inline-flex w-full items-center gap-2 rounded-md border border-border/70 px-3 py-2 text-[10px] uppercase tracking-[0.18em] text-text-muted transition-colors hover:border-border hover:bg-white/[0.03] hover:text-text-primary"
+          >
+            <LogOut size={13} />
+            Logout
+          </button>
+        </div>
+
+        <p className="mt-5 text-left font-mono text-[10px] uppercase tracking-[0.28em] text-text-muted">
           archive access
         </p>
-        <p className="mt-2 text-center text-[11px] uppercase tracking-[0.24em] text-text-muted/70">
+        <p className="mt-2 text-left text-[11px] uppercase tracking-[0.24em] text-text-muted/70">
           doobdeck · v0.1.0
         </p>
       </div>
