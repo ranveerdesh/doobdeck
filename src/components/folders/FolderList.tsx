@@ -102,7 +102,7 @@ function FolderList({ folders }: FolderListProps) {
 
       {folders.length === 0 ? (
         <div className="rounded-md border border-dashed border-border/80 px-6 py-12 text-center text-sm text-text-muted">
-          No folders yet. Create one to organise your stills.
+          No decks yet. Create one to organise your stills.
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">

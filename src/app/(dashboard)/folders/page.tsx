@@ -20,14 +20,14 @@ export default async function FoldersPage() {
     <div className="space-y-6">
       <section className="space-y-3">
         <p className="font-mono text-xs uppercase tracking-[0.32em] text-text-muted">
-          folders
+          Decks
         </p>
         <h1 className="text-3xl font-semibold tracking-tight text-text-primary sm:text-4xl">
-          Organise your stills into folders.
+          Organise your stills into decks.
         </h1>
-        <p className="max-w-2xl text-sm leading-6 text-text-secondary sm:text-base">
+        {/* <p className="max-w-2xl text-sm leading-6 text-text-secondary sm:text-base">
           Group related frames into named sets so the collection stays structured.
-        </p>
+        </p> */}
       </section>
       <FolderList folders={folders} />
     </div>

@@ -197,7 +197,7 @@ function StillForm<TValues extends StillInput | UploadInput = StillInput>({
               <label className="font-mono text-[11px] uppercase tracking-[0.18em] text-text-muted">Folder *</label>
               <ControllerAny name="folderId" control={control} render={({ field }: any) => (
                 <select {...field} value={field.value ?? ""} className="h-11 w-full rounded-md border border-border/80 bg-surface-container-low/80 px-3 py-2 text-sm text-text-primary focus:border-accent/70 focus:outline-none focus:ring-2 focus:ring-accent/30">
-                  <option value="">No folder</option>
+                  <option value="">No deck</option>
                   {folders.map((folder) => (
                     <option key={folder.id} value={folder.id}>{folder.name}</option>
                   ))}

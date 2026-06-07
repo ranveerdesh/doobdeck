@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { Calendar, Clapperboard } from "lucide-react";
 import type { StillSummary } from "@/types";
-import { ColourSwatches } from "./ColourSwatches";
 import { Badge } from "@/components/ui/Badge";
 import { cn } from "@/lib/cn";
 import { StillViewer } from "./StillViewer";
@@ -87,9 +86,6 @@ function StillCard({ still, stills, index, className }: StillCardProps) {
               <Calendar size={12} className="flex-shrink-0" />
               <span className="font-mono text-[11px] uppercase tracking-[0.16em]">{still.year}</span>
             </div>
-          )}
-          {still.colours.length > 0 && (
-            <ColourSwatches colours={still.colours} size="sm" />
           )}
           {still.tags.length > 0 && (
             <div className="mt-1 flex flex-wrap gap-1">

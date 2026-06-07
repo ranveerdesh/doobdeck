@@ -42,7 +42,7 @@ export default async function LandingPage() {
                 A curated archive for stills, frames, and visual reference.
               </h2>
               <p className="max-w-xl text-base leading-7 text-text-secondary sm:text-lg">
-                Save stills, organise them by folder and category, extract their colours, and move through the collection like a darkroom contact sheet.
+                Save stills, organise them by deck and category, extract their colours, and move through the collection like a darkroom contact sheet.
               </p>
             </div>
 

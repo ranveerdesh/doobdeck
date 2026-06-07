@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { UploadCloud, FileImage, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/cn";
 
@@ -18,6 +18,7 @@ interface UploadZoneProps {
 function UploadZone({ onFile, preview, disabled, className }: UploadZoneProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const validateAndSet = useCallback(
     (file: File) => {
@@ -62,6 +63,11 @@ function UploadZone({ onFile, preview, disabled, className }: UploadZoneProps) {
         }}
         onDragLeave={() => setIsDragging(false)}
         onDrop={disabled ? undefined : handleDrop}
+        onClick={() => {
+          if (!disabled) {
+            inputRef.current?.click();
+          }
+        }}
         className={cn(
           "relative flex min-h-[240px] cursor-pointer flex-col items-center justify-center gap-3 overflow-hidden rounded-md border border-dashed border-border/80 transition-all duration-200",
           isDragging
@@ -73,11 +79,12 @@ function UploadZone({ onFile, preview, disabled, className }: UploadZoneProps) {
       >
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),transparent_35%)]" />
         <input
+          ref={inputRef}
           type="file"
           accept={ACCEPTED_TYPES.join(",")}
           onChange={handleChange}
           disabled={disabled}
-          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
+          className="sr-only"
           aria-label="Upload image"
         />
 
