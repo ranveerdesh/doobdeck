@@ -14,15 +14,15 @@ import {
 } from "@/lib/validations";
 import { Input, Textarea } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
-import type { Folder, Category, Tag } from "@prisma/client";
+type NamedItem = { id: string; name: string };
 import { X } from "lucide-react";
 import { cn } from "@/lib/cn";
 
 interface StillFormProps<TValues extends StillInput | UploadInput = StillInput> {
   defaultValues?: Partial<TValues>;
-  folders: Folder[];
-  categories: Category[];
-  allTags: Tag[];
+  folders: NamedItem[];
+  categories: NamedItem[];
+  allTags: NamedItem[];
   onSubmit: (data: TValues) => Promise<void>;
   submitLabel?: string;
   mode?: "create" | "edit";
