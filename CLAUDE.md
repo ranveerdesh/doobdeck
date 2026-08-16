@@ -105,3 +105,4 @@ Beyond the obvious (title, filmName, director, year): cinematographer, editor, a
 | `CLOUDINARY_CLOUD_NAME` | Cloudinary cloud name |
 | `CLOUDINARY_API_KEY` | Cloudinary API key |
 | `CLOUDINARY_API_SECRET` | Cloudinary API secret |
+| `INVITE_CODES` | Comma-separated invite codes for registration (e.g. `CODE1,CODE2`) |
