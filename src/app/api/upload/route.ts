@@ -124,42 +124,39 @@ export async function POST(request: Request) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Upload to Cloudinary
-    const uploadResult = await new Promise<{
-      secure_url: string;
-      public_id: string;
-    }>((resolve, reject) => {
-      cloudinary.uploader
-        .upload_stream(
-          {
-            folder: "doobdeck",
-            resource_type: "image",
-            transformation: [{ quality: "auto", fetch_format: "auto" }],
-          },
-          (error, result) => {
-            if (error || !result) reject(error ?? new Error("Upload failed"));
-            else resolve(result);
-          }
-        )
-        .end(buffer);
-    });
-
-    // Insert new tags in one statement, then fetch all by name
     const tagNames = tags.map((n) => n.toLowerCase());
-    if (tagNames.length > 0) {
-      await prisma.tag.createMany({
-        data: tagNames.map((name) => ({ name, userId })),
-        skipDuplicates: true,
-      });
-    }
-    const tagRecords = tagNames.length > 0
-      ? await prisma.tag.findMany({
+
+    // Cloudinary upload, colour extraction, and tag processing are all
+    // independent — run them in parallel to cut total upload latency.
+    const [uploadResult, extractedColours, tagRecords] = await Promise.all([
+      new Promise<{ secure_url: string; public_id: string }>((resolve, reject) => {
+        cloudinary.uploader
+          .upload_stream(
+            {
+              folder: "doobdeck",
+              resource_type: "image",
+              transformation: [{ quality: "auto", fetch_format: "auto" }],
+            },
+            (error, result) => {
+              if (error || !result) reject(error ?? new Error("Upload failed"));
+              else resolve(result);
+            }
+          )
+          .end(buffer);
+      }),
+      extractColoursFromBuffer(buffer),
+      (async () => {
+        if (tagNames.length === 0) return [];
+        await prisma.tag.createMany({
+          data: tagNames.map((name) => ({ name, userId })),
+          skipDuplicates: true,
+        });
+        return prisma.tag.findMany({
           where: { userId, name: { in: tagNames } },
           select: { id: true },
-        })
-      : [];
-
-    const extractedColours = await extractColoursFromBuffer(buffer);
+        });
+      })(),
+    ]);
     const still = await prisma.still.create({
       data: {
         title: title.trim(),
