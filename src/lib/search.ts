@@ -78,29 +78,25 @@ export async function searchStills({
   const searchWhere = Prisma.sql`
     (
       to_tsvector(
-        'english',
-        concat_ws(
-          ' ',
-          coalesce(s.title, ''),
-          coalesce(s."filmName", ''),
-          coalesce(s.description, ''),
-          coalesce(s.director, ''),
-          coalesce(s.cinematographer, ''),
-          coalesce(s.editor, ''),
-          coalesce(s.actor, ''),
-          coalesce(s.notes, ''),
-          coalesce(s."shotType", ''),
-          coalesce(s.composition, ''),
-          coalesce(s.lighting, ''),
-          coalesce(s."interiorExterior", ''),
-          coalesce(s."timeOfDay", ''),
-          coalesce(s."aspectRatio", ''),
-          coalesce(s."frameSize", ''),
-          coalesce(s."lensSize", ''),
-          coalesce(s."set", ''),
-          coalesce(s."year"::text, ''),
-          coalesce(array_to_string(s."colourTags", ' '), '')
-        )
+        'english'::regconfig,
+        coalesce(s.title, '') || ' ' ||
+        coalesce(s."filmName", '') || ' ' ||
+        coalesce(s.description, '') || ' ' ||
+        coalesce(s.director, '') || ' ' ||
+        coalesce(s.cinematographer, '') || ' ' ||
+        coalesce(s.editor, '') || ' ' ||
+        coalesce(s.actor, '') || ' ' ||
+        coalesce(s.notes, '') || ' ' ||
+        coalesce(s."shotType", '') || ' ' ||
+        coalesce(s.composition, '') || ' ' ||
+        coalesce(s.lighting, '') || ' ' ||
+        coalesce(s."interiorExterior", '') || ' ' ||
+        coalesce(s."timeOfDay", '') || ' ' ||
+        coalesce(s."aspectRatio", '') || ' ' ||
+        coalesce(s."frameSize", '') || ' ' ||
+        coalesce(s."lensSize", '') || ' ' ||
+        coalesce(s."set", '') || ' ' ||
+        coalesce(s."year"::text, '')
       ) @@ websearch_to_tsquery('english', ${qText})
       OR s."year"::text ILIKE ${qLike}
       OR s."colourTags" && ARRAY[${qText}]::text[]
