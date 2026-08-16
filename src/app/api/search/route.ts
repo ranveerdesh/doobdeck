@@ -82,9 +82,7 @@ export async function GET(request: Request) {
               coalesce(s."lensSize", ''),
               coalesce(s."set", ''),
               coalesce(s."year"::text, ''),
-              coalesce(array_to_string(s."colourTags", ' '), ''),
-              coalesce(f.name, ''),
-              coalesce(c.name, '')
+              coalesce(array_to_string(s."colourTags", ' '), '')
             )
           ) @@ websearch_to_tsquery('english', ${qText})
           OR s."year"::text ILIKE ${qLike}
