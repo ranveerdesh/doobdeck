@@ -15,7 +15,9 @@ import { Logo } from "@/components/ui/Logo";
 export default function SignInForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") ?? "/dashboard";
+  const raw = searchParams.get("callbackUrl") ?? "/dashboard";
+  // Reject absolute URLs and protocol-relative URLs (//) to prevent open redirect
+  const callbackUrl = raw.startsWith("/") && !raw.startsWith("//") ? raw : "/dashboard";
   const [authError, setAuthError] = useState("");
 
   const {
