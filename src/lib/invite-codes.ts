@@ -8,6 +8,7 @@ export const VALID_INVITE_CODES = [
   "RONNIEBOY",
 ] as const;
 
+
 /**
  * Validate an invite code
  * @param code - The invite code to validate
