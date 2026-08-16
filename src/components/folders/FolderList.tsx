@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Folder, Plus, Pencil, Trash2 } from "lucide-react";
+import Image from "next/image";
 import type { FolderWithCount } from "@/types";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -123,12 +124,14 @@ function FolderList({ folders }: FolderListProps) {
                 href={`/folders/${folder.id}`}
                 className="block"
               >
-                <div className="flex aspect-[4/3] w-full items-center justify-center overflow-hidden bg-surface-container-low">
+                <div className="relative flex aspect-[4/3] w-full items-center justify-center overflow-hidden bg-surface-container-low">
                   {folder.stills[0]?.imageUrl ? (
-                    <img
+                    <Image
                       src={folder.stills[0].imageUrl}
                       alt={folder.name}
-                      className="h-full w-full object-cover"
+                      fill
+                      sizes="(max-width: 640px) calc(100vw - 16rem), (max-width: 1024px) calc((100vw - 16rem) / 2), calc((100vw - 16rem) / 3)"
+                      className="object-cover"
                     />
                   ) : (
                     <Folder size={28} className="text-accent" />

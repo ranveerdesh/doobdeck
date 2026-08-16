@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { notFound, redirect } from "next/navigation";
@@ -13,12 +14,21 @@ interface StillPageProps {
   params: Promise<{ id: string }>;
 }
 
+const getStill = cache((id: string) =>
+  prisma.still.findUnique({
+    where: { id },
+    include: {
+      folder: { select: { id: true, name: true } },
+      category: { select: { id: true, name: true } },
+      tags: { include: { tag: { select: { id: true, name: true } } } },
+      colours: { orderBy: { population: "desc" }, take: 6 },
+    },
+  })
+);
+
 export async function generateMetadata({ params }: StillPageProps): Promise<Metadata> {
   const { id } = await params;
-  const still = await prisma.still.findUnique({
-    where: { id },
-    select: { title: true },
-  });
+  const still = await getStill(id);
   return { title: still?.title ?? "Still" };
 }
 
@@ -27,16 +37,7 @@ export default async function StillPage({ params }: StillPageProps) {
   if (!session?.user?.id) redirect("/auth/sign-in");
 
   const { id } = await params;
-
-  const still = await prisma.still.findUnique({
-    where: { id },
-    include: {
-      folder: true,
-      category: true,
-      tags: { include: { tag: true } },
-      colours: { orderBy: { population: "desc" } },
-    },
-  });
+  const still = await getStill(id);  // cache hit — no second DB round-trip
 
   if (!still || still.userId !== session.user.id) notFound();
 

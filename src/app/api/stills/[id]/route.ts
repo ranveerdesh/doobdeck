@@ -26,12 +26,12 @@ export async function GET(_req: Request, { params }: RouteParams) {
     }
 
     const { id } = await params;
-    const still = await prisma.still.findUnique({
-      where: { id },
+    const still = await prisma.still.findFirst({
+      where: { id, userId: session.user.id },
       include: STILL_INCLUDE,
     });
 
-    if (!still || still.userId !== session.user.id) {
+    if (!still) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
 
@@ -71,30 +71,38 @@ export async function PATCH(request: Request, { params }: RouteParams) {
 
     const { tags, folderId, categoryId, ...rest } = parsed.data;
 
-    // Validate folder/category ownership
-    if (folderId) {
-      const folder = await prisma.folder.findUnique({ where: { id: folderId } });
-      if (!folder || folder.userId !== userId) {
+    // Validate folder/category ownership in parallel
+    if (folderId || categoryId) {
+      const [folder, category] = await Promise.all([
+        folderId
+          ? prisma.folder.findFirst({ where: { id: folderId, userId }, select: { id: true } })
+          : null,
+        categoryId
+          ? prisma.category.findFirst({ where: { id: categoryId, userId }, select: { id: true } })
+          : null,
+      ]);
+      if (folderId && !folder) {
         return NextResponse.json({ error: "Folder not found" }, { status: 404 });
       }
-    }
-    if (categoryId) {
-      const category = await prisma.category.findUnique({ where: { id: categoryId } });
-      if (!category || category.userId !== userId) {
+      if (categoryId && !category) {
         return NextResponse.json({ error: "Category not found" }, { status: 404 });
       }
     }
 
-    // Upsert tags
-    const tagRecords = await Promise.all(
-      (tags ?? []).map((name) =>
-        prisma.tag.upsert({
-          where: { userId_name: { userId, name } },
-          create: { name, userId },
-          update: {},
+    // Insert new tags in one statement, then fetch all by name
+    const tagNames = tags ?? [];
+    if (tagNames.length > 0) {
+      await prisma.tag.createMany({
+        data: tagNames.map((name) => ({ name, userId })),
+        skipDuplicates: true,
+      });
+    }
+    const tagRecords = tagNames.length > 0
+      ? await prisma.tag.findMany({
+          where: { userId, name: { in: tagNames } },
+          select: { id: true },
         })
-      )
-    );
+      : [];
 
     // Update still with new tags
     const still = await prisma.still.update({

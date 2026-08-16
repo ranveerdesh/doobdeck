@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { Modal } from "@/components/ui/Modal";
 import type { StillSummary } from "@/types";
 import { Badge } from "@/components/ui/Badge";
@@ -113,10 +114,13 @@ function StillViewer({
                     ref={imageStageRef}
                     className={`relative min-h-0 flex-1 ${isFullscreen ? "bg-black flex items-center justify-center" : ""}`}
                   >
-                    <img
+                    <Image
                       src={still.imageUrl}
                       alt={still.title}
-                      className={isFullscreen ? "max-w-full max-h-full object-contain" : "h-full w-full object-cover"}
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 75vw"
+                      className={isFullscreen ? "object-contain" : "object-cover"}
+                      loading="eager"
                     />
                     {typeof currentIndex === "number" && typeof total === "number" && total > 1 && (
                       <>

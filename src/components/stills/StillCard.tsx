@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Calendar, Clapperboard } from "lucide-react";
+import Image from "next/image";
 import type { StillSummary } from "@/types";
 import { Badge } from "@/components/ui/Badge";
 import { cn } from "@/lib/cn";
@@ -69,10 +70,13 @@ function StillCard({ still, stills, index, className }: StillCardProps) {
         )}
       >
         <div className="relative aspect-video overflow-hidden bg-surface-container-high">
-          <img
+          <Image
             src={still.imageUrl}
             alt={still.title}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            fill
+            sizes="(max-width: 640px) calc(100vw - 16rem), (max-width: 1024px) calc((100vw - 16rem) / 2), (max-width: 1280px) calc((100vw - 16rem) / 3), calc((100vw - 16rem) / 4)"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            priority={typeof index === "number" && index < 4}
           />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_45%,rgba(0,0,0,0.55)_100%)]" />
           <div className="absolute left-3 right-3 top-3 flex items-center justify-between gap-3 opacity-0 transition-opacity duration-200 group-hover:opacity-100">

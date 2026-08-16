@@ -6,20 +6,20 @@ import { UploadZone } from "@/components/stills/UploadZone";
 import { StillForm } from "@/components/stills/StillForm";
 import type { UploadInput } from "@/lib/validations";
 import { AlertCircle, CheckCircle2 } from "lucide-react";
-import type { Folder, Category, Tag } from "@prisma/client";
-
 interface UploadFormData extends UploadInput {
   file?: File;
 }
+
+type NamedItem = { id: string; name: string };
 
 export default function UploadPageClient({
   folders,
   categories,
   tags,
 }: {
-  folders: Folder[];
-  categories: Category[];
-  tags: Tag[];
+  folders: NamedItem[];
+  categories: NamedItem[];
+  tags: NamedItem[];
 }) {
   const router = useRouter();
   const [file, setFile] = useState<File | null>(null);

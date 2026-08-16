@@ -102,16 +102,20 @@ export async function POST(request: Request) {
     const tags: string[] = tagsRaw ? JSON.parse(tagsRaw) : [];
     const colourTags = parseJsonArray(formData.get("colourTags"));
 
-    // Validate folder/category ownership
-    if (folderId) {
-      const folder = await prisma.folder.findUnique({ where: { id: folderId } });
-      if (!folder || folder.userId !== userId) {
+    // Validate folder/category ownership in parallel
+    if (folderId || categoryId) {
+      const [folder, category] = await Promise.all([
+        folderId
+          ? prisma.folder.findFirst({ where: { id: folderId, userId }, select: { id: true } })
+          : null,
+        categoryId
+          ? prisma.category.findFirst({ where: { id: categoryId, userId }, select: { id: true } })
+          : null,
+      ]);
+      if (folderId && !folder) {
         return NextResponse.json({ error: "Folder not found" }, { status: 404 });
       }
-    }
-    if (categoryId) {
-      const category = await prisma.category.findUnique({ where: { id: categoryId } });
-      if (!category || category.userId !== userId) {
+      if (categoryId && !category) {
         return NextResponse.json({ error: "Category not found" }, { status: 404 });
       }
     }
@@ -120,38 +124,39 @@ export async function POST(request: Request) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Upload to Cloudinary
-    const uploadResult = await new Promise<{
-      secure_url: string;
-      public_id: string;
-    }>((resolve, reject) => {
-      cloudinary.uploader
-        .upload_stream(
-          {
-            folder: "doobdeck",
-            resource_type: "image",
-            transformation: [{ quality: "auto", fetch_format: "auto" }],
-          },
-          (error, result) => {
-            if (error || !result) reject(error ?? new Error("Upload failed"));
-            else resolve(result);
-          }
-        )
-        .end(buffer);
-    });
+    const tagNames = tags.map((n) => n.toLowerCase());
 
-    // Upsert tags
-    const tagRecords = await Promise.all(
-      tags.map((name) =>
-        prisma.tag.upsert({
-          where: { userId_name: { userId, name: name.toLowerCase() } },
-          create: { name: name.toLowerCase(), userId },
-          update: {},
-        })
-      )
-    );
-
-    const extractedColours = await extractColoursFromBuffer(buffer);
+    // Cloudinary upload, colour extraction, and tag processing are all
+    // independent — run them in parallel to cut total upload latency.
+    const [uploadResult, extractedColours, tagRecords] = await Promise.all([
+      new Promise<{ secure_url: string; public_id: string }>((resolve, reject) => {
+        cloudinary.uploader
+          .upload_stream(
+            {
+              folder: "doobdeck",
+              resource_type: "image",
+              transformation: [{ quality: "auto", fetch_format: "auto" }],
+            },
+            (error, result) => {
+              if (error || !result) reject(error ?? new Error("Upload failed"));
+              else resolve(result);
+            }
+          )
+          .end(buffer);
+      }),
+      extractColoursFromBuffer(buffer),
+      (async () => {
+        if (tagNames.length === 0) return [];
+        await prisma.tag.createMany({
+          data: tagNames.map((name) => ({ name, userId })),
+          skipDuplicates: true,
+        });
+        return prisma.tag.findMany({
+          where: { userId, name: { in: tagNames } },
+          select: { id: true },
+        });
+      })(),
+    ]);
     const still = await prisma.still.create({
       data: {
         title: title.trim(),

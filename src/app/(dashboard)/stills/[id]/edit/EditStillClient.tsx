@@ -3,15 +3,17 @@
 import { useRouter } from "next/navigation";
 import { StillForm } from "@/components/stills/StillForm";
 import type { StillInput } from "@/lib/validations";
-import type { Folder, Category, Tag, Still } from "@prisma/client";
+import type { Still } from "@prisma/client";
 import { AlertCircle } from "lucide-react";
 import { useState } from "react";
 
+type NamedItem = { id: string; name: string };
+
 interface EditStillClientProps {
-  still: Still & { tags: Array<{ tag: Tag }> };
-  folders: Folder[];
-  categories: Category[];
-  tags: Tag[];
+  still: Still & { tags: Array<{ tag: NamedItem }> };
+  folders: NamedItem[];
+  categories: NamedItem[];
+  tags: NamedItem[];
 }
 
 export default function EditStillClient({

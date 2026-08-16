@@ -2,13 +2,12 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { Filter, X } from "lucide-react";
-import type { Folder, Category, Tag } from "@prisma/client";
 import { cn } from "@/lib/cn";
 
 interface FilterPanelProps {
-  folders: Folder[];
-  categories: Category[];
-  tags: Tag[];
+  folders: Array<{ id: string; name: string }>;
+  categories: Array<{ id: string; name: string }>;
+  tags: Array<{ id: string; name: string }>;
   className?: string;
 }
 

@@ -56,9 +56,10 @@ model Still {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  @@index([userId])
-  @@index([userId, folderId])
-  @@index([userId, categoryId])
+  @@index([userId, createdAt(sort: Desc)])
+  @@index([userId, folderId, createdAt(sort: Desc)])
+  @@index([userId, categoryId, createdAt(sort: Desc)])
+  @@index([colourTags], type: Gin)
 }
 
 model Folder {
@@ -104,6 +105,7 @@ model StillTag {
   tag     Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
 
   @@id([stillId, tagId])
+  @@index([tagId])
 }
 
 model Colour {
@@ -116,4 +118,6 @@ model Colour {
   name       String?
   stillId    String
   still      Still  @relation(fields: [stillId], references: [id], onDelete: Cascade)
+
+  @@index([stillId])
 }
