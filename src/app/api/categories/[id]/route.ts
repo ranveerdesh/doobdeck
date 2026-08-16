@@ -15,8 +15,11 @@ export async function PATCH(request: Request, { params }: RouteParams) {
     }
 
     const { id } = await params;
-    const existing = await prisma.category.findUnique({ where: { id } });
-    if (!existing || existing.userId !== session.user.id) {
+    const existing = await prisma.category.findFirst({
+      where: { id, userId: session.user.id },
+      select: { id: true },
+    });
+    if (!existing) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
 
@@ -61,8 +64,11 @@ export async function DELETE(_req: Request, { params }: RouteParams) {
     }
 
     const { id } = await params;
-    const existing = await prisma.category.findUnique({ where: { id } });
-    if (!existing || existing.userId !== session.user.id) {
+    const existing = await prisma.category.findFirst({
+      where: { id, userId: session.user.id },
+      select: { id: true },
+    });
+    if (!existing) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
 
