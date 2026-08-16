@@ -20,16 +20,16 @@ export default async function EditStillPage({ params }: EditStillPageProps) {
   const { id } = await params;
 
   const [still, folders, categories, tags] = await Promise.all([
-    prisma.still.findUnique({
-      where: { id },
-      include: { tags: { include: { tag: true } } },
+    prisma.still.findFirst({
+      where: { id, userId },
+      include: { tags: { include: { tag: { select: { id: true, name: true } } } } },
     }),
-    prisma.folder.findMany({ where: { userId }, orderBy: { name: "asc" } }),
-    prisma.category.findMany({ where: { userId }, orderBy: { name: "asc" } }),
-    prisma.tag.findMany({ where: { userId }, orderBy: { name: "asc" } }),
+    prisma.folder.findMany({ where: { userId }, orderBy: { name: "asc" }, select: { id: true, name: true } }),
+    prisma.category.findMany({ where: { userId }, orderBy: { name: "asc" }, select: { id: true, name: true } }),
+    prisma.tag.findMany({ where: { userId }, orderBy: { name: "asc" }, select: { id: true, name: true } }),
   ]);
 
-  if (!still || still.userId !== userId) notFound();
+  if (!still) notFound();
 
   return (
     <div className="space-y-6">

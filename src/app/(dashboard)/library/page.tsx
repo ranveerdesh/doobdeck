@@ -185,18 +185,9 @@ export default async function LibraryPage({ searchParams }: LibraryPageProps) {
   });
 
   const [folders, categories, tags] = await Promise.all([
-    prisma.folder.findMany({
-      where: { userId },
-      orderBy: { name: "asc" },
-    }),
-    prisma.category.findMany({
-      where: { userId },
-      orderBy: { name: "asc" },
-    }),
-    prisma.tag.findMany({
-      where: { userId },
-      orderBy: { name: "asc" },
-    }),
+    prisma.folder.findMany({ where: { userId }, orderBy: { name: "asc" }, select: { id: true, name: true } }),
+    prisma.category.findMany({ where: { userId }, orderBy: { name: "asc" }, select: { id: true, name: true } }),
+    prisma.tag.findMany({ where: { userId }, orderBy: { name: "asc" }, select: { id: true, name: true } }),
   ]);
 
   return (
