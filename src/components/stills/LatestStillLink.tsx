@@ -13,8 +13,11 @@ function LatestStillLink({ still, fallbackTitle }: LatestStillLinkProps) {
   const [open, setOpen] = useState(false);
 
   if (!still) {
-    return <span className="italic text-[#c58c59]">“{fallbackTitle}”</span>;
+    return <span className="italic text-[#c58c59]">&ldquo;{fallbackTitle}&rdquo;</span>;
   }
+
+  const releaseYear = still.releaseDate ? new Date(still.releaseDate).getFullYear() : null;
+  const displayLabel = still.title || [still.filmName, releaseYear ? `(${releaseYear})` : null].filter(Boolean).join(" ") || fallbackTitle;
 
   return (
     <>
@@ -23,7 +26,7 @@ function LatestStillLink({ still, fallbackTitle }: LatestStillLinkProps) {
         onClick={() => setOpen(true)}
         className="italic text-[#c58c59] underline-offset-4 transition-colors hover:underline hover:decoration-[#c58c59]/80"
       >
-        “{still.title}”
+        &ldquo;{displayLabel}&rdquo;
       </button>
 
       <StillViewer open={open} onClose={() => setOpen(false)} still={still} />

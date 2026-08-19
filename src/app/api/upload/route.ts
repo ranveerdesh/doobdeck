@@ -53,12 +53,8 @@ export async function POST(request: Request) {
       );
     }
 
-    const title = formData.get("title") as string;
-    if (!title?.trim()) {
-      return NextResponse.json({ error: "Title is required" }, { status: 400 });
-    }
+    const title = (formData.get("title") as string) || undefined;
 
-    // Parse optional fields
     const filmName = (formData.get("filmName") as string) || "";
     if (!filmName.trim()) {
       return NextResponse.json({ error: "Film name is required" }, { status: 400 });
@@ -68,47 +64,44 @@ export async function POST(request: Request) {
     const cinematographer = (formData.get("cinematographer") as string) || undefined;
     const editor = (formData.get("editor") as string) || undefined;
     const actor = (formData.get("actor") as string) || undefined;
-    const yearRaw = formData.get("year") as string;
-    const year = yearRaw ? parseInt(yearRaw, 10) : undefined;
+    const releaseDateRaw = formData.get("releaseDate") as string;
+    const releaseDate = releaseDateRaw ? new Date(releaseDateRaw) : undefined;
     const description = (formData.get("description") as string) || undefined;
     const notes = (formData.get("notes") as string) || undefined;
     const shotType = (formData.get("shotType") as string) || undefined;
     const aspectRatio = (formData.get("aspectRatio") as string) || undefined;
-    const frameSize = (formData.get("frameSize") as string) || undefined;
+    const resolution = (formData.get("resolution") as string) || undefined;
     const composition = (formData.get("composition") as string) || undefined;
     const lighting = (formData.get("lighting") as string) || undefined;
     const interiorExterior = (formData.get("interiorExterior") as string) || undefined;
     const timeOfDay = (formData.get("timeOfDay") as string) || undefined;
     const lensSize = (formData.get("lensSize") as string) || undefined;
+    const lensType = (formData.get("lensType") as string) || undefined;
+    const opticalFormat = (formData.get("opticalFormat") as string) || undefined;
+    const colour = (formData.get("colour") as string) || undefined;
     const set = (formData.get("set") as string) || undefined;
-    const folderId = (formData.get("folderId") as string) || "";
+    const folderId = (formData.get("folderId") as string) || undefined;
     const categoryId = (formData.get("categoryId") as string) || "";
-    if (!folderId.trim()) {
-      return NextResponse.json({ error: "Folder is required" }, { status: 400 });
-    }
     if (!categoryId.trim()) {
       return NextResponse.json({ error: "Category is required" }, { status: 400 });
     }
+    const collaborator = parseJsonArray(formData.get("collaborator"));
     const tagsRaw = formData.get("tags") as string;
     const tags: string[] = tagsRaw ? JSON.parse(tagsRaw) : [];
     const colourTags = parseJsonArray(formData.get("colourTags"));
 
     // Validate folder/category ownership in parallel
-    if (folderId || categoryId) {
-      const [folder, category] = await Promise.all([
-        folderId
-          ? prisma.folder.findFirst({ where: { id: folderId, userId }, select: { id: true } })
-          : null,
-        categoryId
-          ? prisma.category.findFirst({ where: { id: categoryId, userId }, select: { id: true } })
-          : null,
-      ]);
-      if (folderId && !folder) {
-        return NextResponse.json({ error: "Folder not found" }, { status: 404 });
-      }
-      if (categoryId && !category) {
-        return NextResponse.json({ error: "Category not found" }, { status: 404 });
-      }
+    const [folder, category] = await Promise.all([
+      folderId
+        ? prisma.folder.findFirst({ where: { id: folderId, userId }, select: { id: true } })
+        : null,
+      prisma.category.findFirst({ where: { id: categoryId, userId }, select: { id: true } }),
+    ]);
+    if (folderId && !folder) {
+      return NextResponse.json({ error: "Folder not found" }, { status: 404 });
+    }
+    if (!category) {
+      return NextResponse.json({ error: "Category not found" }, { status: 404 });
     }
 
     // Convert file to buffer for upload
@@ -150,25 +143,29 @@ export async function POST(request: Request) {
     ]);
     const still = await prisma.still.create({
       data: {
-        title: title.trim(),
+        title: title?.trim() || undefined,
         filmName: filmName.trim(),
         director,
         cinematographer,
         editor,
         actor,
-        year: year && !isNaN(year) ? year : undefined,
+        releaseDate,
         description,
         notes,
         shotType,
         aspectRatio,
-        frameSize,
+        resolution,
         composition,
         lighting,
         interiorExterior,
         timeOfDay,
         lensSize,
+        lensType,
+        opticalFormat,
+        colour,
         set,
         colourTags,
+        collaborator,
         imageUrl: uploadResult.secure_url,
         imagePublicId: uploadResult.public_id,
         userId,

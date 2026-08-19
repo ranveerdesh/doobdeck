@@ -55,6 +55,14 @@ function StillCard({ still, stills, index, className }: StillCardProps) {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [open, hasGallery, stills]);
 
+  const releaseYear = still.releaseDate
+    ? new Date(still.releaseDate).getFullYear()
+    : null;
+  const displayLabel = still.title || [
+    still.filmName,
+    releaseYear ? `(${releaseYear})` : null,
+  ].filter(Boolean).join(" ");
+
   return (
     <>
       <button
@@ -72,7 +80,7 @@ function StillCard({ still, stills, index, className }: StillCardProps) {
         <div className="relative aspect-video overflow-hidden bg-surface-container-high">
           <Image
             src={still.imageUrl}
-            alt={still.title}
+            alt={displayLabel || "Still"}
             fill
             sizes="(max-width: 640px) calc(100vw - 16rem), (max-width: 1024px) calc((100vw - 16rem) / 2), (max-width: 1280px) calc((100vw - 16rem) / 3), calc((100vw - 16rem) / 4)"
             className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -80,16 +88,16 @@ function StillCard({ still, stills, index, className }: StillCardProps) {
           />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_45%,rgba(0,0,0,0.55)_100%)]" />
           <div className="absolute left-3 right-3 top-3 flex items-center justify-between gap-3 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-            {still.year && (
+            {releaseYear && (
               <span className="rounded-md border border-white/10 bg-black/40 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.22em] text-white/80 backdrop-blur-sm">
-                {still.year}
+                {releaseYear}
               </span>
             )}
           </div>
         </div>
         <div className="flex flex-col gap-2 p-4">
           <h3 className="truncate text-sm font-medium tracking-tight text-text-primary leading-snug">
-            {still.title}
+            {displayLabel}
           </h3>
           {(still.filmName || still.director) && (
             <div className="flex items-center gap-1.5 text-xs text-text-muted">
@@ -101,10 +109,10 @@ function StillCard({ still, stills, index, className }: StillCardProps) {
               </span>
             </div>
           )}
-          {still.year && (
+          {releaseYear && (
             <div className="flex items-center gap-1.5 text-xs text-text-muted">
               <Calendar size={12} className="flex-shrink-0" />
-              <span className="font-mono text-[11px] uppercase tracking-[0.16em]">{still.year}</span>
+              <span className="font-mono text-[11px] uppercase tracking-[0.16em]">{releaseYear}</span>
             </div>
           )}
           {still.tags.length > 0 && (

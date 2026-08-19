@@ -56,7 +56,7 @@ export default async function StillPage({ params }: StillPageProps) {
           <div className="relative aspect-video overflow-hidden rounded-md border border-border/80 bg-surface-container-low shadow-card">
             <Image
               src={still.imageUrl}
-              alt={still.title}
+              alt={still.title ?? still.filmName ?? "Still"}
               fill
               sizes="(max-width: 1024px) 100vw, 60vw"
               className="object-cover"
@@ -121,10 +121,10 @@ export default async function StillPage({ params }: StillPageProps) {
                 </span>
               </div>
             )}
-            {still.year && (
+            {still.releaseDate && (
               <div className="flex items-center gap-2">
                 <Calendar size={14} className="text-text-muted flex-shrink-0" />
-                <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-text-secondary">{still.year}</span>
+                <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-text-secondary">{new Date(still.releaseDate).getFullYear()}</span>
               </div>
             )}
           </div>
@@ -184,7 +184,7 @@ export default async function StillPage({ params }: StillPageProps) {
             </div>
           )}
 
-          {(still.director || still.cinematographer || still.editor || still.actor || still.shotType || still.composition || still.lighting || still.set || still.aspectRatio || still.frameSize || still.lensSize || (still.colourTags && still.colourTags.length > 0)) && (
+          {(still.director || still.cinematographer || still.editor || still.actor || still.shotType || still.composition || still.lighting || still.set || still.aspectRatio || still.resolution || still.lensSize || (still.colourTags && still.colourTags.length > 0)) && (
             <div className="rounded-md border border-border/80 bg-surface-container-low/60 p-4">
               <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.24em] text-text-muted">Metadata</p>
 
@@ -200,7 +200,7 @@ export default async function StillPage({ params }: StillPageProps) {
                 {still.set && <div><p className="text-xs text-text-muted">Set</p><p className="font-medium">{still.set}</p></div>}
 
                 {still.aspectRatio && <div><p className="text-xs text-text-muted">Aspect Ratio</p><p className="font-medium">{still.aspectRatio}</p></div>}
-                {still.frameSize && <div><p className="text-xs text-text-muted">Frame Size</p><p className="font-medium">{still.frameSize}</p></div>}
+                {still.resolution && <div><p className="text-xs text-text-muted">Resolution</p><p className="font-medium">{still.resolution}</p></div>}
                 {still.lensSize && <div><p className="text-xs text-text-muted">Lens Size</p><p className="font-medium">{still.lensSize}</p></div>}
 
                 {still.colourTags && still.colourTags.length > 0 && (

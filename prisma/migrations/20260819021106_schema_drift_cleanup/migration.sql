@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Still" ALTER COLUMN "releaseDate" SET DATA TYPE TIMESTAMP(3);

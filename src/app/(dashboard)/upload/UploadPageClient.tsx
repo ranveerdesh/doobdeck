@@ -51,23 +51,29 @@ export default function UploadPageClient({
     try {
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("title", data.title);
+      formData.append("title", data.title ?? "");
       formData.append("filmName", data.filmName);
       if (data.director) formData.append("director", data.director);
       if (data.cinematographer) formData.append("cinematographer", data.cinematographer);
       if (data.editor) formData.append("editor", data.editor);
       if (data.actor) formData.append("actor", data.actor);
-      if (data.year != null) formData.append("year", String(data.year));
+      if (data.releaseDate) {
+        const d = data.releaseDate instanceof Date ? data.releaseDate : new Date(data.releaseDate as string);
+        formData.append("releaseDate", d.toISOString().split("T")[0]);
+      }
       if (data.description) formData.append("description", data.description);
       if (data.notes) formData.append("notes", data.notes);
       if (data.shotType) formData.append("shotType", data.shotType);
       if (data.aspectRatio) formData.append("aspectRatio", data.aspectRatio);
-      if (data.frameSize) formData.append("frameSize", data.frameSize);
+      if (data.resolution) formData.append("resolution", data.resolution);
       if (data.composition) formData.append("composition", data.composition);
       if (data.lighting) formData.append("lighting", data.lighting);
       if (data.interiorExterior) formData.append("interiorExterior", data.interiorExterior);
       if (data.timeOfDay) formData.append("timeOfDay", data.timeOfDay);
       if (data.lensSize) formData.append("lensSize", data.lensSize);
+      if (data.lensType) formData.append("lensType", data.lensType);
+      if (data.opticalFormat) formData.append("opticalFormat", data.opticalFormat);
+      if (data.colour) formData.append("colour", data.colour);
       if (data.set) formData.append("set", data.set);
       if (data.folderId) formData.append("folderId", data.folderId);
       if (data.categoryId) formData.append("categoryId", data.categoryId);
@@ -76,6 +82,9 @@ export default function UploadPageClient({
       }
       if (data.colourTags?.length) {
         formData.append("colourTags", JSON.stringify(data.colourTags));
+      }
+      if (data.collaborator?.length) {
+        formData.append("collaborator", JSON.stringify(data.collaborator));
       }
 
       const res = await fetch("/api/upload", {

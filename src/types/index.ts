@@ -22,7 +22,7 @@ export type StillSummary = Pick<
   | "cinematographer"
   | "editor"
   | "actor"
-  | "year"
+  | "releaseDate"
   | "description"
   | "notes"
   | "imageUrl"
@@ -32,14 +32,18 @@ export type StillSummary = Pick<
   | "categoryId"
   | "shotType"
   | "aspectRatio"
-  | "frameSize"
+  | "resolution"
   | "composition"
   | "lighting"
   | "interiorExterior"
   | "timeOfDay"
   | "lensSize"
+  | "lensType"
+  | "opticalFormat"
+  | "colour"
   | "set"
   | "colourTags"
+  | "collaborator"
 > & {
   folder: Pick<Folder, "id" | "name"> | null;
   category: Pick<Category, "id" | "name"> | null;

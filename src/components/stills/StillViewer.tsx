@@ -80,7 +80,7 @@ function StillViewer({
   const notes = typeof still.notes === "string" ? still.notes.trim() : "";
   const hasCore = Boolean(still.director) || Boolean(still.cinematographer) || Boolean(still.editor) || Boolean(still.actor) || Boolean(still.folder?.name) || Boolean(still.category?.name);
   const hasCreative = Boolean(still.shotType) || Boolean(still.composition) || Boolean(still.lighting) || Boolean(still.interiorExterior) || Boolean(still.timeOfDay) || Boolean(still.set);
-  const hasTechnical = Boolean(still.aspectRatio) || Boolean(still.frameSize) || Boolean(still.lensSize);
+  const hasTechnical = Boolean(still.aspectRatio) || Boolean(still.resolution) || Boolean(still.lensSize);
 
   const renderField = (label: string, value: unknown): React.ReactNode => {
     if (!value && value !== 0) return null;
@@ -116,7 +116,7 @@ function StillViewer({
                   >
                     <Image
                       src={still.imageUrl}
-                      alt={still.title}
+                      alt={still.title ?? still.filmName ?? "Still"}
                       fill
                       sizes="(max-width: 1024px) 100vw, 75vw"
                       className={isFullscreen ? "object-contain" : "object-cover"}
@@ -199,12 +199,12 @@ function StillViewer({
                 </div>
 
                 <h2 className="mt-3 text-3xl font-semibold leading-tight tracking-tight text-text-primary sm:text-[2.4rem]">
-                  {still.title}
+                  {still.title || still.filmName || "Untitled"}
                 </h2>
 
                 <p className="mt-2 text-lg font-medium leading-snug text-accent sm:text-xl">
                   {still.filmName}
-                  {still.year ? ` (${still.year})` : ""}
+                  {still.releaseDate ? ` (${new Date(still.releaseDate).getFullYear()})` : ""}
                 </p>
 
                 <div className="mt-4 flex flex-wrap gap-2">
@@ -262,7 +262,7 @@ function StillViewer({
                       <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-text-muted">Technical</p>
                       <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
                         {renderField("Aspect Ratio", still.aspectRatio)}
-                        {renderField("Frame Size", still.frameSize)}
+                        {renderField("Resolution", still.resolution)}
                         {renderField("Lens Size", still.lensSize)}
                       </div>
                     </div>

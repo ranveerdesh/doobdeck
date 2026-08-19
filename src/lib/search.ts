@@ -45,7 +45,11 @@ export async function searchStills({
     const [stills, total] = await Promise.all([
       prisma.still.findMany({
         where,
-        orderBy: [{ createdAt: "desc" }, { id: "asc" }],
+        orderBy: [
+          { releaseDate: { sort: "desc", nulls: "last" } },
+          { createdAt: "desc" },
+          { id: "asc" },
+        ],
         skip,
         take: limit,
         include: stillInclude,
@@ -93,13 +97,16 @@ export async function searchStills({
         coalesce(s."interiorExterior", '') || ' ' ||
         coalesce(s."timeOfDay", '') || ' ' ||
         coalesce(s."aspectRatio", '') || ' ' ||
-        coalesce(s."frameSize", '') || ' ' ||
+        coalesce(s.resolution, '') || ' ' ||
         coalesce(s."lensSize", '') || ' ' ||
+        coalesce(s."lensType", '') || ' ' ||
+        coalesce(s."opticalFormat", '') || ' ' ||
+        coalesce(s.colour, '') || ' ' ||
         coalesce(s."set", '') || ' ' ||
-        coalesce(s."year"::text, '')
+        coalesce(extract(year from s."releaseDate")::text, '')
       ) @@ websearch_to_tsquery('english', ${qText})
-      OR s."year"::text ILIKE ${qLike}
       OR s."colourTags" && ARRAY[${qText}]::text[]
+      OR s."collaborator" && ARRAY[${qText}]::text[]
       OR EXISTS (
         SELECT 1 FROM "StillTag" st
         JOIN "Tag" tg ON tg.id = st."tagId"
@@ -131,7 +138,7 @@ export async function searchStills({
       FROM "Still" s
       WHERE ${commonWhere}
         AND ${searchWhere}
-      ORDER BY s."createdAt" DESC, s.id ASC
+      ORDER BY s."releaseDate" DESC NULLS LAST, s."createdAt" DESC, s.id ASC
       LIMIT ${limit} OFFSET ${skip}
     `,
     prisma.$queryRaw<Array<{ count: string }>>`
@@ -149,7 +156,11 @@ export async function searchStills({
 
   const stills = await prisma.still.findMany({
     where: { id: { in: ids } },
-    orderBy: [{ createdAt: "desc" }, { id: "asc" }],
+    orderBy: [
+      { releaseDate: { sort: "desc", nulls: "last" } },
+      { createdAt: "desc" },
+      { id: "asc" },
+    ],
     include: stillInclude,
   });
 

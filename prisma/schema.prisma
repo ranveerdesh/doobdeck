@@ -23,40 +23,45 @@ model User {
 }
 
 model Still {
-  id            String    @id @default(cuid())
-  title         String
-  filmName      String?
-  description   String?
-  director      String?
-  cinematographer String?
-  editor        String?
-  actor         String?
-  year          Int?
-  notes         String?
-  shotType      String?
-  aspectRatio   String?
-  frameSize     String?
-  composition   String?
-  lighting      String?
+  id               String    @id @default(cuid())
+  title            String?
+  filmName         String?
+  description      String?
+  director         String?
+  cinematographer  String?
+  editor           String?
+  actor            String?
+  releaseDate      DateTime?
+  notes            String?
+  shotType         String?
+  aspectRatio      String?
+  resolution       String?
+  composition      String?
+  lighting         String?
   interiorExterior String?
-  timeOfDay     String?
-  lensSize      String?
-  set           String?
-  colourTags    String[]  @default([])
-  imageUrl      String
-  imagePublicId String
-  userId        String
-  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  folderId      String?
-  folder        Folder?   @relation(fields: [folderId], references: [id])
-  categoryId    String?
-  category      Category? @relation(fields: [categoryId], references: [id])
-  tags          StillTag[]
-  colours       Colour[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  timeOfDay        String?
+  lensSize         String?
+  lensType         String?
+  opticalFormat    String?
+  colour           String?
+  set              String?
+  colourTags       String[]  @default([])
+  collaborator     String[]  @default([])
+  imageUrl         String
+  imagePublicId    String
+  userId           String
+  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  folderId         String?
+  folder           Folder?   @relation(fields: [folderId], references: [id])
+  categoryId       String?
+  category         Category? @relation(fields: [categoryId], references: [id])
+  tags             StillTag[]
+  colours          Colour[]
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 
   @@index([userId, createdAt(sort: Desc)])
+  @@index([userId, releaseDate(sort: Desc), createdAt(sort: Desc)])
   @@index([userId, folderId, createdAt(sort: Desc)])
   @@index([userId, categoryId, createdAt(sort: Desc)])
   @@index([colourTags], type: Gin)

@@ -4,8 +4,16 @@ import { useState } from "react";
 import { Controller, type DefaultValues, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
+  ASPECT_RATIO_OPTIONS,
+  COLOUR_OPTIONS,
+  COMPOSITION_OPTIONS,
   INTERIOR_EXTERIOR_OPTIONS,
   LENS_SIZE_OPTIONS,
+  LENS_TYPE_OPTIONS,
+  LIGHTING_OPTIONS,
+  OPTICAL_FORMAT_OPTIONS,
+  RESOLUTION_OPTIONS,
+  SHOT_TYPE_OPTIONS,
   TIME_OF_DAY_OPTIONS,
   stillSchema,
   uploadSchema,
@@ -27,8 +35,6 @@ interface StillFormProps<TValues extends StillInput | UploadInput = StillInput> 
   submitLabel?: string;
   mode?: "create" | "edit";
 }
-
-// No collapsible section — render metadata fields directly (no "Metadata" header)
 
 function SelectField({
   label,
@@ -139,6 +145,7 @@ function StillForm<TValues extends StillInput | UploadInput = StillInput>({
     defaultValues: {
       tags: [],
       colourTags: [],
+      collaborator: [],
       ...defaultValues,
     } as DefaultValues<TValues>,
   });
@@ -146,8 +153,8 @@ function StillForm<TValues extends StillInput | UploadInput = StillInput>({
   const watchAny = watch as unknown as (...args: any[]) => any;
   const currentTags: string[] = watchAny("tags") ?? [];
   const currentColours: string[] = watchAny("colourTags") ?? [];
+  const currentCollaborators: string[] = watchAny("collaborator") ?? [];
 
-  // helper to avoid type-assertions inside JSX spreads (SWC parser can choke on `as` in JSX)
   const registerAny = register as unknown as (...args: any[]) => any;
   const setValueAny = setValue as unknown as (name: string, value: any) => void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -176,6 +183,17 @@ function StillForm<TValues extends StillInput | UploadInput = StillInput>({
     setValueAny("colourTags", currentColours.filter((item) => item !== value));
   };
 
+  const addCollaborator = (value: string) => {
+    const trimmed = value.trim();
+    if (trimmed && !currentCollaborators.includes(trimmed)) {
+      setValueAny("collaborator", [...currentCollaborators, trimmed]);
+    }
+  };
+
+  const removeCollaborator = (value: string) => {
+    setValueAny("collaborator", currentCollaborators.filter((item) => item !== value));
+  };
+
   const handleFormSubmit = async (data: TValues) => {
     setIsSubmitting(true);
     try {
@@ -185,19 +203,17 @@ function StillForm<TValues extends StillInput | UploadInput = StillInput>({
     }
   };
 
-  const isCreate = mode === "create";
-
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4 rounded-md border border-border/80 bg-surface-container-low/60 p-4 shadow-card sm:p-5">
       <div className="space-y-4">
         <div className="grid grid-cols-1 gap-4">
-          <Input label="Title *" {...registerAny("title")} error={errors.title?.message} placeholder="e.g. Rooftop at dusk" />
+          <Input label="Title" {...registerAny("title")} error={errors.title?.message} placeholder="e.g. Rooftop at dusk" />
 
           <Input label="Film Name *" {...registerAny("filmName")} error={errors.filmName?.message} placeholder="e.g. Blade Runner" />
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="flex flex-col gap-1.5">
-              <label className="font-mono text-[11px] uppercase tracking-[0.18em] text-text-muted">Deck *</label>
+              <label className="font-mono text-[11px] uppercase tracking-[0.18em] text-text-muted">Deck</label>
               <ControllerAny name="folderId" control={control} render={({ field }: any) => (
                 <select {...field} value={field.value ?? ""} className="h-11 w-full rounded-md border border-border/80 bg-surface-container-low/80 px-3 py-2 text-sm text-text-primary focus:border-accent/70 focus:outline-none focus:ring-2 focus:ring-accent/30">
                   <option value="">No deck</option>
@@ -223,7 +239,7 @@ function StillForm<TValues extends StillInput | UploadInput = StillInput>({
             </div>
           </div>
 
-          <Input label="Year" type="number" {...registerAny("year", { setValueAs: (value: string) => (value === "" ? null : parseInt(value, 10)) })} error={errors.year?.message} placeholder="e.g. 1982" />
+          <Input label="Release Date" type="date" {...registerAny("releaseDate")} error={errors.releaseDate?.message} />
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -233,34 +249,58 @@ function StillForm<TValues extends StillInput | UploadInput = StillInput>({
           <Input label="Actor" {...registerAny("actor")} error={errors.actor?.message} placeholder="e.g. Harrison Ford" />
         </div>
 
+        <ChipInput label="Collaborator" values={currentCollaborators} onAdd={addCollaborator} onRemove={removeCollaborator} placeholder="Add collaborators... (Enter to add)" />
+
         <Textarea label="Description" {...registerAny("description")} error={errors.description?.message} placeholder="Optional description..." rows={3} />
         <Textarea label="Other Notes" {...registerAny("notes")} error={errors.notes?.message} placeholder="Personal notes..." rows={3} />
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <Input label="Shot Type" {...registerAny("shotType")} error={errors.shotType?.message} placeholder="e.g. Close-Up" />
-          <Input label="Composition" {...registerAny("composition")} error={errors.composition?.message} placeholder="e.g. Rule of Thirds" />
-          <Input label="Lighting" {...registerAny("lighting")} error={errors.lighting?.message} placeholder="e.g. Soft Backlight" />
+          <ControllerAny name="shotType" control={control} render={({ field, fieldState }: any) => (
+            <SelectField label="Shot Type" value={field.value ?? ""} onChange={field.onChange} options={SHOT_TYPE_OPTIONS} placeholder="Select shot type" error={fieldState.error?.message} />
+          )} />
+          <ControllerAny name="composition" control={control} render={({ field, fieldState }: any) => (
+            <SelectField label="Composition" value={field.value ?? ""} onChange={field.onChange} options={COMPOSITION_OPTIONS} placeholder="Select composition" error={fieldState.error?.message} />
+          )} />
+          <ControllerAny name="lighting" control={control} render={({ field, fieldState }: any) => (
+            <SelectField label="Lighting" value={field.value ?? ""} onChange={field.onChange} options={LIGHTING_OPTIONS} placeholder="Select lighting" error={fieldState.error?.message} />
+          )} />
           <Input label="Set" {...registerAny("set")} error={errors.set?.message} placeholder="e.g. Apartment interior" />
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <ControllerAny name="interiorExterior" control={control} render={({ field, fieldState }: any) => (
-            <SelectField label="Interior / Exterior" value={field.value ?? ""} onChange={field.onChange} options={INTERIOR_EXTERIOR_OPTIONS} placeholder="Select interior / exterior" required={isCreate} error={fieldState.error?.message} />
+            <SelectField label="Interior / Exterior" value={field.value ?? ""} onChange={field.onChange} options={INTERIOR_EXTERIOR_OPTIONS} placeholder="Select interior / exterior" error={fieldState.error?.message} />
           )} />
           <ControllerAny name="timeOfDay" control={control} render={({ field, fieldState }: any) => (
-            <SelectField label="Time of Day" value={field.value ?? ""} onChange={field.onChange} options={TIME_OF_DAY_OPTIONS} placeholder="Select time of day" required={isCreate} error={fieldState.error?.message} />
+            <SelectField label="Time of Day" value={field.value ?? ""} onChange={field.onChange} options={TIME_OF_DAY_OPTIONS} placeholder="Select time of day" error={fieldState.error?.message} />
           )} />
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <Input label="Aspect Ratio" {...registerAny("aspectRatio")} error={errors.aspectRatio?.message} placeholder="e.g. 2.39:1" />
-          <Input label="Frame Size" {...registerAny("frameSize")} error={errors.frameSize?.message} placeholder="e.g. 4K" />
-          <ControllerAny name="lensSize" control={control} render={({ field, fieldState }: any) => (
-            <SelectField label="Lens Size" value={field.value ?? ""} onChange={field.onChange} options={LENS_SIZE_OPTIONS} placeholder="Select lens size" required={isCreate} error={fieldState.error?.message} />
+          <ControllerAny name="aspectRatio" control={control} render={({ field, fieldState }: any) => (
+            <SelectField label="Aspect Ratio" value={field.value ?? ""} onChange={field.onChange} options={ASPECT_RATIO_OPTIONS} placeholder="Select aspect ratio" error={fieldState.error?.message} />
+          )} />
+          <ControllerAny name="resolution" control={control} render={({ field, fieldState }: any) => (
+            <SelectField label="Resolution" value={field.value ?? ""} onChange={field.onChange} options={RESOLUTION_OPTIONS} placeholder="Select resolution" error={fieldState.error?.message} />
+          )} />
+          <ControllerAny name="colour" control={control} render={({ field, fieldState }: any) => (
+            <SelectField label="Colour" value={field.value ?? ""} onChange={field.onChange} options={COLOUR_OPTIONS} placeholder="Select colour" error={fieldState.error?.message} />
           )} />
         </div>
 
-        <ChipInput label="Colour" values={currentColours} onAdd={addColour} onRemove={removeColour} placeholder="Add colour names..." />
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <ControllerAny name="lensSize" control={control} render={({ field, fieldState }: any) => (
+            <SelectField label="Lens Size" value={field.value ?? ""} onChange={field.onChange} options={LENS_SIZE_OPTIONS} placeholder="Select lens size" error={fieldState.error?.message} />
+          )} />
+          <ControllerAny name="lensType" control={control} render={({ field, fieldState }: any) => (
+            <SelectField label="Lens Type" value={field.value ?? ""} onChange={field.onChange} options={LENS_TYPE_OPTIONS} placeholder="Select lens type" error={fieldState.error?.message} />
+          )} />
+          <ControllerAny name="opticalFormat" control={control} render={({ field, fieldState }: any) => (
+            <SelectField label="Optical Format" value={field.value ?? ""} onChange={field.onChange} options={OPTICAL_FORMAT_OPTIONS} placeholder="Select optical format" error={fieldState.error?.message} />
+          )} />
+        </div>
+
+        <ChipInput label="Colour Tags" values={currentColours} onAdd={addColour} onRemove={removeColour} placeholder="Add colour names..." />
 
         <div className="flex flex-col gap-1.5">
           <label className="font-mono text-[11px] uppercase tracking-[0.18em] text-text-muted">Tags</label>
