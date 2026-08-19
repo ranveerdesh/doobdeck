@@ -89,15 +89,6 @@ export async function POST(request: Request) {
     if (!categoryId.trim()) {
       return NextResponse.json({ error: "Category is required" }, { status: 400 });
     }
-    if (!interiorExterior?.trim()) {
-      return NextResponse.json({ error: "Interior / Exterior is required" }, { status: 400 });
-    }
-    if (!timeOfDay?.trim()) {
-      return NextResponse.json({ error: "Time of Day is required" }, { status: 400 });
-    }
-    if (!lensSize?.trim()) {
-      return NextResponse.json({ error: "Lens Size is required" }, { status: 400 });
-    }
     const tagsRaw = formData.get("tags") as string;
     const tags: string[] = tagsRaw ? JSON.parse(tagsRaw) : [];
     const colourTags = parseJsonArray(formData.get("colourTags"));

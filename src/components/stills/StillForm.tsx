@@ -37,6 +37,7 @@ function SelectField({
   options,
   placeholder,
   required = false,
+  error,
 }: {
   label: string;
   value: string;
@@ -44,6 +45,7 @@ function SelectField({
   options: readonly string[];
   placeholder: string;
   required?: boolean;
+  error?: string;
 }) {
   return (
     <div className="flex flex-col gap-1.5">
@@ -61,6 +63,7 @@ function SelectField({
           <option key={option} value={option}>{option}</option>
         ))}
       </select>
+      {error && <p className="text-xs text-danger">{error}</p>}
     </div>
   );
 }
@@ -241,19 +244,19 @@ function StillForm<TValues extends StillInput | UploadInput = StillInput>({
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <ControllerAny name="interiorExterior" control={control} render={({ field }: any) => (
-            <SelectField label="Interior / Exterior" value={field.value ?? ""} onChange={field.onChange} options={INTERIOR_EXTERIOR_OPTIONS} placeholder="Select interior / exterior" required={isCreate} />
+          <ControllerAny name="interiorExterior" control={control} render={({ field, fieldState }: any) => (
+            <SelectField label="Interior / Exterior" value={field.value ?? ""} onChange={field.onChange} options={INTERIOR_EXTERIOR_OPTIONS} placeholder="Select interior / exterior" required={isCreate} error={fieldState.error?.message} />
           )} />
-          <ControllerAny name="timeOfDay" control={control} render={({ field }: any) => (
-            <SelectField label="Time of Day" value={field.value ?? ""} onChange={field.onChange} options={TIME_OF_DAY_OPTIONS} placeholder="Select time of day" required={isCreate} />
+          <ControllerAny name="timeOfDay" control={control} render={({ field, fieldState }: any) => (
+            <SelectField label="Time of Day" value={field.value ?? ""} onChange={field.onChange} options={TIME_OF_DAY_OPTIONS} placeholder="Select time of day" required={isCreate} error={fieldState.error?.message} />
           )} />
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <Input label="Aspect Ratio" {...registerAny("aspectRatio")} error={errors.aspectRatio?.message} placeholder="e.g. 2.39:1" />
           <Input label="Frame Size" {...registerAny("frameSize")} error={errors.frameSize?.message} placeholder="e.g. 4K" />
-          <ControllerAny name="lensSize" control={control} render={({ field }: any) => (
-            <SelectField label="Lens Size" value={field.value ?? ""} onChange={field.onChange} options={LENS_SIZE_OPTIONS} placeholder="Select lens size" required={isCreate} />
+          <ControllerAny name="lensSize" control={control} render={({ field, fieldState }: any) => (
+            <SelectField label="Lens Size" value={field.value ?? ""} onChange={field.onChange} options={LENS_SIZE_OPTIONS} placeholder="Select lens size" required={isCreate} error={fieldState.error?.message} />
           )} />
         </div>
 
