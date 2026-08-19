@@ -16,7 +16,7 @@ function LatestStillLink({ still, fallbackTitle }: LatestStillLinkProps) {
     return <span className="italic text-[#c58c59]">&ldquo;{fallbackTitle}&rdquo;</span>;
   }
 
-  const releaseYear = still.releaseDate ? new Date(still.releaseDate).getFullYear() : null;
+  const releaseYear = still.releaseDate ? new Date(still.releaseDate as Date | string).getFullYear() : null;
   const displayLabel = still.title || [still.filmName, releaseYear ? `(${releaseYear})` : null].filter(Boolean).join(" ") || fallbackTitle;
 
   return (
