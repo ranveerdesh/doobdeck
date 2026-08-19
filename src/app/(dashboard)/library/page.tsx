@@ -6,6 +6,7 @@ import { StillGrid } from "@/components/stills/StillGrid";
 import { FilterPanel } from "@/components/search/FilterPanel";
 import { FullPageSpinner } from "@/components/ui/Spinner";
 import { searchSchema } from "@/lib/validations";
+import { searchStills } from "@/lib/search";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = { title: "Library" };
@@ -28,88 +29,8 @@ async function LibraryContent({
   filters: ReturnType<typeof searchSchema.parse>;
 }) {
   const { q, folderId, categoryId, tag, page, limit } = filters;
-  const skip = (page - 1) * limit;
 
-  const where = {
-    userId,
-    ...(folderId ? { folderId } : {}),
-    ...(categoryId ? { categoryId } : {}),
-    ...(tag
-      ? { tags: { some: { tag: { name: tag, userId } } } }
-      : {}),
-    ...(q
-      ? {
-          OR: [
-            { title: { contains: q, mode: "insensitive" as const } },
-            { description: { contains: q, mode: "insensitive" as const } },
-            { filmName: { contains: q, mode: "insensitive" as const } },
-            { director: { contains: q, mode: "insensitive" as const } },
-            { cinematographer: { contains: q, mode: "insensitive" as const } },
-            { editor: { contains: q, mode: "insensitive" as const } },
-            { actor: { contains: q, mode: "insensitive" as const } },
-            { notes: { contains: q, mode: "insensitive" as const } },
-            { shotType: { contains: q, mode: "insensitive" as const } },
-            { composition: { contains: q, mode: "insensitive" as const } },
-            { lighting: { contains: q, mode: "insensitive" as const } },
-            { interiorExterior: { contains: q, mode: "insensitive" as const } },
-            { timeOfDay: { contains: q, mode: "insensitive" as const } },
-            { aspectRatio: { contains: q, mode: "insensitive" as const } },
-            { frameSize: { contains: q, mode: "insensitive" as const } },
-            { lensSize: { contains: q, mode: "insensitive" as const } },
-            { set: { contains: q, mode: "insensitive" as const } },
-            { year: Number.isNaN(Number(q)) ? undefined : Number(q) },
-            { folder: { name: { contains: q, mode: "insensitive" as const } } },
-            {
-              category: {
-                name: { contains: q, mode: "insensitive" as const },
-              },
-            },
-            {
-              tags: {
-                some: {
-                  tag: { name: { contains: q, mode: "insensitive" as const } },
-                },
-              },
-            },
-            {
-              colours: {
-                some: {
-                  OR: [
-                    { hex: { contains: q, mode: "insensitive" as const } },
-                    { name: { contains: q, mode: "insensitive" as const } },
-                  ],
-                },
-              },
-            },
-            {
-              colourTags: {
-                hasSome: [q],
-              },
-            },
-          ],
-        }
-      : {}),
-  };
-
-  const [stills, total] = await Promise.all([
-    prisma.still.findMany({
-      where,
-      orderBy: { createdAt: "desc" },
-      skip,
-      take: limit,
-      include: {
-        folder: { select: { id: true, name: true } },
-        category: { select: { id: true, name: true } },
-        tags: { include: { tag: { select: { id: true, name: true } } } },
-        colours: {
-          select: { id: true, hex: true, name: true, population: true },
-          orderBy: { population: "desc" },
-          take: 6,
-        },
-      },
-    }),
-    prisma.still.count({ where }),
-  ]);
+  const { stills, total } = await searchStills({ userId, q, folderId, categoryId, tag, page, limit });
 
   const totalPages = Math.ceil(total / limit);
 

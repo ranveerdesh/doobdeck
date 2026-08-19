@@ -59,6 +59,7 @@ model Still {
   @@index([userId, createdAt(sort: Desc)])
   @@index([userId, folderId, createdAt(sort: Desc)])
   @@index([userId, categoryId, createdAt(sort: Desc)])
+  @@index([colourTags], type: Gin)
 }
 
 model Folder {
